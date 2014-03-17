@@ -1,0 +1,101 @@
+<div class="input-group hidden" id="categoria-template">
+    <?php echo $this->categorias() ?>
+    <div class="input-group-btn">
+        <button class="btn btn-success btn-save-categoria"><span class="glyphicon glyphicon-save"></span></button>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Relatório de Perguntas <a href="/perguntas/nova-pergunta" class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-plus-sign"></span> Nova Pergunta</a></div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="fm-perguntas" role="form">
+            <?php echo $this->paginator->getInputHidden() ?>
+            <div class="form-group">
+                <label for="categoria" class="col-sm-2 control-label">Categoria</label>
+                <div class="col-sm-4">
+                    <?php echo $this->categorias('categoria', '', false) ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label">Descrição</label>
+                <div class="col-sm-4">
+                    <input type="text" name="descricao" id="descricao" class="form-control" placeholder="Descrição da Pergunta" value="<?php echo $this->request->get->offsetGet('descricao') ?>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="status" class="col-sm-2 control-label">Status</label>
+                <div class="col-sm-4">
+                    <select name="status" id="status" class="form-control">
+                        <option value="">Selecione</option>
+                        <option value="1" <?php echo $this->request->get->offsetGet('status') == 1 ? 'selected' : '' ?>>Ativo</option>
+                        <option value="2" <?php echo $this->request->get->offsetGet('status') == 2 ? 'selected' : '' ?>>Inativo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <?php if (count($this->listagem)): ?>
+        <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th width="15%" class="text-center">Categoria</th>
+                    <th width="35%">Pergunta</th>
+                    <th width="35%">Alternativas</th>
+                    <th width="10%" class="text-center">Nível</th>
+                    <th width="5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->paginator->rows as $row): ?>
+                    <tr <?php echo $row['status'] == 1 ? "class='success'" : '' ?>>
+                        <td class="categoria-edit text-center" data-cod="<?php echo $row['cod'] ?>" data-categoria="<?php echo $row['categoria'] ?>" data-edit="hidden"><?php echo $row['categoria_desc'] ?></td>
+                        <td class="descricao-edit" data-cod="<?php echo $row['cod'] ?>" data-edit="hidden"><?php echo $row['descricao'] ?></td>
+                        <td>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a class="alternativa-edit <?php echo $row['alternativa1'] == $row['correta'] ? 'bg-success' : '' ?>" data-cod="<?php echo $row['alternativa1'] ?>" data-edit="hidden"><?php echo $row['alternativa1_desc'] ?></a>
+                                </li>
+                                <li>
+                                    <a class="alternativa-edit <?php echo $row['alternativa2'] == $row['correta'] ? 'bg-success' : '' ?>" data-cod="<?php echo $row['alternativa2'] ?>" data-edit="hidden"><?php echo $row['alternativa2_desc'] ?></a>
+                                </li>
+                                <li>
+                                    <a class="alternativa-edit <?php echo $row['alternativa3'] == $row['correta'] ? 'bg-success' : '' ?>" data-cod="<?php echo $row['alternativa3'] ?>" data-edit="hidden"><?php echo $row['alternativa3_desc'] ?></a>
+                                </li>
+                                <li>
+                                    <a class="alternativa-edit <?php echo $row['alternativa4'] == $row['correta'] ? 'bg-success' : '' ?>" data-cod="<?php echo $row['alternativa4'] ?>" data-edit="hidden"><?php echo $row['alternativa4_desc'] ?></a>
+                                </li>
+                                <li>
+                                    <a class="alternativa-edit <?php echo $row['alternativa5'] == $row['correta'] ? 'bg-success' : '' ?>" data-cod="<?php echo $row['alternativa5'] ?>" data-edit="hidden"><?php echo $row['alternativa5_desc'] ?></a>
+                                </li>
+                            </ul>
+                        </td>
+                        <td class="text-center">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <span class="glyphicon glyphicon-star<?php echo $i <= $row['nivel'] ? '' : '-empty' ?> nivel" data-nivel="<?php echo $i ?>" data-cod="<?php echo $row['cod'] ?>"></span>
+                            <?php endfor; ?>
+                            <input type="hidden" class="sr-only" name="nivel" />
+                        </td>
+                        <td class="text-center">
+                            <button class="btn-change-status btn btn-sm btn-<?php echo $row['status'] == 2 ? 'success' : 'danger' ?>" data-cod="<?php echo $row['cod'] ?>" data-status="<?php echo $row['status'] ?>">
+                                <span class="glyphicon glyphicon-thumbs-<?php echo $row['status'] == 2 ? 'up' : 'down' ?>"></span>
+                            </button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr class="text-center">
+                    <td colspan="4">
+                        <?php echo $this->paginator ?>
+                        <br class="clearfix" />
+                        <div class="bg-info img-rounded col-sm-2 col-sm-offset-5">Total: <?php echo $this->paginator->totalItems ?></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    <?php endif; ?>
+</div>

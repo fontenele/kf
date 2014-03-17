@@ -1,0 +1,7 @@
+.nivel {
+    cursor: pointer;
+    font-size: 16pt;
+}
+.nivel.glyphicon-star {
+    color: #DAA520;
+}

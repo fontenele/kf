@@ -1,0 +1,77 @@
+<div class="input-group hidden" id="categoria-template">
+    <?php echo $this->categorias('template-pai', null, true, true) ?>
+    <div class="input-group-btn">
+        <button class="btn btn-success btn-save-pai"><span class="glyphicon glyphicon-save"></span></button>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Relatório de Categorias <a href="/categorias/nova-categoria" class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-plus-sign"></span> Nova Categoria</a></div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="fm-categorias" role="form">
+            <?php echo $this->paginator->getInputHidden() ?>
+            <div class="form-group">
+                <label for="pai" class="col-sm-2 control-label">Pai</label>
+                <div class="col-sm-4">
+                    <?php echo $this->categorias('pai', '', false, true) ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nome" class="col-sm-2 control-label">Descrição</label>
+                <div class="col-sm-4">
+                    <input type="text" name="nome" id="nome" class="form-control" placeholder="Descrição da Categoria" value="<?php echo $this->request->get->offsetGet('nome') ?>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <?php if (count($this->listagem)): ?>
+        <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th width="45%" class="text-center">Pai</th>
+                    <th width="50%">Categoria</th>
+                    <th width="5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->paginator->rows as $row): ?>
+                    <tr>
+                        <td class="pai-edit text-center" data-cod="<?php echo $row['cod'] ?>" data-pai="<?php echo $row['pai'] ?>" data-edit="hidden"><strong><?php echo $row['pai_desc'] ?></strong></td>
+                        <td class="nome-edit" data-cod="<?php echo $row['cod'] ?>" data-pai="<?php echo $row['pai'] ?>" data-edit="hidden">
+                            <?php echo !$row['pai'] ? '<strong>' : '' ?><?php echo $row['nome'] ?><?php echo !$row['pai'] ? '</strong>' : '' ?>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn-delete btn btn-sm btn-danger" data-cod="<?php echo $row['cod'] ?>">
+                                <span class="glyphicon glyphicon-remove-sign"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <?php foreach ($row['filhos'] as $filho): ?>
+                        <tr>
+                            <td class="pai-edit text-center" data-cod="<?php echo $filho['cod'] ?>" data-pai="<?php echo $filho['pai'] ?>" data-edit="hidden"><strong><?php echo $filho['pai_desc'] ?></strong></td>
+                            <td class="nome-edit" data-cod="<?php echo $filho['cod'] ?>" data-pai="<?php echo $filho['pai'] ?>" data-edit="hidden"><?php echo $filho['nome'] ?></td>
+                            <td class="text-center">
+                                <button class="btn-delete btn btn-sm btn-danger" data-cod="<?php echo $filho['cod'] ?>">
+                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr class="text-center">
+                    <td colspan="3">
+                        <?php echo $this->paginator ?>
+                        <br class="clearfix" />
+                        <div class="bg-info img-rounded col-sm-2 col-sm-offset-5">Total: <?php echo $this->paginator->totalItems ?></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    <?php endif; ?>
+</div>

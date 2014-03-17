@@ -1,0 +1,14 @@
+<select name="<?php echo $this->attrs['name'] ?>" id="<?php echo $this->attrs['id'] ?>" class="form-control" <?php echo $this->attrs['required'] ?>>
+    <option value="">Selecione</option>
+    <?php foreach ($this->categorias as $categoria): ?>
+        <?php if ($this->onlyParents): ?>
+            <option value="<?php echo $categoria['cod'] ?>" <?php echo $this->request->get->offsetGet($this->attrs['name']) == $categoria['cod'] ? 'selected' : '' ?>><?php echo $categoria['nome'] ?></option>
+        <?php else: ?>
+            <optgroup label="<?php echo $categoria['nome'] ?>">
+                <?php foreach ($categoria['filhos'] as $filho): ?>
+                    <option value="<?php echo $filho['cod'] ?>" <?php echo $this->request->get->offsetGet($this->attrs['name']) == $filho['cod'] ? 'selected' : '' ?>><?php echo $filho['nome'] ?></option>
+                <?php endforeach; ?>
+            </optgroup>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>

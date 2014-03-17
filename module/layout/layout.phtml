@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Kuestions</title>
+
+        <link href="<?php echo $this->basePath ?>css/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <link href="<?php echo $this->basePath ?>css/layout/layout.css" rel="stylesheet">
+        <?php foreach($this->css as $css): ?>
+            <link href="<?php echo $css ?>" rel="stylesheet">
+        <?php endforeach; ?>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="<?php echo $this->basePath ?>js/bootstrap/html5shiv.js"></script>
+          <script src="<?php echo $this->basePath ?>js/bootstrap/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <?php echo $this->partial('layout/top.phtml', $this->getArrayCopy()) ?>
+
+        <div class="container">
+
+            <?php foreach ($this->success as $success): ?>
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Sucesso!</strong> <?php echo $success ?>
+                </div>
+            <?php endforeach; ?>
+            <?php foreach ($this->error as $error): ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>Erro!</strong> <?php echo $error ?>
+                </div>
+            <?php endforeach; ?>
+
+            <?php echo $this->content ?>
+        </div>
+
+        <script src="<?php echo $this->basePath ?>js/bootstrap/jquery.min.js"></script>
+        <script src="<?php echo $this->basePath ?>js/bootstrap/bootstrap.min.js"></script>
+        <script src="<?php echo $this->basePath ?>js/layout/layout.js"></script>
+        <?php foreach($this->js as $js): ?>
+            <script src="<?php echo $js ?>"></script>
+        <?php endforeach; ?>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+.nav-pills li a {
+    background-color: #DFDFDF;
+}
+.nav-pills li a:hover {
+    background-color: #CDCBCB;
+}
+.categoria-edit,
+.alternativa-edit,
+.descricao-edit {
+    cursor: pointer;
+}
+
+.alternativa-edit.bg-success {
+    background-color: #DFF0D8;
+}
+
+.nivel {
+    cursor: pointer;
+    font-size: 12pt;
+}
+.nivel.glyphicon-star {
+    color: #DAA520;
+}

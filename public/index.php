@@ -1,0 +1,176 @@
+<?php
+
+namespace KF;
+
+Class Kernel {
+
+    /**
+     * @var array
+     */
+    public static $config = array();
+
+    /**
+     * @var Lib\View\Html
+     */
+    public static $layout;
+
+    /**
+     * @var Lib\Http\Request
+     */
+    public static $request;
+
+    /**
+     * @var Lib\System\Router
+     */
+    public static $router;
+
+    /**
+     * @var Lib\Database\Pdo
+     */
+    public static $db;
+
+    /**
+     * @var boolean
+     */
+    public static $logged = false; // criar identity
+
+    public static function app() {
+        self::bootLoader();
+        self::setConstants();
+        self::loadLibs();
+        self::loadConfigs();
+        self::loadRequest();
+        self::loadRouter();
+        self::loadDatabase();
+        $valid = self::acl();
+        if ($valid) {
+            self::run();
+        }
+    }
+
+    public static function bootLoader() {
+        session_start();
+        chdir(dirname(__DIR__));
+        set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__));
+        spl_autoload_register(function($className) {
+            $router = Kernel::$router;
+            $realPath = $router::getRealPath($className);
+            if ($realPath) {
+                require_once($realPath);
+            }
+        });
+    }
+
+    public static function setConstants() {
+        define('APP_PATH', dirname(__DIR__) . '/');
+    }
+
+    public static function loadLibs() {
+        require_once('lib/autoload.php');
+    }
+
+    public static function loadConfigs() {
+        $dir = new Lib\System\Dir(APP_PATH . 'config');
+        foreach ($dir->getFiles() as $_item) {
+            $config = include_once("{$dir->dirName}/{$_item}");
+            self::$config = array_merge_recursive(self::$config, $config);
+        }
+    }
+
+    public static function loadRequest() {
+        self::$request = new Lib\Http\Request();
+    }
+
+    public static function loadRouter() {
+        self::$router = new Lib\System\Router(self::$config['system']['router']);
+    }
+
+    public static function loadDatabase() {
+        if (isset(self::$config['db'])) {
+            self::$db = new Lib\Database\Pdo(self::$config['db']);
+        }
+    }
+
+    public static function acl() {
+        $session = new Lib\System\Session('system');
+        if (!$session->offsetExists('identity')) {
+            self::$logged = false;
+            self::run(self::$router->defaultAuth);
+            return false;
+        }
+
+        self::$logged = true;
+        return true;
+    }
+
+    public static function run($route = null) {
+        $controller = null;
+        $action = null;
+
+        if ($route) {
+            $route = self::$router->parseRoute($route);
+            $controller = $route['controller'];
+            $action = $route['action'];
+        } else {
+            $controller = self::$router->getController();
+            $action = self::$router->getAction();
+        }
+
+        self::callAction($controller, $action, self::$request);
+    }
+
+    public static function callAction($controller, $action, $request) {
+        try {
+            self::$layout = new Lib\View\Html('public/themes/' . self::$config['system']['view']['theme'] . '/view/' . self::$config['system']['view']['layout']);
+            self::$layout->success = Lib\View\Helper\Messenger::getSuccess();
+            self::$layout->error = Lib\View\Helper\Messenger::getError();
+            self::$layout->userLogged = self::$logged;
+
+            $arrController = explode('\\', $controller);
+            $_module = Lib\View\Helper\String::camelToDash($arrController[0]);
+            $_controller = Lib\View\Helper\String::camelToDash($arrController[2]);
+            $_action = Lib\View\Helper\String::camelToDash($action);
+            $pathCssJs = "%s/modules/{$_module}/{$_controller}/{$_action}.%s";
+
+            $js = array();
+            $css = array();
+
+            if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'css', 'css'))) {
+                $css[] = sprintf(self::$router->basePath . $pathCssJs, 'css', 'css');
+            }
+
+            if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'js', 'js'))) {
+                $js[] = sprintf(self::$router->basePath . $pathCssJs, 'js', 'js');
+            }
+
+            self::$layout->css = $css;
+            self::$layout->js = $js;
+
+            $controller = '\\' . $controller;
+
+            // Instance controller
+            $obj = new $controller($action, $request);
+
+            // Call action
+            $view = $obj->$action($request);
+
+            if ($view instanceof Lib\View\Json) {
+                // Render Json output
+                echo $view->render();
+            } else {
+                header('Content-type: text/html; charset=UTF-8');
+                
+                // Set content var
+                self::$layout->content = $view->render();
+
+                // Render layout
+                echo self::$layout->render();
+            }
+        } catch (\Exception $ex) {
+            xd($ex);
+        }
+    }
+
+}
+
+\KF\Kernel::app();
