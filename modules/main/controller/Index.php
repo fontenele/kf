@@ -10,7 +10,7 @@ Class Index extends \KF\Lib\Module\Controller {
     
     public function index() {
         try {
-            xd($_SESSION);
+            return $this->view;
         } catch (\Exception $ex) {
             xd($ex);
         }

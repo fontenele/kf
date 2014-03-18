@@ -12,9 +12,9 @@ Class Auth extends \KF\Lib\Module\Controller {
         try {
             if ($this->request->isPost() && $this->request->post->offsetGet('email') && $this->request->post->offsetGet('senha')) {
                 $service = new \Admin\Service\User();
-                $auth = $service->auth($this->request->post->offsetGet('email'), md5($this->request->post->offsetGet('senha')));
+                $logged = $service->auth($this->request->post->offsetGet('email'), md5($this->request->post->offsetGet('senha')));
 
-                if ($auth['logged']) {
+                if ($logged) {
                     $session = new \KF\Lib\System\Session('system');
                     $photo = null;
 
@@ -43,6 +43,7 @@ Class Auth extends \KF\Lib\Module\Controller {
     public function logout() {
         try {
             session_destroy();
+            \KF\Lib\View\Helper\Messenger::success('Volte sempre!');
             $this->redirect('admin/auth/login');
         } catch (\Exception $ex) {
             xd($ex);

@@ -7,7 +7,7 @@ return array(
             'defaultAuth' => 'admin/auth/login',
         ),
         'auth' => array(
-            'gravatar' => true
+            'gravatar' => false
         ),
         'view' => array(
             'theme' => 'kf',

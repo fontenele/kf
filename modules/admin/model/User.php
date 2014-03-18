@@ -4,8 +4,19 @@ namespace Admin\Model;
 
 class User extends \KF\Lib\Module\Model {
 
-    public $_sequence = 'usuarios_cod_seq';
-    
+    public function __construct() {
+        $this->_table = 'public.user';
+        $this->_sequence = 'user_cod_seq';
+        $this->_pk = 'cod';
+
+        $this->addField('cod', self::TYPE_INTEGER);
+        $this->addField('email', self::TYPE_VARCHAR, 150);
+        $this->addField('password', self::TYPE_VARCHAR, 32);
+        $this->addField('name', self::TYPE_VARCHAR, 200);
+        $this->addField('perfil', self::TYPE_INTEGER);
+        $this->addField('status', self::TYPE_INTEGER);
+    }
+
     /**
      * @param string $email
      * @param string $pass
@@ -14,11 +25,9 @@ class User extends \KF\Lib\Module\Model {
     public function auth($email, $pass) {
         try {
             $dml = <<<DML
-                    SELECT count(1) as logged FROM usuarios WHERE email = :email AND senha = :senha
+                    SELECT count(1) as logged FROM {$this->_table} WHERE email = :email AND password = :password
 DML;
-            $stmt = \KF\Kernel::$db->prepare($dml);
-            $stmt->execute(array(':email' => $email, ':senha' => $pass));
-            return $stmt->fetchAll()[0];
+            return $this->fetch($dml, array(':email' => $email, ':password' => $pass))['logged'];
         } catch (\Exception $ex) {
             throw $ex;
         }

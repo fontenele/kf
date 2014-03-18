@@ -2,7 +2,7 @@
 
 return array(
     'db' => array(
-        'dsn' => 'pgsql:dbname=perguntas;host=localhost',
+        'dsn' => 'pgsql:dbname=kf;host=localhost',
         'username' => 'postgres',
         'password' => 'postgres'
     )
