@@ -8,8 +8,7 @@ abstract class Model {
     public $_sequence;
     public $_pk;
     public $_fields;
-    public $_joins = [self::JOIN_INNER => [], self::JOIN_LEFT => [], self::JOIN_RIGHT => [], self::JOIN_FULL => []];
-    private $_totalJoins = 0;
+    public $_joins = [];
 
     const TYPE_INTEGER = 1;
     const TYPE_VARCHAR = 2;
@@ -35,24 +34,7 @@ abstract class Model {
         try {
             $this->_fields[$name] = ['type' => $type, 'length' => $length, 'join' => $join];
             if ($join && $joinTable && $joinForeign) {
-                switch($join) {
-                    case self::JOIN_INNER:
-                        $alias = ++$this->_totalJoins;
-                        $this->_joins[$join][$name] = "INNER JOIN {$joinTable} j{$alias} ON (j{$alias}.{$joinForeign} = {$name})";
-                        break;
-                    case self::JOIN_LEFT:
-                        $alias = ++$this->_totalJoins;
-                        $this->_joins[$join][$name] = "LEFT JOIN {$joinTable} j{$alias} ON (j{$alias}.{$joinForeign} = {$name})";
-                        break;
-                    case self::JOIN_RIGHT:
-                        $alias = ++$this->_totalJoins;
-                        $this->_joins[$join][$name] = "RIGHT JOIN {$joinTable} j{$alias} ON (j{$alias}.{$joinForeign} = {$name})";
-                        break;
-                    case self::JOIN_FULL:
-                        $alias = ++$this->_totalJoins;
-                        $this->_joins[$join][$name] = "FULL JOIN {$joinTable} j{$alias} ON (j{$alias}.{$joinForeign} = {$name})";
-                        break;
-                }
+                $this->_joins[$name] = ['table' => $joinTable, 'fk' => $joinForeign, 'type' => $join];
             }
         } catch (\Exception $ex) {
             throw $ex;
@@ -121,7 +103,6 @@ abstract class Model {
 
     public function findOneBy($where, $selectNames = array()) {
         try {
-            xd($this);
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames)->from($this->_table)->where($where);
             return $this->fetch($sql);

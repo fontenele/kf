@@ -5,9 +5,9 @@ namespace Main\Controller;
 Class Index extends \KF\Lib\Module\Controller {
 
     public function init() {
-        
+
     }
-    
+
     public function index() {
         try {
             $service = new \Admin\Service\User();

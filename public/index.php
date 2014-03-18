@@ -104,19 +104,22 @@ Class Kernel {
     }
 
     public static function run($route = null) {
-        $controller = null;
-        $action = null;
+        try {
+            $controller = null;
+            $action = null;
+            if ($route) {
+                $route = self::$router->parseRoute($route);
+                $controller = $route['controller'];
+                $action = $route['action'];
+            } else {
+                $controller = self::$router->getController();
+                $action = self::$router->getAction();
+            }
 
-        if ($route) {
-            $route = self::$router->parseRoute($route);
-            $controller = $route['controller'];
-            $action = $route['action'];
-        } else {
-            $controller = self::$router->getController();
-            $action = self::$router->getAction();
+            self::callAction($controller, $action, self::$request);
+        } catch (\Exception $ex) {
+            throw $ex;
         }
-
-        self::callAction($controller, $action, self::$request);
     }
 
     public static function callAction($controller, $action, $request) {
@@ -159,7 +162,7 @@ Class Kernel {
                 echo $view->render();
             } else {
                 header('Content-type: text/html; charset=UTF-8');
-                
+
                 // Set content var
                 self::$layout->content = $view->render();
 
@@ -167,7 +170,7 @@ Class Kernel {
                 echo self::$layout->render();
             }
         } catch (\Exception $ex) {
-            xd($ex);
+            throw $ex;
         }
     }
 

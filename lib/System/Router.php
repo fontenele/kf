@@ -22,6 +22,11 @@ class Router {
     /**
      * @var string
      */
+    public $serverName;
+
+    /**
+     * @var string
+     */
     public $controller;
 
     /**
@@ -60,6 +65,8 @@ class Router {
         }
 
         $httpScheme = $this->isSSL ? 'https' : 'http';
+        $this->serverName = "{$httpScheme}://{$_SERVER['SERVER_NAME']}";
+
         if ($_SERVER['SCRIPT_NAME'] == '/index.php') {
             $this->basePath = "{$httpScheme}://{$_SERVER['SERVER_NAME']}/";
         } else {
@@ -74,7 +81,7 @@ class Router {
     public function defineControllerAndAction() {
         if ($_SERVER['REQUEST_URI'] && $_SERVER['REQUEST_URI'] != '/') {
             //$uri = explode('/', substr($_SERVER['REQUEST_URI'], 1));
-            $uri = $this->parseRoute(substr($_SERVER['REQUEST_URI'], 1));
+            $uri = $this->parseRoute($_SERVER['REQUEST_URI'], 1);
             $this->controller = $uri['controller'];
             if ($uri['params']) {
                 \KF\Kernel::$request->setQuery(urldecode($uri['params']));
@@ -113,7 +120,8 @@ class Router {
         return $realPath;
     }
 
-    public static function parseRoute($route) {
+    public function parseRoute($route) {
+        $route = str_replace($this->basePath, '', $this->serverName . $route);
         $arrRoute = \explode('/', $route);
         $_module = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
         $_controller = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));

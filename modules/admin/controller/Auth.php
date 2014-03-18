@@ -5,7 +5,7 @@ namespace Admin\Controller;
 Class Auth extends \KF\Lib\Module\Controller {
 
     public function init() {
-        
+
     }
 
     public function login() {
@@ -27,9 +27,9 @@ Class Auth extends \KF\Lib\Module\Controller {
                             $user['photo'] = $gravatar['entry'][0]['thumbnailUrl'];
                         }
                     }
-                    
+
                     $session->identity = $user;
-                    
+
                     \KF\Lib\View\Helper\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
                     $this->redirect(\KF\Kernel::$router->default);
                 } else {
