@@ -10,6 +10,9 @@ Class Index extends \KF\Lib\Module\Controller {
     
     public function index() {
         try {
+            $service = new \Admin\Service\User();
+            $user = $service->findOneByEmail('guilherme@fontenele.net');
+            xd($user);
             return $this->view;
         } catch (\Exception $ex) {
             xd($ex);

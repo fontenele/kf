@@ -12,21 +12,24 @@ Class Auth extends \KF\Lib\Module\Controller {
         try {
             if ($this->request->isPost() && $this->request->post->offsetGet('email') && $this->request->post->offsetGet('senha')) {
                 $service = new \Admin\Service\User();
-                $logged = $service->auth($this->request->post->offsetGet('email'), md5($this->request->post->offsetGet('senha')));
+                $logged = $service->findOneBy(array('email' => $this->request->post->offsetGet('email'), 'password' => md5($this->request->post->offsetGet('senha'))), array('logged' => 'count(1)'))['logged'];
 
                 if ($logged) {
                     $session = new \KF\Lib\System\Session('system');
-                    $photo = null;
+                    $user = $service->findOneByEmail('guilherme@fontenele.net');
+                    unset($user['password']);
+                    $user['photo'] = null;
 
                     if (\KF\Kernel::$config['system']['auth']['gravatar']) {
                         $gravatarUrl = 'http://www.gravatar.com/%s.php';
                         $gravatar = \unserialize(\file_get_contents(sprintf($gravatarUrl, md5($this->request->post->offsetGet('email')))));
                         if (is_array($gravatar) && isset($gravatar['entry']) && isset($gravatar['entry'][0])) {
-                            $photo = $gravatar['entry'][0]['thumbnailUrl'];
+                            $user['photo'] = $gravatar['entry'][0]['thumbnailUrl'];
                         }
                     }
-
-                    $session->identity = array('email' => $this->request->post->offsetGet('email'), 'photo' => $photo);
+                    
+                    $session->identity = $user;
+                    
                     \KF\Lib\View\Helper\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
                     $this->redirect(\KF\Kernel::$router->default);
                 } else {
@@ -43,7 +46,6 @@ Class Auth extends \KF\Lib\Module\Controller {
     public function logout() {
         try {
             session_destroy();
-            \KF\Lib\View\Helper\Messenger::success('Volte sempre!');
             $this->redirect('admin/auth/login');
         } catch (\Exception $ex) {
             xd($ex);
