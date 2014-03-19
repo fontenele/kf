@@ -26,7 +26,7 @@ class Html extends \KF\Lib\System\ArrayObject {
             $html = ob_get_clean();
             return $html;
         } catch (\Exception $ex) {
-            xd($ex);
+            throw new \Exception("Template {$this->template} not found.", 404);
         }
     }
 

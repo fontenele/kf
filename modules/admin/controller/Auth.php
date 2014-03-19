@@ -29,7 +29,7 @@ Class Auth extends \KF\Lib\Module\Controller {
                     }
 
                     $session->identity = $user;
-
+                    
                     \KF\Lib\View\Helper\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
                     $this->redirect(\KF\Kernel::$router->default);
                 } else {

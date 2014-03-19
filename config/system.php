@@ -1,21 +1,24 @@
 <?php
 
-return array(
-    'system' => array(
-        'router' => array(
-            'default' => 'main/index/index',
-            'defaultAuth' => 'admin/auth/login',
-        ),
-        'auth' => array(
+return [
+    'system' => [
+        'router' => [
+            'error' => [
+                '404' => ['controller' => 'Admin\Controller\Index', 'action' => 'error404']
+            ],
+            'default' => '/main/index/index',
+            'defaultAuth' => '/admin/auth/login',
+        ],
+        'auth' => [
             'gravatar' => false
-        ),
-        'view' => array(
+        ],
+        'view' => [
             'theme' => 'kf',
             'layout' => 'layout.phtml',
             'error404' => 'error404.phtml',
-            'datagrid' => array(
+            'datagrid' => [
                 'rowsPerPage' => 10
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];

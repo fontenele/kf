@@ -9,7 +9,7 @@ class Session extends ArrayObject {
     public function __construct($container) {
         $this->container = $container;
         if (!isset($_SESSION[$container])) {
-            $_SESSION[$container] = array();
+            $this->clear();
         } else {
             parent::__construct($_SESSION[$container]);
         }
@@ -20,8 +20,20 @@ class Session extends ArrayObject {
     }
 
     public function __set($name, $value = null) {
-        $_SESSION[$this->container][$name] = $value;
         $this->offsetSet($name, $value);
+    }
+    
+    public function offsetSet($name, $value = null) {
+        $_SESSION[$this->container][$name] = serialize($value);
+        parent::offsetSet($name, $value);
+    }
+    
+    public function offsetGet($index) {
+        return unserialize(parent::offsetGet($index));
+    }
+    
+    public function clear() {
+        $_SESSION[$this->container] = [];
     }
 
 }

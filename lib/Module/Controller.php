@@ -25,7 +25,8 @@ abstract class Controller {
 
         $templace = \strpos($action, '-') === false ? \KF\Lib\View\Helper\String::camelToDash($action) : $action;
         $_module = \KF\Lib\View\Helper\String::camelToDash($arrClass[0]);
-        $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$templace}.phtml", array('request' => $request));
+        $_controller = \KF\Lib\View\Helper\String::camelToDash($arrClass[2]);
+        $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$templace}.phtml", array('request' => $request));
 
         $this->request = $request;
 
@@ -37,6 +38,9 @@ abstract class Controller {
     }
 
     public function redirect($path = null) {
+        if ($path && substr($path, 0, 1) == '/') {
+            $path = substr($path, 1);
+        }
         \KF\Kernel::$router->redirect($path);
     }
 

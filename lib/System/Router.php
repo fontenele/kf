@@ -103,11 +103,11 @@ class Router {
     }
 
     public function getController() {
-        return $this->controller ? $this->controller : $this->defaults['controller'];
+        return $this->controller;
     }
 
     public function getAction() {
-        return $this->action ? $this->action : $this->defaults['action'];
+        return $this->action;
     }
 
     public static function getRealPath($className) {
@@ -122,6 +122,7 @@ class Router {
 
     public function parseRoute($route) {
         $route = str_replace($this->basePath, '', $this->serverName . $route);
+        
         $arrRoute = \explode('/', $route);
         $_module = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
         $_controller = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
@@ -153,7 +154,7 @@ class Router {
     }
 
     public function redirect($path = null) {
-        $path = $this->basePath . $path;
+        $path = $this->basePath .$path;
         header("Location: {$path}");
         exit;
     }

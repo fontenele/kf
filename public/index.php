@@ -35,30 +35,49 @@ Class Kernel {
     public static $logged = false; // criar identity
 
     public static function app() {
-        self::bootLoader();
-        self::setConstants();
-        self::loadLibs();
-        self::loadConfigs();
-        self::loadRequest();
-        self::loadRouter();
-        self::loadDatabase();
-        $valid = self::acl();
-        if ($valid) {
-            self::run();
+        try {
+            self::bootLoader();
+            self::setConstants();
+            self::loadLibs();
+            self::loadConfigs();
+            self::loadRequest();
+            self::loadRouter();
+            self::loadDatabase();
+            $valid = self::acl();
+            if ($valid) {
+                self::run();
+            }
+        } catch (\Exception $ex) {
+            if (isset(self::$config['system']['router']['error'][$ex->getCode()])) {
+                $session = new Lib\System\Session('errorInfo');
+                $session->info = [
+                    'message' => $ex->getMessage(),
+                    'file' => $ex->getFile(),
+                    'line' => $ex->getLine(),
+                    'trace' => $ex->getTrace(),
+                    'previous' => $ex->getPrevious()
+                ];
+                return self::callAction(self::$config['system']['router']['error'][$ex->getCode()]['controller'], self::$config['system']['router']['error'][$ex->getCode()]['action'], self::$request);
+            }
+            xd($ex);
         }
     }
 
     public static function bootLoader() {
-        session_start();
-        chdir(dirname(__DIR__));
-        set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__));
-        spl_autoload_register(function($className) {
-            $router = Kernel::$router;
-            $realPath = $router::getRealPath($className);
-            if ($realPath) {
-                require_once($realPath);
-            }
-        });
+        try {
+            session_start();
+            chdir(dirname(__DIR__));
+            set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__));
+            spl_autoload_register(function($className) {
+                $router = Kernel::$router;
+                $realPath = $router::getRealPath($className);
+                if ($realPath) {
+                    require_once($realPath);
+                }
+            });
+        } catch (\Exception $ex) {
+            xd(2);
+        }
     }
 
     public static function setConstants() {
@@ -107,6 +126,7 @@ Class Kernel {
         try {
             $controller = null;
             $action = null;
+
             if ($route) {
                 $route = self::$router->parseRoute($route);
                 $controller = $route['controller'];
@@ -114,6 +134,11 @@ Class Kernel {
             } else {
                 $controller = self::$router->getController();
                 $action = self::$router->getAction();
+                if (!$controller || !$action) {
+                    $route = self::$router->parseRoute(self::$router->default);
+                    $controller = $route['controller'];
+                    $action = $route['action'];
+                }
             }
 
             self::callAction($controller, $action, self::$request);
@@ -151,9 +176,17 @@ Class Kernel {
 
             $controller = '\\' . $controller;
 
+            if (!class_exists($controller)) {
+                throw new \Exception("Controller {$controller} not found.", 404);
+            }
+
             // Instance controller
             $obj = new $controller($action, $request);
-
+            
+            if (!method_exists($obj, $action)) {
+                throw new \Exception("Action {$controller}::{$action} not found.", 404);
+            }
+            
             // Call action
             $view = $obj->$action($request);
 
