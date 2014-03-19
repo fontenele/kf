@@ -9,14 +9,12 @@ abstract class Service {
     /**
      * @var Model
      */
-    private static $model;
+    private $model;
 
     public function model() {
         try {
-            if (!self::$model) {
-                self::$model = new $this->_model;
-            }
-            return self::$model;
+            $this->model = new $this->_model;
+            return $this->model;
         } catch (\Exception $ex) {
             throw $ex;
         }

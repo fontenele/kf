@@ -30,11 +30,11 @@ abstract class Model {
         }
     }
 
-    public function addField($name, $type, $length = null, $join = null, $joinTable = null, $joinForeign = null) {
+    public function addField($name, $type, $length = null, $join = null, $joinModel = null, $joinForeign = null) {
         try {
             $this->_fields[$name] = ['type' => $type, 'length' => $length, 'join' => $join];
-            if ($join && $joinTable && $joinForeign) {
-                $this->_joins[$name] = ['table' => $joinTable, 'fk' => $joinForeign, 'type' => $join];
+            if ($join && $joinModel && $joinForeign) {
+                $this->_joins[$name] = ['model' => $joinModel, 'fk' => $joinForeign, 'type' => $join];
             }
         } catch (\Exception $ex) {
             throw $ex;

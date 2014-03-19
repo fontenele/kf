@@ -19,6 +19,7 @@ class Sql {
      */
     public $model;
     public $aliases = [];
+    public $aliasesFromFields = [];
 
     /**
      * @param \KF\Lib\Module\Model $model
@@ -27,13 +28,13 @@ class Sql {
     public function __construct($model = null) {
         try {
             $this->model = $model;
-
             $alias = 'j' . (count($this->aliases) + 1);
             $this->aliases[$this->model->_table] = $alias;
 
             foreach ($this->model->_joins as $field => $join) {
                 $alias = 'j' . (count($this->aliases) + 1);
-                $this->aliases[$join['table']] = $alias;
+                $this->aliases[$join['model']->_table] = $alias;
+                $this->aliasesFromFields[$field] = $alias;
             }
         } catch (\Exception $ex) {
             throw $ex;
@@ -56,8 +57,19 @@ class Sql {
                 }
                 $this->query = substr($this->query, 0, -2) . ' ';
             } elseif (count($this->aliases)) {
+                foreach ($this->model->fields() as $field => $fieldAttr) {
+                    $alias = $this->aliases[$this->model->_table];
+                    $this->query.= "{$alias}.{$field}, ";
+                }
+
                 foreach ($this->aliases as $table => $alias) {
-                    $this->query.= "{$alias}.*, ";
+                    if (in_array($alias, $this->aliasesFromFields) && isset($this->model->_joins[array_search($alias, $this->aliasesFromFields)])) {
+                        $model = $this->model->_joins[array_search($alias, $this->aliasesFromFields)]['model'];
+                        $_table = explode('.', $table);
+                        foreach ($model->fields() as $field => $fieldAttrs) {
+                            $this->query.= "{$alias}.{$field} as {$_table[1]}_{$field}, ";
+                        }
+                    }
                 }
                 $this->query = substr($this->query, 0, -2) . ' ';
             } else {
@@ -85,7 +97,7 @@ class Sql {
             }
 
             foreach ($this->model->_joins as $field => $join) {
-                $this->join($field, $join['type'], $table, $join['table'], $this->aliases[$join['table']], $join['fk']);
+                $this->join($field, $join['type'], $table, $join['model']->_table, $this->aliases[$join['model']->_table], $join['fk']);
             }
 
             return $this;
@@ -111,6 +123,7 @@ class Sql {
                     break;
             }
 
+
             $this->query.= "{$tableFk} {$aliasFk} ON ({$aliasFk}.{$fieldFk} = {$this->aliases[$tableFrom]}.{$field}) ";
         } catch (\Exception $ex) {
             throw $ex;
@@ -127,7 +140,13 @@ class Sql {
         try {
             $this->query.= "WHERE 1=1 ";
             foreach ($where as $field => $value) {
-                $this->query.= "AND {$field} = ? ";
+                if ($this->model->field($field)) {
+                    $alias = $this->aliases[$this->model->_table];
+                    $this->query.= "AND {$alias}.{$field} = ? ";
+                } else {
+                    $alias = $this->aliases[$this->model->_table];
+                    $this->query.= "AND {$field} = ? ";
+                }
                 $this->input[] = $value;
             }
             return $this;
