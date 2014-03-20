@@ -7,7 +7,7 @@ Class Kernel {
     /**
      * @var array
      */
-    public static $config = array();
+    public static $config = [];
 
     /**
      * @var Lib\View\Html
@@ -32,7 +32,7 @@ Class Kernel {
     /**
      * @var boolean
      */
-    public static $logged = false; // criar identity
+    public static $logged = false;
 
     public static function app() {
         try {
@@ -70,13 +70,15 @@ Class Kernel {
             set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__DIR__));
             spl_autoload_register(function($className) {
                 $router = Kernel::$router;
-                $realPath = $router::getRealPath($className);
-                if ($realPath) {
-                    require_once($realPath);
+                if ($router) {
+                    $realPath = $router::getRealPath($className);
+                    if ($realPath) {
+                        require_once($realPath);
+                    }
                 }
             });
         } catch (\Exception $ex) {
-            xd(2);
+            throw $ex;
         }
     }
 
@@ -150,14 +152,14 @@ Class Kernel {
     public static function callAction($controller, $action, $request) {
         try {
             self::$layout = new Lib\View\Html('public/themes/' . self::$config['system']['view']['theme'] . '/view/' . self::$config['system']['view']['layout']);
-            self::$layout->success = Lib\View\Helper\Messenger::getSuccess();
-            self::$layout->error = Lib\View\Helper\Messenger::getError();
+            self::$layout->success = Lib\System\Messenger::getSuccess();
+            self::$layout->error = Lib\System\Messenger::getError();
             self::$layout->userLogged = self::$logged;
 
             $arrController = explode('\\', $controller);
-            $_module = Lib\View\Helper\String::camelToDash($arrController[0]);
-            $_controller = Lib\View\Helper\String::camelToDash($arrController[2]);
-            $_action = Lib\View\Helper\String::camelToDash($action);
+            $_module = Lib\System\String::camelToDash($arrController[0]);
+            $_controller = Lib\System\String::camelToDash($arrController[2]);
+            $_action = Lib\System\String::camelToDash($action);
             $pathCssJs = "%s/modules/{$_module}/{$_controller}/{$_action}.%s";
 
             $js = array();
@@ -182,11 +184,11 @@ Class Kernel {
 
             // Instance controller
             $obj = new $controller($action, $request);
-            
+
             if (!method_exists($obj, $action)) {
                 throw new \Exception("Action {$controller}::{$action} not found.", 404);
             }
-            
+
             // Call action
             $view = $obj->$action($request);
 

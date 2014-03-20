@@ -1,1 +1,15 @@
-New item!!!
+<form class="form-horizontal" role="form">
+    <?php echo $this->form->cod->render(5) ?>
+    <div class="form-group">
+        <?php echo $this->form->name->label('col-sm-2 text-right') ?>
+        <div class="col-sm-4">
+            <?php echo $this->form->name->render() ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?php echo $this->form->status->label('col-sm-2 text-right') ?>
+        <div class="col-sm-4">
+            <?php echo $this->form->status->render() ?>
+        </div>
+    </div>
+</form>

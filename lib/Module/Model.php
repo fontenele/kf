@@ -4,10 +4,34 @@ namespace KF\Lib\Module;
 
 abstract class Model {
 
+    /**
+     * Table name
+     * @var string
+     */
     public $_table;
+
+    /**
+     * PK sequence
+     * @var string
+     */
     public $_sequence;
+
+    /**
+     * PK
+     * @var string
+     */
     public $_pk;
-    public $_fields;
+
+    /**
+     * Table Fields
+     * @var array
+     */
+    public $_fields = [];
+
+    /**
+     * Table joins
+     * @var array
+     */
     public $_joins = [];
 
     const TYPE_INTEGER = 1;
@@ -21,9 +45,9 @@ abstract class Model {
         try {
             switch (true) {
                 case substr($name, 0, 6) == 'findBy':
-                    return call_user_func_array(array($this, "findBy"), array(array(strtolower(substr($name, 6)) => $arguments[0])));
+                    return call_user_func_array([$this, "findBy"], [[strtolower(substr($name, 6)) => $arguments[0]]]);
                 case substr($name, 0, 9) == 'findOneBy':
-                    return call_user_func_array(array($this, "findOneBy"), array(array(strtolower(substr($name, 9)) => $arguments[0])));
+                    return call_user_func_array([$this, "findOneBy"], [[strtolower(substr($name, 9)) => $arguments[0]]]);
             }
         } catch (\Exception $ex) {
             throw $ex;
@@ -49,7 +73,7 @@ abstract class Model {
         return isset($this->_fields[$field]) ? $this->_fields[$field] : null;
     }
 
-    protected function fetchAllBySql($dml, $input = array()) {
+    protected function fetchAllBySql($dml, $input = []) {
         try {
             $stmt = \KF\Kernel::$db->prepare($dml);
             $stmt->execute($input);
@@ -59,7 +83,7 @@ abstract class Model {
         }
     }
 
-    protected function fetchBySql($dml, $input = array()) {
+    protected function fetchBySql($dml, $input = []) {
         try {
             $stmt = \KF\Kernel::$db->prepare($dml);
             $stmt->execute($input);
@@ -91,7 +115,7 @@ abstract class Model {
         }
     }
 
-    public function findBy($where, $selectNames = array()) {
+    public function findBy($where, $selectNames = []) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames)->from($this->_table)->where($where);
@@ -101,7 +125,7 @@ abstract class Model {
         }
     }
 
-    public function findOneBy($where, $selectNames = array()) {
+    public function findOneBy($where, $selectNames = []) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames)->from($this->_table)->where($where);

@@ -12,7 +12,7 @@ class Sql {
     /**
      * @var array
      */
-    public $input = array();
+    public $input = [];
 
     /**
      * @var \KF\Lib\Module\Model
@@ -47,7 +47,7 @@ class Sql {
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function select($fields = array()) {
+    public function select($fields = []) {
         try {
             $this->query.= 'SELECT ';
             if ($fields) {
@@ -136,7 +136,7 @@ class Sql {
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function where($where = array()) {
+    public function where($where = []) {
         try {
             $this->query.= "WHERE 1=1 ";
             foreach ($where as $field => $value) {

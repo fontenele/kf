@@ -8,4 +8,12 @@ class ArrayObject extends \ArrayObject {
         return $this->offsetExists($index) ? parent::offsetGet($index) : null;
     }
 
+    public function __get($name) {
+        return $this->offsetExists($name) ? $this->offsetGet($name) : '';
+    }
+
+    public function __set($name, $value = null) {
+        $this->offsetSet($name, $value);
+    }
+
 }

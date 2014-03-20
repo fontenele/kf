@@ -23,9 +23,9 @@ abstract class Controller {
         $arrClass = explode('\\', get_class($this));
         $this->action = $action;
 
-        $templace = \strpos($action, '-') === false ? \KF\Lib\View\Helper\String::camelToDash($action) : $action;
-        $_module = \KF\Lib\View\Helper\String::camelToDash($arrClass[0]);
-        $_controller = \KF\Lib\View\Helper\String::camelToDash($arrClass[2]);
+        $templace = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
+        $_module = \KF\Lib\System\String::camelToDash($arrClass[0]);
+        $_controller = \KF\Lib\System\String::camelToDash($arrClass[2]);
         $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$templace}.phtml", array('request' => $request));
 
         $this->request = $request;

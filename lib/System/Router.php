@@ -7,7 +7,7 @@ class Router {
     /**
      * @var array
      */
-    public static $sslPorts = array('443');
+    public static $sslPorts = ['443'];
 
     /**
      * @var boolean
@@ -57,11 +57,13 @@ class Router {
      */
     public function config($config) {
         switch (true) {
-            case isset($_SERVER['HTTPS']) && in_array($_SERVER['HTTPS'], array('on', '1')):
+            case isset($_SERVER['HTTPS']) && in_array($_SERVER['HTTPS'], ['on', '1']):
             case isset($_SERVER['SERVER_PORT']) && in_array($_SERVER['SERVER_PORT'], self::$sslPorts):
                 $this->isSSL = true;
+                break;
             default:
                 $this->isSSL = false;
+                break;
         }
 
         $httpScheme = $this->isSSL ? 'https' : 'http';
@@ -112,7 +114,7 @@ class Router {
 
     public static function getRealPath($className) {
         $arrClassName = \explode('\\', $className);
-        $_module = \KF\Lib\View\Helper\String::camelToDash($arrClassName[0]);
+        $_module = String::camelToDash($arrClassName[0]);
         $_class = $arrClassName[2];
 
         $path = "modules/{$_module}/" . strtolower($arrClassName[1]) . "/{$_class}.php";
@@ -122,11 +124,11 @@ class Router {
 
     public function parseRoute($route) {
         $route = str_replace($this->basePath, '', $this->serverName . $route);
-        
+
         $arrRoute = \explode('/', $route);
-        $_module = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
-        $_controller = ucfirst(\KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
-        $_arrAction = explode('?', \KF\Lib\View\Helper\String::dashToCamel(array_shift($arrRoute)));
+        $_module = ucfirst(String::dashToCamel(array_shift($arrRoute)));
+        $_controller = ucfirst(String::dashToCamel(array_shift($arrRoute)));
+        $_arrAction = explode('?', String::dashToCamel(array_shift($arrRoute)));
         $_action = $_arrAction[0];
 
         $_params = null;
@@ -154,7 +156,7 @@ class Router {
     }
 
     public function redirect($path = null) {
-        $path = $this->basePath .$path;
+        $path = $this->basePath . $path;
         header("Location: {$path}");
         exit;
     }
