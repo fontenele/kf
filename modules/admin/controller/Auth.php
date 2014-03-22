@@ -30,10 +30,10 @@ Class Auth extends \KF\Lib\Module\Controller {
 
                     $session->identity = $user;
                     
-                    \KF\Lib\View\Helper\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
+                    \KF\Lib\System\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
                     $this->redirect(\KF\Kernel::$router->default);
                 } else {
-                    \KF\Lib\View\Helper\Messenger::error('Login inválido');
+                    \KF\Lib\System\Messenger::error('Login inválido');
                     $this->redirect('admin/auth/login');
                 }
             }

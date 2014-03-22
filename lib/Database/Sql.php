@@ -155,4 +155,31 @@ class Sql {
         }
     }
 
+    public function insert($row) {
+        try {
+            $this->query = "INSERT INTO {$this->model->_table} (";
+            $values = '';
+            if(isset($row[$this->model->_pk])) {
+                unset($row[$this->model->_pk]);
+            }
+            foreach ($row as $field => $value) {
+                $this->query.= "{$field}, ";
+                $values.= "?, ";
+                $this->input[] = $value;
+            }
+            $values = substr($values, 0, -2);
+            $this->query = substr($this->query, 0, -2) . ") VALUES ({$values})";
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function update($where = []) {
+        try {
+            
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
 }

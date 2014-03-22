@@ -135,4 +135,61 @@ abstract class Model {
         }
     }
 
+    public function save(&$row) {
+        try {
+            if ($this->_pk && isset($row[$this->_pk]) && $row[$this->_pk]) {
+                return $this->update($row);
+            } else {
+                return $this->insert($row);
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function insert(&$row) {
+        try {
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->insert($row);
+            
+            $stmt = \KF\Kernel::$db->prepare($sql->query);
+            $success = $stmt->execute($sql->input);
+            
+            if($success) {
+                $row[$this->_pk] = \KF\Kernel::$db->lastInsertId($this->_sequence);
+            }
+            
+            return $success;
+        } catch (\Exception $ex) {
+            xd($ex);
+        }
+    }
+
+    public function update(&$row) {
+        try {
+            xd('update');
+            $data = $row;
+            unset($data['cod']);
+            $set = '';
+
+            foreach ($data as $dataIndex => $dataValue) {
+                $set.= ",{$dataIndex}='{$dataValue}'";
+            }
+
+            $set = substr($set, 1);
+
+            $dml = <<<DML
+                    UPDATE categorias
+                        SET {$set}
+                    WHERE cod = ?
+DML;
+            $stmt = \Kuestions\System::$db->prepare($dml);
+            return $stmt->execute(array(
+                        $row['cod']
+            ));
+        } catch (\Exception $ex) {
+            xd($ex);
+        }
+    }
+
 }

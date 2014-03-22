@@ -24,7 +24,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
      */
     public $closeTagAfter = false;
 
-    public function __construct($tag, $name, $label) {
+    public function __construct($tag, $name, $label = null) {
         try {
             $this->tag = $tag;
             $this->name = $name;
@@ -37,7 +37,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     public function __toString() {
         try {
-            return $this->label() . $this->render(true);
+            return ( $this->label ? $this->label() : '' ) . $this->render(true);
         } catch (\Exception $ex) {
             throw $ex;
         }

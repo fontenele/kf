@@ -8,10 +8,13 @@ class Select extends Tag {
     public $defaultItemValue;
     public $defaultItemLabel = 'Selecione';
 
-    public function __construct($name, $label, $options = []) {
+    public function __construct($name, $label = null, $options = []) {
         try {
             parent::__construct('select', $name, $label);
-            $this->setOptions($options);
+            $this->setOptions(isset($options['options']) ? $options['options'] : []);
+            if (isset($options['required'])) {
+                $this->required = $options['required'];
+            }
             $this->closeTagAfter = true;
         } catch (\Exception $ex) {
             throw $ex;

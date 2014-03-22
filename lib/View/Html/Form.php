@@ -19,6 +19,16 @@ class Form extends \KF\Lib\System\ArrayObject {
      */
     public $fields;
 
+    /**
+     * @var string
+     */
+    public $action;
+
+    /**
+     * @var string
+     */
+    public $method;
+
     const TYPE_INPUT_TEXT = 1;
     const TYPE_INPUT_HIDDEN = 2;
     const TYPE_INPUT_PASSWORD = 3;
@@ -40,6 +50,8 @@ class Form extends \KF\Lib\System\ArrayObject {
     const TYPE_SELECT = 19;
     const TYPE_SELECT_MULTIPLE = 20;
     const TYPE_BUTTON = 21;
+    const METHOD_POST = 'POST';
+    const METHOD_GET = 'GET';
 
     /**
      * @param array $config
@@ -47,27 +59,45 @@ class Form extends \KF\Lib\System\ArrayObject {
      */
     public function __construct($config = []) {
         try {
-            if ($config) {
-                xd($config);
-            }
+            $this->action = isset($config['action']) ? $config['action'] : null;
+            $this->method = isset($config['method']) ? $config['method'] : null;
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
-    public function addField($name, $label, $type, $options = []) {
+    public function open() {
+        try {
+            return "<form action='{$this->action}' method='{$this->method}' class='form-horizontal' role='form'>";
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function close() {
+        try {
+            return '</form>';
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function addField($name, $type, $label = null, $options = []) {
         try {
             $obj = null;
 
             switch ($type) {
                 case self::TYPE_INPUT_TEXT:
-                    $obj = new InputText($name, $label);
+                    $obj = new InputText($name, $label, null, $options);
                     break;
                 case self::TYPE_INPUT_HIDDEN:
                     $obj = new Input($name, $label, 'hidden');
                     break;
                 case self::TYPE_SELECT:
                     $obj = new Select($name, $label, $options);
+                    break;
+                case self::TYPE_BUTTON:
+                    $obj = new Button($name, $label, $options);
                     break;
             }
 
