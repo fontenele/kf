@@ -4,7 +4,7 @@ a, a:hover, a:active, a:focus, object, embed, input::-moz-focus-inner {
 
 body {
     padding-top: 60px;
-    background-color: #D43F3A;
+    //background-color: #D43F3A;
 }
 
 .table tbody tr td {

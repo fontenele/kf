@@ -12,7 +12,7 @@ Class Auth extends \KF\Lib\Module\Controller {
         try {
             if ($this->request->isPost() && $this->request->post->offsetGet('email') && $this->request->post->offsetGet('senha')) {
                 $service = new \Admin\Service\User();
-                $logged = $service->findOneBy(array('email' => $this->request->post->offsetGet('email'), 'password' => md5($this->request->post->offsetGet('senha'))), array('logged' => 'count(1)'))['logged'];
+                $logged = $service->findOneBy(['status' => '1', 'email' => $this->request->post->offsetGet('email'), 'password' => md5($this->request->post->offsetGet('senha'))], ['logged' => 'count(1)'])['logged'];
 
                 if ($logged) {
                     $session = new \KF\Lib\System\Session('system');

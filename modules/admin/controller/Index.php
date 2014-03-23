@@ -8,6 +8,14 @@ class Index extends \KF\Lib\Module\Controller {
         
     }
 
+    public function index() {
+        try {
+            return $this->view;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
     public function error404() {
         try {
             $this->view->template = 'public/themes/' . \KF\Kernel::$config['system']['view']['theme'] . '/view/' . \KF\Kernel::$config['system']['view']['error404'];
