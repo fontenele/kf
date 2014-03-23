@@ -1,10 +1,8 @@
 <div class="col-xs-12 col-sm-6 col-sm-offset-3">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4>Perfis</h4>
-        </div>
-        <?php echo $this->form->open() ?>
+        <div class="panel-heading">Grupos de Usuários<a title="Novo Grupo de Usuário" href="<?php $this->basePath ?>/admin/user-group/list-items" class="btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-plus-sign"></span> Ver Grupos de Usuários</a></div>
         <div class="panel-body">
+            <?php echo $this->form->open() ?>
             <fieldset>
                 <?php echo $this->form->cod->render() ?>
                 <div class="form-group">
@@ -25,7 +23,7 @@
                     </div>
                 </div>
             </fieldset>
+            <?php echo $this->form->close() ?>
         </div>
-        <?php echo $this->form->close() ?>
     </div>
 </div>

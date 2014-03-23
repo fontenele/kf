@@ -199,7 +199,7 @@ Class Kernel {
                 header('Content-type: text/html; charset=UTF-8');
 
                 // Set content var
-                self::$layout->content = $view->render();
+                self::$layout->content = $view ? $view->render() : $obj->view->render();
 
                 // Render layout
                 echo self::$layout->render();

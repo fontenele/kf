@@ -5,6 +5,11 @@ namespace KF\Lib\View\Html;
 class Form extends \KF\Lib\System\ArrayObject {
 
     /**
+     * @var array
+     */
+    public $attrs = [];
+
+    /**
      * @var \KF\Lib\Module\Model
      */
     public $model;
@@ -60,7 +65,10 @@ class Form extends \KF\Lib\System\ArrayObject {
     public function __construct($config = []) {
         try {
             $this->action = isset($config['action']) ? $config['action'] : null;
-            $this->method = isset($config['method']) ? $config['method'] : null;
+            $this->method = isset($config['method']) ? $config['method'] : self::METHOD_POST;
+            if (isset($config['id'])) {
+                $this->attrs['id'] = $config['id'];
+            }
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -68,7 +76,12 @@ class Form extends \KF\Lib\System\ArrayObject {
 
     public function open() {
         try {
-            return "<form action='{$this->action}' method='{$this->method}' class='form-horizontal' role='form'>";
+            $html = "<form action='{$this->action}' method='{$this->method}' class='form-horizontal' role='form' ";
+            foreach ($this->attrs as $attr => $value) {
+                $html.= "{$attr}='{$value}' ";
+            }
+            $html.= '>';
+            return $html;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -77,6 +90,21 @@ class Form extends \KF\Lib\System\ArrayObject {
     public function close() {
         try {
             return '</form>';
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function setValues($row) {
+        try {
+            foreach ($row as $field => $value) {
+                switch (true) {
+                    case $this->$field instanceof Input:
+                    case $this->$field instanceof Select:
+                        $this->$field->setValue($value);
+                        break;
+                }
+            }
         } catch (\Exception $ex) {
             throw $ex;
         }

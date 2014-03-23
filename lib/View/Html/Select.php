@@ -4,6 +4,7 @@ namespace KF\Lib\View\Html;
 
 class Select extends Tag {
 
+    public $selected;
     public $options = [];
     public $defaultItemValue;
     public $defaultItemLabel = 'Selecione';
@@ -35,6 +36,14 @@ class Select extends Tag {
                 $this->content.= "<option {$selected} value='{$_value}'>{$_label}</option>";
             }
             return $this;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function setValue($value = null) {
+        try {
+            return $this->setSelected($value);
         } catch (\Exception $ex) {
             throw $ex;
         }

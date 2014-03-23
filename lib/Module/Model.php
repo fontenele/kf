@@ -99,8 +99,12 @@ abstract class Model {
      * @return array
      * @throws \KF\Lib\Module\Exception
      */
-    protected function fetchAll($sql) {
+    public function fetchAll($sql = null, $where = [], $paginator = false, $rowsPerPage = null, $numPage = 1) {
         try {
+            if (!$sql) {
+                $sql = new \KF\Lib\Database\Sql($this);
+                $sql->select(null, $paginator)->from($this->_table)->where($where, $paginator, $rowsPerPage, $numPage);
+            }
             return $this->fetchAllBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
             throw $ex;
@@ -151,14 +155,14 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->insert($row);
-            
+
             $stmt = \KF\Kernel::$db->prepare($sql->query);
             $success = $stmt->execute($sql->input);
-            
-            if($success) {
+
+            if ($success) {
                 $row[$this->_pk] = \KF\Kernel::$db->lastInsertId($this->_sequence);
             }
-            
+
             return $success;
         } catch (\Exception $ex) {
             xd($ex);
@@ -167,26 +171,11 @@ abstract class Model {
 
     public function update(&$row) {
         try {
-            xd('update');
-            $data = $row;
-            unset($data['cod']);
-            $set = '';
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->update($row);
 
-            foreach ($data as $dataIndex => $dataValue) {
-                $set.= ",{$dataIndex}='{$dataValue}'";
-            }
-
-            $set = substr($set, 1);
-
-            $dml = <<<DML
-                    UPDATE categorias
-                        SET {$set}
-                    WHERE cod = ?
-DML;
-            $stmt = \Kuestions\System::$db->prepare($dml);
-            return $stmt->execute(array(
-                        $row['cod']
-            ));
+            $stmt = \KF\Kernel::$db->prepare($sql->query);
+            return $stmt->execute($sql->input);
         } catch (\Exception $ex) {
             xd($ex);
         }

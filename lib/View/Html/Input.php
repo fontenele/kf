@@ -13,4 +13,12 @@ class Input extends Tag {
         }
     }
 
+    public function setValue($value = null) {
+        try {
+            $this->value = $value;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
 }

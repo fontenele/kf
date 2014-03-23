@@ -47,9 +47,12 @@ class Sql {
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function select($fields = []) {
+    public function select($fields = [], $paginator = false) {
         try {
             $this->query.= 'SELECT ';
+            if ($paginator) {
+                $this->query.= "(SELECT count(1) FROM {$this->model->_table} %s) as total, ";
+            }
             if ($fields) {
                 foreach ($fields as $alias => $field) {
                     $alias = is_integer($alias) ? '' : ' as ' . $alias;
@@ -136,18 +139,41 @@ class Sql {
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function where($where = []) {
+    public function where($where = [], $paginator = false, $rowsPerPage = null, $numPage = 1) {
         try {
             $this->query.= "WHERE 1=1 ";
+            $_where = '';
             foreach ($where as $field => $value) {
                 if ($this->model->field($field)) {
                     $alias = $this->aliases[$this->model->_table];
                     $this->query.= "AND {$alias}.{$field} = ? ";
+                    $_where.= "AND {$field} = ";
+                    if ($paginator) {
+                        $_where.= "'{$value}' ";
+                    } else {
+                        $_where.= '? ';
+                    }
                 } else {
                     $alias = $this->aliases[$this->model->_table];
+                    $_where.= "AND {$field} = ";
                     $this->query.= "AND {$field} = ? ";
+                    if ($paginator) {
+                        $_where.= "'{$value}' ";
+                    } else {
+                        $_where.= '? ';
+                    }
                 }
                 $this->input[] = $value;
+            }
+            $this->query = sprintf($this->query, $paginator ? ('WHERE 1=1 ' . $_where) : '');
+            $this->query.= "ORDER BY {$this->model->_pk} ";
+            if ($paginator) {
+                $offset = 0;
+                $rowsPerPage = $rowsPerPage ? $rowsPerPage : \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
+                if ($numPage > 1) {
+                    $offset = $rowsPerPage * ($numPage - 1);
+                }
+                $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset}";
             }
             return $this;
         } catch (\Exception $ex) {
@@ -159,7 +185,7 @@ class Sql {
         try {
             $this->query = "INSERT INTO {$this->model->_table} (";
             $values = '';
-            if(isset($row[$this->model->_pk])) {
+            if (isset($row[$this->model->_pk])) {
                 unset($row[$this->model->_pk]);
             }
             foreach ($row as $field => $value) {
@@ -174,9 +200,20 @@ class Sql {
         }
     }
 
-    public function update($where = []) {
+    public function update($row) {
         try {
-            
+            $this->query = "UPDATE {$this->model->_table} SET ";
+            $pk = $row[$this->model->_pk];
+            $where = " WHERE {$this->model->_pk}=?";
+            $values = '';
+            unset($row[$this->model->_pk]);
+            foreach ($row as $field => $value) {
+                $this->query.= "{$field}=?, ";
+                $this->input[] = $value;
+            }
+            $this->query = substr($this->query, 0, -2);
+            $this->query.= $where;
+            $this->input[] = $pk;
         } catch (Exception $ex) {
             throw $ex;
         }

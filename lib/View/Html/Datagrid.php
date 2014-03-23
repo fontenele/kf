@@ -25,9 +25,10 @@ class Datagrid {
     public $totalPages = 0;
 
     /**
+     * Max pages in paginator
      * @var integer
      */
-    public $numItems = 5;
+    public $numItems = 3; // ver esse 5 ae
 
     /**
      * @var array
@@ -52,30 +53,166 @@ class Datagrid {
     /**
      * @var string
      */
-    public $left = '&laquo;';
+    public $paginatorLeft = '&laquo;';
 
     /**
      * @var string
      */
-    public $right = '&raquo;';
+    public $paginatorRight = '&raquo;';
+
+    /**
+     * @var array
+     */
+    public $headers = [];
+
+    /**
+     * @var array
+     */
+    public $headersRenderers = [];
 
     public function __construct($formSelector = 'form', $criteria = array()) {
-        $this->rowsPerPage = \KF\System::$config['system']['view']['datagrid']['rowsPerPage'];
-        $this->formSelector = $formSelector;
+        try {
 
-        $this->criteria = $criteria;
+            $this->rowsPerPage = \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
+            $this->formSelector = $formSelector;
 
-        if (isset($criteria['p'])) {
-            $this->active = $criteria['p'];
-            unset($this->criteria['p']);
+            $this->criteria = $criteria;
+
+            if (isset($criteria['kf-dg-p'])) {
+                $this->active = $criteria['kf-dg-p'];
+                unset($this->criteria['kf-dg-p']);
+            }
+            foreach ($this->criteria as $field => $value) {
+                if (!$value) {
+                    unset($this->criteria[$field]);
+                }
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
         }
     }
 
     public function getInputHidden() {
-        $html = <<<HTML
-                <input type="hidden" name="p" value="{$this->active}" />
+        try {
+
+            $html = <<<HTML
+                <input type="hidden" name="kf-dg-p" value="{$this->active}" />
 HTML;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
         return $html;
+    }
+
+    public function addHeader($fieldName, $label, $width = null, $class = null, $renderer = null) {
+        try {
+            $this->headers[$fieldName] = ['label' => $label];
+            if ($width) {
+                $this->headers[$fieldName]['width'] = $width;
+            }
+            if ($class) {
+                $this->headers[$fieldName]['class'] = $class;
+            }
+            if ($renderer) {
+                $this->headersRenderers[$fieldName] = $renderer;
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function datagrid() {
+        try {
+            $html = '';
+            if (count($this->headers)) {
+                $html.= '<table class="table table-bordered table-condensed table-hover table-responsive table-striped">';
+                $html.= $this->headers();
+                $html.= $this->body();
+                $html.= $this->footer();
+                $html.= '</table>';
+            }
+            return $html;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function headers() {
+        try {
+            $html = '<thead><tr>';
+            foreach ($this->headers as $header => $data) {
+                $width = isset($data['width']) ? $data['width'] : null;
+                $class = isset($data['class']) ? $data['class'] : null;
+                $html.= "<th class='{$class}' width='{$width}'>{$data['label']}</th>";
+            }
+            $html.= '</tr></thead>';
+            return $html;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function body() {
+        try {
+            $html = '<tbody>';
+            foreach ($this->rows as $row) {
+                $html.= '<tr>';
+                foreach ($this->headers as $header => $data) {
+                    $class = isset($data['class']) ? $data['class'] : null;
+                    $value = isset($row[$header]) ? $row[$header] : null;
+                    if (isset($this->headersRenderers[$header])) {
+                        $value = call_user_func_array($this->headersRenderers[$header], [$value, $row]);
+                    }
+                    $html.= "<td class='{$class}'>{$value}</td>";
+                }
+                $html.= '</tr>';
+            }
+            if (!count($this->rows)) {
+                $colspan = count($this->headers);
+                $html.= "<tr class='warning'><td colspan='{$colspan}'>Nenhum resultado encontrado.</td></tr>";
+            }
+            $html.= '</tbody>';
+            return $html;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function footer() {
+        try {
+            $html = '<tfoot><tr class="text-center">';
+            $colspan = count($this->headers);
+            $html.= "<td colspan='{$colspan}'>";
+
+            $htmlPaginator = <<<HTML
+                <ul class="pagination">
+                    %s
+                </ul>
+HTML;
+            $items = '';
+
+            $leftDisabled = $this->active <= 1 ? "class='disabled'" : '';
+            $leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
+            $items.= "<li {$leftDisabled}><a data-page='{$leftPage}' data-form='{$this->formSelector}'>{$this->paginatorLeft}</a></li>";
+
+            foreach ($this->items as $page) {
+                $active = $page == $this->active ? "class='active'" : '';
+                $items.= "<li {$active}><a data-page='{$page}' data-form='{$this->formSelector}'>{$page}</a></li>";
+            }
+
+            $rightDisabled = $this->active == $this->totalPages ? "class='disabled'" : '';
+            $rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
+            $items.= "<li {$rightDisabled}><a data-page='{$rightPage}' data-form='{$this->formSelector}'>{$this->paginatorRight}</a></li>";
+
+            $html.= sprintf($htmlPaginator, $items);
+            $html.= '<br class="clearfix" />';
+            $html.= "<div class='bg-info img-rounded col-xs-2 col-xs-offset-5'>Total: {$this->totalItems}</div>";
+            $html.= '</td></tr></tfoot>';
+
+            return $html;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
     public function setRows($rows = array()) {
@@ -143,27 +280,7 @@ HTML;
     }
 
     public function __toString() {
-        $html = <<<HTML
-                <ul class="pagination">
-                    %s
-                </ul>
-HTML;
-        $items = '';
-
-        $leftDisabled = $this->active <= 1 ? "class='disabled'" : '';
-        $leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
-        $items.= "<li {$leftDisabled}><a data-page='{$leftPage}' data-form='{$this->formSelector}'>{$this->left}</a></li>";
-
-        foreach ($this->items as $page) {
-            $active = $page == $this->active ? "class='active'" : '';
-            $items.= "<li {$active}><a data-page='{$page}' data-form='{$this->formSelector}'>{$page}</a></li>";
-        }
-
-        $rightDisabled = $this->active == $this->totalPages ? "class='disabled'" : '';
-        $rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
-        $items.= "<li {$rightDisabled}><a data-page='{$rightPage}' data-form='{$this->formSelector}'>{$this->right}</a></li>";
-
-        return sprintf($html, $items);
+        return $this->datagrid();
     }
 
 }

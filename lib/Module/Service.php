@@ -6,6 +6,7 @@ namespace KF\Lib\Module;
  * @abstract
  * @method public findBy($where, $selectNames = []) Find by field(s)
  * @method public findOneBy($where, $selectNames = []) Find one row by field(s)
+ * @method public fetchAll(\KF\Lib\Database\Sql $sql = null, $paginator = false, $rowsPerPage = null, $numPage = 1) Fetch all results
  */
 abstract class Service {
 
