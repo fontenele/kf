@@ -18,13 +18,13 @@
                     <li class="<?php echo $this->topItemAtual == 'painel' ? 'active' : '' ?> dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administração <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/index/index"><span class="glyphicon glyphicon-th"></span> Painel Administrativo</a></li>
+                            <li><a href="/admin/index/index"><?php echo $this->glyphicon('th') ?> Painel Administrativo</a></li>
                             <li role="presentation" class="divider"></li>
-                            <li><a href="/admin/user-group/new-item"><span class="glyphicon glyphicon-plus-sign"></span> Novo Grupo de Usuários</a></li>
-                            <li><a href="/admin/user/new-item"><span class="glyphicon glyphicon-plus-sign"></span> Novo Usuário</a></li>
+                            <li><a href="/admin/user-group/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Grupo de Usuários</a></li>
+                            <li><a href="/admin/user/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Usuário</a></li>
                             <li role="presentation" class="divider"></li>
-                            <li><a href="/admin/user-group/list-items"><span class="glyphicon glyphicon-list-alt"></span> Ver Grupos de Usuários</a></li>
-                            <li><a href="/admin/user/list-items"><span class="glyphicon glyphicon-list-alt"></span> Ver Usuários</a></li>
+                            <li><a href="/admin/user-group/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Grupos de Usuários</a></li>
+                            <li><a href="/admin/user/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Usuários</a></li>
                         </ul>
                     </li>
                 </ul>

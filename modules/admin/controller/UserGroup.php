@@ -67,7 +67,7 @@ class UserGroup extends \KF\Lib\Module\Controller {
 
             $form = $this->form();
             $form->action = \KF\Kernel::$router->basePath . 'admin/user-group/list-items';
-            $form->submit->label = $form->submit->content = '<span class="glyphicon glyphicon-search"></span> Pesquisar';
+            $form->submit->label = $form->submit->content = \KF\Lib\View\Html\Helper\Glyphicon::get('search') . ' Pesquisar';
             $form->name->offsetUnset('required');
             $form->status->offsetUnset('required');
             $form->setValues($this->request->post->getArrayCopy());

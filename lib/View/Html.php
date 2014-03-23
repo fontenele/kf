@@ -39,7 +39,7 @@ class Html extends \KF\Lib\System\ArrayObject {
     }
 
     public function __call($name, $arguments) {
-        $name = 'KF\Lib\View\Helper\Html\\' . ucfirst($name);
+        $name = 'KF\Lib\View\Html\Helper\\' . ucfirst($name);
         if (class_exists($name)) {
             $class = new $name();
             return call_user_func_array(array($class, "__invoke"), $arguments);

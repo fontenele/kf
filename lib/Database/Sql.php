@@ -166,8 +166,8 @@ class Sql {
                 $this->input[] = $value;
             }
             $this->query = sprintf($this->query, $paginator ? ('WHERE 1=1 ' . $_where) : '');
-            $this->query.= "ORDER BY {$this->model->_pk} ";
             if ($paginator) {
+                $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
                 $offset = 0;
                 $rowsPerPage = $rowsPerPage ? $rowsPerPage : \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
                 if ($numPage > 1) {
