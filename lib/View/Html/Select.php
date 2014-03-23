@@ -65,4 +65,16 @@ class Select extends Tag {
         }
     }
 
+    public static function rows2options($rows, $codName = 'cod', $valueName = 'name') {
+        try {
+            $options = [];
+            foreach($rows as $row) {
+                $options[$row[$codName]] = $row[$valueName];
+            }
+            return $options;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
 }

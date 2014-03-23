@@ -119,7 +119,13 @@ class Form extends \KF\Lib\System\ArrayObject {
                     $obj = new InputText($name, $label, null, $options);
                     break;
                 case self::TYPE_INPUT_HIDDEN:
-                    $obj = new Input($name, $label, 'hidden');
+                    $obj = new Input($name, $label, 'hidden', $options);
+                    break;
+                case self::TYPE_INPUT_PASSWORD:
+                    $obj = new Input($name, $label, 'password', $options);
+                    break;
+                case self::TYPE_INPUT_EMAIL:
+                    $obj = new Input($name, $label, 'email', $options);
                     break;
                 case self::TYPE_SELECT:
                     $obj = new Select($name, $label, $options);
