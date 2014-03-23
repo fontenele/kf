@@ -144,6 +144,7 @@ class Sql {
             $this->query.= "WHERE 1=1 ";
             $_where = '';
             foreach ($where as $field => $value) {
+
                 if ($this->model->field($field)) {
                     $alias = $this->aliases[$this->model->_table];
                     $this->query.= "AND {$alias}.{$field} = ? ";
@@ -153,8 +154,18 @@ class Sql {
                     } else {
                         $_where.= '? ';
                     }
+                } elseif (strstr($field, '.')) {
+                    $field = explode('.', $field);
+                    $alias = $this->aliasesFromFields[array_shift($field)];
+                    $field = array_shift($field);
+                    $_where.= "AND {$alias}.{$field} = ";
+                    $this->query.= "AND {$alias}.{$field} = ? ";
+                    if ($paginator) {
+                        $_where.= "'{$value}' ";
+                    } else {
+                        $_where.= '? ';
+                    }
                 } else {
-                    $alias = $this->aliases[$this->model->_table];
                     $_where.= "AND {$field} = ";
                     $this->query.= "AND {$field} = ? ";
                     if ($paginator) {
