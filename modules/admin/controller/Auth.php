@@ -21,7 +21,7 @@ Class Auth extends \KF\Lib\Module\Controller {
                     $user['photo'] = null;
 
                     if (\KF\Kernel::$config['system']['auth']['gravatar']) {
-                        $gravatarUrl = 'http://www.gravatar.com/avatar/%s?s=200&f=y';
+                        $gravatarUrl = 'http://www.gravatar.com/avatar/%s?s=300';
                         $gravatar = sprintf($gravatarUrl, md5($this->request->post->offsetGet('email')));
                         $user['photo'] = $gravatar;
                     }
