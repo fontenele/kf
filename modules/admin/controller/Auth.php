@@ -39,7 +39,7 @@ Class Auth extends \KF\Lib\Module\Controller {
             }
             return $this->view;
         } catch (\Exception $ex) {
-            xd($ex);
+            throw $ex;
         }
     }
 
@@ -48,7 +48,7 @@ Class Auth extends \KF\Lib\Module\Controller {
             session_destroy();
             $this->redirect('admin/auth/login');
         } catch (\Exception $ex) {
-            xd($ex);
+            throw $ex;
         }
     }
 
