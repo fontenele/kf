@@ -10,7 +10,7 @@ return [
             'defaultAuth' => '/admin/auth/login',
         ],
         'auth' => [
-            'gravatar' => false
+            'gravatar' => true
         ],
         'view' => [
             'theme' => 'kf',

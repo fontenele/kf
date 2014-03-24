@@ -108,9 +108,7 @@ class User extends \KF\Lib\Module\Controller {
 
     public function profile() {
         try {
-            $session = new \KF\Lib\System\Session('system');
-            $this->view->gravatar = $session->gravatar;
-            $this->view->usuario = $session->usuario;
+            $this->view->usuario = \Admin\Service\User::identity();
             return $this->view;
         } catch (\Exception $ex) {
             throw $ex;

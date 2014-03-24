@@ -1,5 +1,5 @@
 .pic {
-    margin-top:150px; 
+    margin-top:50px; 
     width:120px;
     margin-left:50px;
     margin-bottom:-60px;
@@ -8,7 +8,6 @@
 .panel {
     background-image:url("/img/bg-fla.jpg"); 
     background-position: center;
-    height: 220px;
 }
 
 .name {
