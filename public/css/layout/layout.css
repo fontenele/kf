@@ -4,7 +4,6 @@ a, a:hover, a:active, a:focus, object, embed, input::-moz-focus-inner {
 
 body {
     padding-top: 60px;
-    //background-color: #D43F3A;
 }
 
 .table tbody tr td {
@@ -51,4 +50,14 @@ optgroup {
 optgroup option {
     text-indent: 30px;
     padding: 5px;
+}
+
+@media (min-width: 767px) {
+    .caret-right {
+        width: 0;
+        height: 0;
+        border-top: 4px solid rgba(0, 0, 0, 0);
+        border-bottom: 4px solid rgba(0, 0, 0, 0);
+        border-left: 4px solid #777777;
+    }
 }

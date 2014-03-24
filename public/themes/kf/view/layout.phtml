@@ -6,8 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>KF</title>
 
-        <link href="<?php echo $this->basePath ?>css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="<?php echo $this->basePath ?>css/bootstrap/bootstrap-theme.css" rel="stylesheet">
+        <link id="theme-css" href="<?php echo $this->basePath ?>css/bootstrap/bs-lumen.min.css" rel="stylesheet">
         <link href="<?php echo $this->basePath ?>css/layout/layout.css" rel="stylesheet">
         <?php foreach ($this->css as $css): ?>
             <link href="<?php echo $css ?>" rel="stylesheet">
@@ -21,6 +20,9 @@
         <![endif]-->
     </head>
     <body>
+        <script>
+            var hostPath = '<?php echo $this->basePath ?>';
+        </script>
         <?php echo $this->partial('public/themes/kf/view/top.phtml', $this->getArrayCopy()) ?>
 
         <div class="container">
@@ -30,12 +32,14 @@
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <strong>Sucesso!</strong> <?php echo $success ?>
                     </div>
+                    <br /><br /><br />
                 <?php endforeach; ?>
                 <?php foreach ($this->error as $error): ?>
                     <div class="alert alert-danger alert-dismissable col-xs-12">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <strong>Erro!</strong> <?php echo $error ?>
                     </div>
+                    <br /><br /><br />
                 <?php endforeach; ?>
                 <?php echo $this->content ?>
             </div>

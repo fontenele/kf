@@ -20,11 +20,26 @@
                         <ul class="dropdown-menu">
                             <li><a href="/admin/index/index"><?php echo $this->glyphicon('th') ?> Painel Administrativo</a></li>
                             <li role="presentation" class="divider"></li>
-                            <li><a href="/admin/user-group/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Grupo de Usuários</a></li>
-                            <li><a href="/admin/user/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Usuário</a></li>
-                            <li role="presentation" class="divider"></li>
-                            <li><a href="/admin/user-group/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Grupos de Usuários</a></li>
-                            <li><a href="/admin/user/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Usuários</a></li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Grupos de Usuários <b class="caret caret-right"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/admin/user-group/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Grupo de Usuários</a></li>
+                                    <li><a href="/admin/user-group/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Grupos de Usuários</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuários <b class="caret caret-right"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/admin/user/new-item"><?php echo $this->glyphicon('plus-sign') ?> Novo Usuário</a></li>
+                                    <li><a href="/admin/user/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Usuários</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menus <b class="caret caret-right"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/admin/menu/list-items"><?php echo $this->glyphicon('list-alt') ?> Ver Menus</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                 </ul>
