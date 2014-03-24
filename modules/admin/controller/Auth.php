@@ -16,18 +16,15 @@ Class Auth extends \KF\Lib\Module\Controller {
 
                 if ($logged) {
                     $session = new \KF\Lib\System\Session('system');
-                    $user = $service->findOneByEmail('guilherme@fontenele.net');
+                    $user = $service->findOneByEmail($this->request->post->offsetGet('email'));
                     unset($user['password']);
                     $user['photo'] = null;
 
                     if (\KF\Kernel::$config['system']['auth']['gravatar']) {
-                        $gravatarUrl = 'http://www.gravatar.com/%s.php';
-                        $gravatar = \unserialize(\file_get_contents(sprintf($gravatarUrl, md5($this->request->post->offsetGet('email')))));
-                        if (is_array($gravatar) && isset($gravatar['entry']) && isset($gravatar['entry'][0])) {
-                            $user['photo'] = $gravatar['entry'][0]['thumbnailUrl'];
-                        }
+                        $gravatarUrl = 'http://www.gravatar.com/avatar/%s?s=200&f=y';
+                        $gravatar = sprintf($gravatarUrl, md5($this->request->post->offsetGet('email')));
+                        $user['photo'] = $gravatar;
                     }
-
                     $session->identity = $user;
 
                     \KF\Lib\System\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));

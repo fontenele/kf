@@ -4,17 +4,17 @@ namespace KF\Lib\View\Html\Helper;
 
 class Glyphicon extends Helper {
 
-    public function __invoke($name) {
+    public function __invoke($name, $type = 'glyphicon') {
         try {
-            return self::get($name);
+            return self::get($name, $type);
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
-    public static function get($name) {
+    public static function get($name, $type = 'glyphicon') {
         try {
-            return "<span class='glyphicon glyphicon-{$name}'></span>";
+            return "<span class='{$type} {$type}-{$name}'></span>";
         } catch (\Exception $ex) {
             throw $ex;
         }

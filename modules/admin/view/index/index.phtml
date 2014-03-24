@@ -4,15 +4,39 @@
     <div class="col-sm-6">
         <div class="blockquote-box blockquote-warning clearfix">
             <div class="square pull-left">
-                <span class="glyphicon glyphicon-tags glyphicon-lg"></span>
+                <?php echo $this->glyphicon('group glyphicon-lg', 'glyphicons') ?>
+            </div>
+            <h4>Grupo de Usuários</h4>
+            <p>
+            <ul class="list-unstyled list-inline">
+                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user-group/new-item">Novo Grupo de Usuário</a></li>
+                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user-group/list-items">Ver Grupos de Usuários</a></li>
+            </ul>
+            </p>
+        </div>
+        <div class="blockquote-box blockquote-danger clearfix">
+            <div class="square pull-left">
+                <?php echo $this->glyphicon('user glyphicon-lg') ?>
             </div>
             <h4>Usuários</h4>
             <p>
             <ul class="list-unstyled list-inline">
-                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user-group/new-item">Novo Grupo de Usuário</a></li>
                 <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user/new-item">Novo Usuário</a></li>
-                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user-group/list-items">Ver Grupos de Usuários</a></li>
                 <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user/list-items">Ver Usuários</a></li>
+            </ul>
+            </p>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="blockquote-box blockquote-info clearfix">
+            <div class="square pull-left">
+                <?php echo $this->glyphicon('list glyphicon-lg') ?>
+            </div>
+            <h4>Menus</h4>
+            <p>
+            <ul class="list-unstyled list-inline">
+                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/menu/new-item">Novo Menu</a></li>
+                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/menu/list-items">Ver Menus</a></li>
             </ul>
             </p>
         </div>
