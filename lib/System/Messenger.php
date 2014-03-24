@@ -5,14 +5,14 @@ namespace KF\Lib\System;
 class Messenger {
 
     public static function success($message) {
-        $session = new \KF\Lib\System\Session('__KuestionsMessenger__');
+        $session = new Session('__KuestionsMessenger__');
         $success = $session->success;
         $success[] = $message;
         $session->success = $success;
     }
 
     public static function error($message) {
-        $session = new \KF\Lib\System\Session('__KuestionsMessenger__');
+        $session = new Session('__KuestionsMessenger__');
         $error = $session->error;
         $error[] = $message;
         $session->error = $error;
@@ -31,14 +31,14 @@ class Messenger {
     }
 
     public static function getSuccess() {
-        $session = new \KF\Lib\System\Session('__KuestionsMessenger__');
+        $session = new Session('__KuestionsMessenger__');
         $success = $session->success ? $session->success : [];
         $session->success = [];
         return $success;
     }
 
     public static function getError() {
-        $session = new \KF\Lib\System\Session('__KuestionsMessenger__');
+        $session = new Session('__KuestionsMessenger__');
         $error = $session->error ? $session->error : [];
         $session->error = [];
         return $error;
