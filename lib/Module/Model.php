@@ -2,6 +2,10 @@
 
 namespace KF\Lib\Module;
 
+/**
+ * @package Module
+ * @abstract
+ */
 abstract class Model {
 
     /**
@@ -34,13 +38,32 @@ abstract class Model {
      */
     public $_joins = [];
 
+    /**
+     * Debug toggle
+     * @var boolean
+     */
+    public static $debug = false;
+
+    /**
+     * Fields types
+     */
     const TYPE_INTEGER = 1;
     const TYPE_VARCHAR = 2;
+
+    /**
+     * Joins types
+     */
     const JOIN_INNER = 1;
     const JOIN_LEFT = 2;
     const JOIN_RIGHT = 3;
     const JOIN_FULL = 4;
 
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     * @throws \KF\Lib\Module\Exception
+     */
     public function __call($name, $arguments) {
         try {
             switch (true) {
@@ -54,6 +77,15 @@ abstract class Model {
         }
     }
 
+    /**
+     * @param string $name
+     * @param integer $type
+     * @param integer $length
+     * @param integer $join
+     * @param Model $joinModel
+     * @param string $joinForeign
+     * @throws \KF\Lib\Module\Exception
+     */
     public function addField($name, $type, $length = null, $join = null, $joinModel = null, $joinForeign = null) {
         try {
             $this->_fields[$name] = ['type' => $type, 'length' => $length, 'join' => $join];
@@ -65,14 +97,27 @@ abstract class Model {
         }
     }
 
+    /**
+     * @return array
+     */
     public function fields() {
         return $this->_fields;
     }
 
+    /**
+     * @param string $field
+     * @return array
+     */
     public function field($field) {
         return isset($this->_fields[$field]) ? $this->_fields[$field] : null;
     }
 
+    /**
+     * @param string $dml
+     * @param array $input
+     * @return array
+     * @throws \KF\Lib\Module\Exception
+     */
     protected function fetchAllBySql($dml, $input = []) {
         try {
             $stmt = \KF\Kernel::$db->prepare($dml);
@@ -83,6 +128,12 @@ abstract class Model {
         }
     }
 
+    /**
+     * @param string $dml
+     * @param array $input
+     * @return array
+     * @throws \KF\Lib\Module\Exception
+     */
     protected function fetchBySql($dml, $input = []) {
         try {
             $stmt = \KF\Kernel::$db->prepare($dml);
@@ -94,51 +145,73 @@ abstract class Model {
     }
 
     /**
-     * Fetch All
-     * @param \KF\Lib\Database\Sql $sql
+     * @param array $where
+     * @param integer $rowsPerPage
+     * @param integer $numPage
+     * @param array $selectNames
      * @return array
      * @throws \KF\Lib\Module\Exception
      */
-    public function fetchAll($sql = null, $where = [], $paginator = false, $rowsPerPage = null, $numPage = 1) {
+    public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = []) {
         try {
-            if (!$sql) {
-                $sql = new \KF\Lib\Database\Sql($this);
-                $sql->select(null, $paginator)->from($this->_table)->where($where, $paginator, $rowsPerPage, $numPage);
-            }
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage);
             return $this->fetchAllBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
-    protected function fetch($sql) {
+    /**
+     * @param array $where
+     * @param array $selectNames
+     * @return array
+     * @throws \KF\Lib\Module\Exception
+     */
+    public function fetch($where = [], $selectNames = []) {
         try {
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->select($selectNames)->from($this->_table)->where($where);
             return $this->fetchBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
+    /**
+     * @param array $where
+     * @param array $selectNames
+     * @return array
+     * @throws \KF\Lib\Module\Exception
+     */
     public function findBy($where, $selectNames = []) {
         try {
-            $sql = new \KF\Lib\Database\Sql($this);
-            $sql->select($selectNames)->from($this->_table)->where($where);
-            return $this->fetchAll($sql);
+            return $this->fetchAll($where, $selectNames);
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
+    /**
+     * 
+     * @param array $where
+     * @param array $selectNames
+     * @return array
+     * @throws \KF\Lib\Module\Exception
+     */
     public function findOneBy($where, $selectNames = []) {
         try {
-            $sql = new \KF\Lib\Database\Sql($this);
-            $sql->select($selectNames)->from($this->_table)->where($where);
-            return $this->fetch($sql);
+            return $this->fetch($where, $selectNames);
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
+    /**
+     * @param array $row
+     * @return boolean
+     * @throws \KF\Lib\Module\Exception
+     */
     public function save(&$row) {
         try {
             if ($this->_pk && isset($row[$this->_pk]) && $row[$this->_pk]) {
@@ -151,6 +224,10 @@ abstract class Model {
         }
     }
 
+    /**
+     * @param array $row
+     * @return boolean
+     */
     public function insert(&$row) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
@@ -165,10 +242,14 @@ abstract class Model {
 
             return $success;
         } catch (\Exception $ex) {
-            xd($ex);
+            throw $ex;
         }
     }
 
+    /**
+     * @param array $row
+     * @return boolean
+     */
     public function update(&$row) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
@@ -177,7 +258,7 @@ abstract class Model {
             $stmt = \KF\Kernel::$db->prepare($sql->query);
             return $stmt->execute($sql->input);
         } catch (\Exception $ex) {
-            xd($ex);
+            throw $ex;
         }
     }
 

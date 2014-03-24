@@ -63,7 +63,7 @@ class UserGroup extends \KF\Lib\Module\Controller {
             $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit');
 
             $service = new \Admin\Service\UserGroup();
-            $dg->setRows($service->fetchAll(null, $dg->criteria, true, $dg->rowPerPage, $dg->active));
+            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active));
 
             $form = $this->form();
             $form->action = \KF\Kernel::$router->basePath . 'admin/user-group/list-items';

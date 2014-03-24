@@ -139,7 +139,7 @@ class Sql {
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function where($where = [], $paginator = false, $rowsPerPage = null, $numPage = 1) {
+    public function where($where = [], $rowsPerPage = null, $numPage = 1) {
         try {
             $this->query.= "WHERE 1=1 ";
             $_where = '';
@@ -149,7 +149,7 @@ class Sql {
                     $alias = $this->aliases[$this->model->_table];
                     $this->query.= "AND {$alias}.{$field} = ? ";
                     $_where.= "AND {$field} = ";
-                    if ($paginator) {
+                    if ($rowsPerPage) {
                         $_where.= "'{$value}' ";
                     } else {
                         $_where.= '? ';
@@ -160,7 +160,7 @@ class Sql {
                     $field = array_shift($field);
                     $_where.= "AND {$alias}.{$field} = ";
                     $this->query.= "AND {$alias}.{$field} = ? ";
-                    if ($paginator) {
+                    if ($rowsPerPage) {
                         $_where.= "'{$value}' ";
                     } else {
                         $_where.= '? ';
@@ -168,7 +168,7 @@ class Sql {
                 } else {
                     $_where.= "AND {$field} = ";
                     $this->query.= "AND {$field} = ? ";
-                    if ($paginator) {
+                    if ($rowsPerPage) {
                         $_where.= "'{$value}' ";
                     } else {
                         $_where.= '? ';
@@ -176,8 +176,8 @@ class Sql {
                 }
                 $this->input[] = $value;
             }
-            $this->query = sprintf($this->query, $paginator ? ('WHERE 1=1 ' . $_where) : '');
-            if ($paginator) {
+            $this->query = sprintf($this->query, $rowsPerPage ? ('WHERE 1=1 ' . $_where) : '');
+            if ($rowsPerPage) {
                 $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
                 $offset = 0;
                 $rowsPerPage = $rowsPerPage ? $rowsPerPage : \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
