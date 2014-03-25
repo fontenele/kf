@@ -1,0 +1,13 @@
+.list-group-item label {
+    width: 80%;
+}
+
+.container .row .panel,
+.container .row .panel .panel-heading,
+.container .row .panel .panel-body {
+    //min-width: 350px;
+    
+}
+.list-group {
+    //min-width: 300px;
+}

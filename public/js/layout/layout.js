@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    $('a, .btn').tooltip();
+    $('.form-control').tooltip({'placement': 'right'});
+    
     // Paginator
     $('.pagination li a').on('click', function() {
         if (!$(this).parent().hasClass('active') && !$(this).parent().hasClass('disabled')) {

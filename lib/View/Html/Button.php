@@ -13,6 +13,7 @@ class Button extends Tag {
             if (isset($options['class'])) {
                 $this->class.= ' ' . $options['class'];
             }
+            $this->title = $label;
             $this->closeTagAfter = true;
         } catch (\Exception $ex) {
             throw $ex;

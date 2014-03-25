@@ -16,6 +16,7 @@ class Select extends Tag {
             if (isset($options['required'])) {
                 $this->required = $options['required'];
             }
+            $this->title = $label;
             $this->closeTagAfter = true;
         } catch (\Exception $ex) {
             throw $ex;
