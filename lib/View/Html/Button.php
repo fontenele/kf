@@ -8,10 +8,11 @@ class Button extends Tag {
         try {
             parent::__construct('button', $name, $label);
             $this->content = $label;
-            $this->class = 'btn';
+            $this->class[] = 'btn';
+            $this->removeClass('form-control');
             $this->name = '';
             if (isset($options['class'])) {
-                $this->class.= ' ' . $options['class'];
+                $this->class[] = $options['class'];
             }
             $this->title = $label;
             $this->closeTagAfter = true;

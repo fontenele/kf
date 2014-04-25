@@ -20,6 +20,11 @@ class Tag extends \KF\Lib\System\ArrayObject {
     public $label;
 
     /**
+     * @var array
+     */
+    public $class = [];
+
+    /**
      * @var boolean
      */
     public $closeTagAfter = false;
@@ -29,7 +34,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             $this->tag = $tag;
             $this->name = $name;
             $this->label = $label;
-            $this->class = 'form-control';
+            $this->addClass('form-control');
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -61,11 +66,45 @@ class Tag extends \KF\Lib\System\ArrayObject {
                 return "<p class='form-control-static'>{$this->value}</p>";
             }
             $html = "<{$this->tag} ";
+
+            $html.= "class='";
+            foreach ($this->class as $className) {
+                $html.= "{$className} ";
+            }
+            $html.= "' ";
+
             foreach ($this as $attr => $value) {
                 $html.= "{$attr}='{$value}' ";
             }
+
             $html.= $this->closeTagAfter ? ">{$this->content}</{$this->tag}>" : " />";
             return $html;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function addClass($classname) {
+        try {
+            $this->class[$classname] = $classname;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function removeClass($classname) {
+        try {
+            if ($this->hasClass($classname)) {
+                unset($this->class[$classname]);
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function hasClass($classname) {
+        try {
+            return isset($this->class[$classname]);
         } catch (\Exception $ex) {
             throw $ex;
         }

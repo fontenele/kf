@@ -2,7 +2,7 @@
 
 namespace KF;
 
-Class Kernel {
+class Kernel {
 
     /**
      * @var array

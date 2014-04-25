@@ -7,7 +7,7 @@ class Datagrid {
     /**
      * @var integer
      */
-    public $rowPerPage = 15;
+    public $rowPerPage = 10;
 
     /**
      * @var integer
@@ -192,7 +192,8 @@ HTML;
             $items = '';
 
             $leftDisabled = $this->active <= 1 ? "class='disabled'" : '';
-            $leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
+            //$leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
+            $leftPage = 1;
             $items.= "<li {$leftDisabled}><a data-page='{$leftPage}' data-form='{$this->formSelector}'>{$this->paginatorLeft}</a></li>";
 
             foreach ($this->items as $page) {
@@ -201,12 +202,13 @@ HTML;
             }
 
             $rightDisabled = $this->active == $this->totalPages ? "class='disabled'" : '';
-            $rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
+            //$rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
+            $rightPage = $this->totalPages;
             $items.= "<li {$rightDisabled}><a data-page='{$rightPage}' data-form='{$this->formSelector}'>{$this->paginatorRight}</a></li>";
 
             $html.= sprintf($htmlPaginator, $items);
             $html.= '<br class="clearfix" />';
-            $html.= "<div class='bg-info img-rounded col-xs-2 col-xs-offset-5'>Total: {$this->totalItems}</div>";
+            $html.= "<div class='bg-info img-rounded col-xs-2 col-xs-offset-5'>Total: {$this->totalItems} - Página: {$this->active}/{$this->totalPages}</div>";
             $html.= '</td></tr></tfoot>';
 
             return $html;
@@ -216,71 +218,44 @@ HTML;
     }
 
     public function setRows($rows = array()) {
-        $this->rows = $rows;
-        if (count($rows) && isset($rows[array_keys($rows)[0]]) && isset($rows[array_keys($rows)[0]]['total'])) {
-            $this->active = $this->active == 0 ? 1 : $this->active;
-            $this->totalItems = $rows[array_keys($rows)[0]]['total'];
+        try {
+            $this->rows = $rows;
+            if (count($this->rows) && isset($this->rows[array_keys($this->rows)[0]]) && isset($this->rows[array_keys($this->rows)[0]]['total'])) {
+                $this->active = $this->active == 0 ? 1 : $this->active;
+                $this->totalItems = $this->rows[array_keys($rows)[0]]['total'];
 
-            $totalPages = round($this->totalItems / $this->rowPerPage);
-            if ($totalPages * $this->rowPerPage < $this->totalItems) {
-                $totalPages++;
-            }
-            $this->totalPages = $totalPages;
-            if ($this->active > $this->totalPages) {
-                $this->active = $this->totalPages;
-            }
+                $maxItens = $this->numItems;
+                $this->totalPages = ceil($this->totalItems / $this->rowPerPage);
 
-            $activeMiddle = $this->numItems % 2;
+                $itensPerSide = intval($maxItens / 2);
 
-            $itemsPerSide = floor($this->numItems / 2);
-            if ($activeMiddle && $this->active - $itemsPerSide > 0 && $this->active + $itemsPerSide <= $this->totalPages) {
-                for ($i = $itemsPerSide; $i > 0; $i--) {
-                    $this->items[] = $this->active - $i;
+                for ($i = $this->active - $itensPerSide; $i < $this->active; $i++) {
+                    if ($i > 0 && $i <= $this->totalPages) {
+                        $this->items[$i] = $i;
+                    }
                 }
-                $this->items[] = $this->active;
-                for ($i = 1; $i <= $itemsPerSide; $i++) {
-                    $this->items[] = $this->active + $i;
+
+                if ($this->active <= $this->totalPages) {
+                    $this->items[$this->active] = $this->active;
                 }
-            } else {
-                $itemsAdded = 0;
-                if ($this->active - $itemsPerSide <= 0) {
-                    $i = $this->active - $itemsPerSide;
-                    while ($i <= $this->active) {
-                        if ($i > 0 && $itemsAdded < $this->numItems && $i <= $this->totalPages) {
-                            $this->items[] = $i;
-                            $itemsAdded++;
-                        }
-                        $i++;
-                    }
-                    while ($itemsAdded < $this->numItems && $i <= $this->totalPages) {
-                        $this->items[] = $i;
-                        $itemsAdded++;
-                        $i++;
-                    }
-                } else {
-                    $i = $this->active + $itemsPerSide;
 
-                    while ($i >= $this->active) {
-                        if ($i >= $this->active && $i <= $this->totalPages && $itemsAdded < $this->numItems) {
-                            $this->items[] = $i;
-                            $itemsAdded++;
-                        }
-                        $i--;
+                for ($i = $this->active + 1; $i <= $this->active + $itensPerSide; $i++) {
+                    if ($i <= $this->totalPages) {
+                        $this->items[$i] = $i;
                     }
-                    while ($itemsAdded < $this->numItems && $i <= $this->totalPages) {
-                        $this->items[] = $i;
-                        $itemsAdded++;
-                        $i--;
-                    }
-
-                    $this->items = \array_reverse($this->items);
                 }
             }
+        } catch (\Exception $ex) {
+            throw $ex;
         }
     }
 
     public function __toString() {
-        return $this->datagrid();
+        try {
+            return $this->datagrid();
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
 }

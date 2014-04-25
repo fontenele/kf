@@ -20,7 +20,7 @@ class User extends \KF\Lib\Module\Controller {
                 $form->addField('password', \KF\Lib\View\Html\Form::TYPE_INPUT_PASSWORD, 'Senha', ['required' => true, 'placeholder' => 'Senha']);
                 $form->addField('user_group', \KF\Lib\View\Html\Form::TYPE_SELECT, 'Grupo', ['options' => \KF\Lib\View\Html\Select::rows2options($service->fetchAll()), 'required' => true]);
                 $form->addField('status', \KF\Lib\View\Html\Form::TYPE_SELECT, 'Status', ['options' => [1 => 'Ativo', 2 => 'Inativo'], 'required' => true]);
-                $form->addField('submit', \KF\Lib\View\Html\Form::TYPE_BUTTON, 'Salvar', ['class' => 'btn-primary', 'required' => true]);
+                $form->addField('submit', \KF\Lib\View\Html\Form::TYPE_BUTTON, 'Salvar', ['class' => 'btn-primary']);
                 self::$form = $form;
             }
             return self::$form;
@@ -80,6 +80,7 @@ class User extends \KF\Lib\Module\Controller {
             $form->email->offsetUnset('required');
             $form->user_group->offsetUnset('required');
             $form->status->offsetUnset('required');
+            $form->submit->addClass('btn-search');
             $form->setValues($this->request->post->getArrayCopy());
 
             $this->view->form = $form;
