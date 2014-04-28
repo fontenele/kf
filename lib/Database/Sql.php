@@ -136,47 +136,44 @@ class Sql {
     /**
      * Set WHERE Clausules
      * @param array $where
+     * @param integer $rowsPerPage
+     * @param integer $numPage
+     * @param array $whereConditions
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function where($where = [], $rowsPerPage = null, $numPage = 1) {
+    public function where($where = [], $rowsPerPage = null, $numPage = 1, $whereConditions = []) {
         try {
             $this->query.= "WHERE 1=1 ";
+
             $_where = '';
+
             foreach ($where as $field => $value) {
+                $_conditionOperator = \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL;
+                if (isset($whereConditions[$field]) && $whereConditions[$field]) {
+                        $_conditionOperator = $whereConditions[$field];
+                }
 
                 if ($this->model->field($field)) {
                     $alias = $this->aliases[$this->model->_table];
-                    $this->query.= "AND {$alias}.{$field} = ? ";
-                    $_where.= "AND {$field} = ";
-                    if ($rowsPerPage) {
-                        $_where.= "'{$value}' ";
-                    } else {
-                        $_where.= '? ';
-                    }
+
+                    $this->query.= "AND {$this->parseWhereFieldValue("{$alias}.{$field}", $value, $_conditionOperator)}";
+                    $_where.= "AND {$this->parseWhereFieldValue($field, $value, $_conditionOperator)}";
                 } elseif (strstr($field, '.')) {
                     $field = explode('.', $field);
                     $alias = $this->aliasesFromFields[array_shift($field)];
                     $field = array_shift($field);
-                    $_where.= "AND {$alias}.{$field} = ";
-                    $this->query.= "AND {$alias}.{$field} = ? ";
-                    if ($rowsPerPage) {
-                        $_where.= "'{$value}' ";
-                    } else {
-                        $_where.= '? ';
-                    }
+
+                    $this->query.= "AND {$this->parseWhereFieldValue("{$alias}.{$field}", $value, $_conditionOperator)}";
+                    $_where.= "AND {$this->parseWhereFieldValue("{$alias}.{$field}", $value, $_conditionOperator)}";
                 } else {
-                    $_where.= "AND {$field} = ";
-                    $this->query.= "AND {$field} = ? ";
-                    if ($rowsPerPage) {
-                        $_where.= "'{$value}' ";
-                    } else {
-                        $_where.= '? ';
-                    }
+                    $this->query.= "AND {$this->parseWhereFieldValue($field, $value, $_conditionOperator)}";
+                    $_where.= "AND {$this->parseWhereFieldValue($field, $value, $_conditionOperator)}";
                 }
-                $this->input[] = $value;
             }
-            $this->query = sprintf($this->query, $rowsPerPage ? ('WHERE 1=1 ' . $_where) : '');
+
+            $this->query = sprintf($this->query, $rowsPerPage ? ('WHERE 1=1 ' . sprintf($_where)) : '');
+
             if ($rowsPerPage) {
                 $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
                 $offset = 0;
@@ -186,7 +183,24 @@ class Sql {
                 }
                 $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset}";
             }
+
             return $this;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    protected function parseWhereFieldValue($field, $value, $criteriaCondition = \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL) {
+        try {
+            $_whereLike = "LIKE '%%%s%%'";
+            $value = strtoupper($value);
+
+            switch($criteriaCondition) {
+                case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
+                    return "UPPER({$field}) = '{$value}' ";
+                case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
+                    return "UPPER({$field}) LIKE '%%{$value}%%' ";
+            }
         } catch (\Exception $ex) {
             throw $ex;
         }

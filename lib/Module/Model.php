@@ -152,10 +152,10 @@ abstract class Model {
      * @return array
      * @throws \KF\Lib\Module\Exception
      */
-    public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = []) {
+    public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = []) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
-            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage);
+            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions);
             return $this->fetchAllBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
             throw $ex;
@@ -193,7 +193,7 @@ abstract class Model {
     }
 
     /**
-     * 
+     *
      * @param array $where
      * @param array $selectNames
      * @return array

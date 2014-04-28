@@ -51,14 +51,29 @@ class Datagrid {
     public $criteria = array();
 
     /**
-     * @var string
+     * @var array
      */
-    public $paginatorLeft = '&laquo;';
+    public $criteriaConditions = array();
 
     /**
      * @var string
      */
-    public $paginatorRight = '&raquo;';
+    public $paginatorFirst = '&laquo;';
+
+    /**
+     * @var string
+     */
+    public $paginatorLeft = '<';
+
+    /**
+     * @var string
+     */
+    public $paginatorRight = '>';
+
+    /**
+     * @var string
+     */
+    public $paginatorLast = '&raquo;';
 
     /**
      * @var array
@@ -70,23 +85,46 @@ class Datagrid {
      */
     public $headersRenderers = [];
 
+    const CRITERIA_CONDITION_LIKE = 'LIKE';
+    const CRITERIA_CONDITION_EQUAL = 'EQUAL';
+
     public function __construct($formSelector = 'form', $criteria = array()) {
         try {
-
+            $this->paginatorFirst = Helper\Glyphicon::get('step-backward');
+            $this->paginatorLeft = Helper\Glyphicon::get('backward');
+            $this->paginatorRight = Helper\Glyphicon::get('forward');
+            $this->paginatorLast = Helper\Glyphicon::get('step-forward');
             $this->rowsPerPage = \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
             $this->formSelector = $formSelector;
 
-            $this->criteria = $criteria;
+            $this->setCriterias($criteria);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
 
-            if (isset($criteria['kf-dg-p'])) {
-                $this->active = $criteria['kf-dg-p'];
+    public function setCriterias($criterias = []) {
+        try {
+            $this->criteria = $criterias;
+            if (isset($this->criteria['kf-dg-p'])) {
+                $this->active = $this->criteria['kf-dg-p'];
                 unset($this->criteria['kf-dg-p']);
             }
             foreach ($this->criteria as $field => $value) {
                 if (!$value) {
                     unset($this->criteria[$field]);
+                } else {
+                    $this->criteriaConditions[$field] = self::CRITERIA_CONDITION_EQUAL;
                 }
             }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function addCriteria($field, $condition = self::CRITERIA_CONDITION_EQUAL) {
+        try {
+            $this->criteriaConditions[$field] = $condition;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -191,9 +229,10 @@ HTML;
 HTML;
             $items = '';
 
+            $firstPage = 1;
             $leftDisabled = $this->active <= 1 ? "class='disabled'" : '';
-            //$leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
-            $leftPage = 1;
+            $leftPage = $this->active - 1 > 0 ? $this->active - 1 : 1;
+            $items.= "<li {$leftDisabled}><a data-page='{$firstPage}' data-form='{$this->formSelector}'>{$this->paginatorFirst}</a></li>";
             $items.= "<li {$leftDisabled}><a data-page='{$leftPage}' data-form='{$this->formSelector}'>{$this->paginatorLeft}</a></li>";
 
             foreach ($this->items as $page) {
@@ -202,9 +241,10 @@ HTML;
             }
 
             $rightDisabled = $this->active == $this->totalPages ? "class='disabled'" : '';
-            //$rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
-            $rightPage = $this->totalPages;
+            $rightPage = $this->active + 1 < $this->totalPages ? $this->active + 1 : $this->totalPages;
+            $lastPage = $this->totalPages;
             $items.= "<li {$rightDisabled}><a data-page='{$rightPage}' data-form='{$this->formSelector}'>{$this->paginatorRight}</a></li>";
+            $items.= "<li {$rightDisabled}><a data-page='{$lastPage}' data-form='{$this->formSelector}'>{$this->paginatorLast}</a></li>";
 
             $html.= sprintf($htmlPaginator, $items);
             $html.= '<br class="clearfix" />';
