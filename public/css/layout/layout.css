@@ -174,3 +174,34 @@ optgroup option {
 .pagination .active a {
     background-color: #C1C1C1;
 }
+
+/* BRAND */
+.navbar-brand {
+    margin-top: 8px;
+}
+.navbar-brand, .brand {
+    background: url(../../img/kf/logo-xs.png) no-repeat;
+    text-indent: -9999px;
+    height: 32px;
+    width: 39px;
+}
+
+/* JS TREE */
+/*.jstree-open > .jstree-icon:before {
+    content: "\2212";
+}
+.jstree-closed > .jstree-icon:before {
+    content: "\2b";
+}
+.jstree-open > .jstree-icon, .jstree-closed > .jstree-icon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+}*/

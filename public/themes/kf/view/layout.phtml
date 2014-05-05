@@ -7,6 +7,9 @@
         <title>KF</title>
 
         <link id="theme-css" href="<?php echo $this->basePath ?>css/bootstrap/bs-lumen.min.css" rel="stylesheet">
+        <?php foreach ($this->extraCss as $css): ?>
+            <link href="<?php echo $css ?>" rel="stylesheet">
+        <?php endforeach; ?>
         <link href="<?php echo $this->basePath ?>css/layout/layout.css" rel="stylesheet">
         <?php foreach ($this->css as $css): ?>
             <link href="<?php echo $css ?>" rel="stylesheet">
@@ -47,6 +50,11 @@
 
         <script src="<?php echo $this->basePath ?>js/bootstrap/jquery.min.js"></script>
         <script src="<?php echo $this->basePath ?>js/bootstrap/bootstrap.min.js"></script>
+        <script src="<?php echo $this->basePath ?>js/bootstrap/jquery.cookie.js"></script>
+        <script src="<?php echo $this->basePath ?>js/bootstrap/jquery.hotkeys.js"></script>
+        <?php foreach ($this->extraJs as $js): ?>
+            <script src="<?php echo $js ?>"></script>
+        <?php endforeach; ?>
         <script src="<?php echo $this->basePath ?>js/layout/layout.js"></script>
         <?php foreach ($this->js as $js): ?>
             <script src="<?php echo $js ?>"></script>

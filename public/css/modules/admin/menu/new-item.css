@@ -11,3 +11,19 @@
 .list-group {
     //min-width: 300px;
 }
+
+#block-menu-tree, #menu-tree, #block-form-info {
+    height: 150px;
+}
+
+#block-menu-tree-aux {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    text-align: right;
+}
+
+.jstree-container-ul {
+    max-height: 132px !important;
+    overflow: auto;
+}

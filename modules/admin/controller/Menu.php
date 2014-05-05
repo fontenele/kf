@@ -15,7 +15,7 @@ class Menu extends \KF\Lib\Module\Controller {
                 ]);
                 $form->addField('cod', \KF\Lib\View\Html\Form::TYPE_INPUT_HIDDEN, 'Cod');
                 $form->addField('name', \KF\Lib\View\Html\Form::TYPE_INPUT_TEXT, 'Nome', ['required' => true, 'placeholder' => 'Nome']);
-                $form->addField('submit', \KF\Lib\View\Html\Form::TYPE_BUTTON, 'Salvar', ['class' => 'btn-primary', 'required' => true]);
+                $form->addField('submit', \KF\Lib\View\Html\Form::TYPE_BUTTON, 'Salvar Menu', ['class' => 'btn-primary', 'required' => true]);
                 self::$form = $form;
             }
             return self::$form;
@@ -28,6 +28,9 @@ class Menu extends \KF\Lib\Module\Controller {
         try {
             $service = new \Admin\Service\Menu();
             $form = $this->form();
+            
+            $this->addViewComponent('tree');
+            $this->addExtraJsFile('bootstrap/jquery.jstree.js');
 
             if ($this->request->get->cod) {
                 $row = $service->findOneBy(['cod' => $this->request->get->cod]);

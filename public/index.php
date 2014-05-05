@@ -10,7 +10,7 @@ class Kernel {
     public static $config = [];
 
     /**
-     * @var Lib\View\Html
+     * @var Lib\View\Layout
      */
     public static $layout;
 
@@ -84,6 +84,7 @@ class Kernel {
 
     public static function setConstants() {
         define('APP_PATH', dirname(__DIR__) . '/');
+        defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'prod'));
     }
 
     public static function loadLibs() {
@@ -148,14 +149,22 @@ class Kernel {
             throw $ex;
         }
     }
-
-    public static function callAction($controller, $action, $request) {
+    
+    public static function createLayout() {
         try {
-            self::$layout = new Lib\View\Html('public/themes/' . self::$config['system']['view']['theme'] . '/view/' . self::$config['system']['view']['layout']);
+            self::$layout = new Lib\View\Layout('public/themes/' . self::$config['system']['view']['theme'] . '/view/' . self::$config['system']['view']['layout']);
             self::$layout->success = Lib\System\Messenger::getSuccess();
             self::$layout->error = Lib\System\Messenger::getError();
             self::$layout->userLogged = self::$logged;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
 
+    public static function callAction($controller, $action, $request) {
+        try {
+            self::createLayout();
+            
             $arrController = explode('\\', $controller);
             $_module = Lib\System\String::camelToDash($arrController[0]);
             $_controller = Lib\System\String::camelToDash($arrController[2]);
@@ -173,9 +182,6 @@ class Kernel {
                 $js[] = sprintf(self::$router->basePath . $pathCssJs, 'js', 'js');
             }
 
-            self::$layout->css = $css;
-            self::$layout->js = $js;
-
             $controller = '\\' . $controller;
 
             if (!class_exists($controller)) {
@@ -191,6 +197,8 @@ class Kernel {
 
             // Call action
             $view = $obj->$action($request);
+            self::$layout->css = array_merge(self::$layout->css, $css);
+            self::$layout->js = array_merge(self::$layout->js, $js);
 
             if ($view instanceof Lib\View\Json) {
                 // Render Json output

@@ -20,6 +20,8 @@ class Sql {
     public $model;
     public $aliases = [];
     public $aliasesFromFields = [];
+    
+    public static $debug = false;
 
     /**
      * @param \KF\Lib\Module\Model $model
@@ -193,12 +195,12 @@ class Sql {
     protected function parseWhereFieldValue($field, $value, $criteriaCondition = \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL) {
         try {
             $_whereLike = "LIKE '%%%s%%'";
-            $value = strtoupper($value);
 
             switch($criteriaCondition) {
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
-                    return "UPPER({$field}) = '{$value}' ";
+                    return "{$field} = '{$value}' ";
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
+                    $value = strtoupper($value);
                     return "UPPER({$field}) LIKE '%%{$value}%%' ";
             }
         } catch (\Exception $ex) {

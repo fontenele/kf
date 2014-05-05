@@ -11,6 +11,7 @@ require_once('Http/Request.php');
 require_once('Http/Curl.php');
 require_once('View/Html.php');
 require_once('View/Json.php');
+require_once('View/Layout.php');
 require_once('View/Html/Tag.php');
 require_once('View/Html/Input.php');
 require_once('View/Html/InputText.php');
