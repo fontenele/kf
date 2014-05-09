@@ -21,7 +21,6 @@ $(document).ready(function() {
     });
 
     $("#block-menu-tree").bind('click.jstree', function(e, data) {
-
         $('#btn-menu-new-sibling').removeClass('disabled');
         $('#btn-menu-new-sibling').removeAttr('disabled');
         $('#btn-menu-rename').removeClass('disabled');
@@ -31,14 +30,13 @@ $(document).ready(function() {
         $('#btn-menu-new-child').removeClass('disabled');
         $('#btn-menu-new-child').removeAttr('disabled');
         
-        if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('jstree') || $(e.target).attr('id') === 'root-item') {
+        if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('btn') || $(e.target).hasClass('jstree') || $(e.target).attr('id') === 'root-item') {
             
-            if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('jstree')) {
+            if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('btn') || $(e.target).hasClass('jstree')) {
                 $('#btn-menu-new-child').addClass('disabled');
                 $('#btn-menu-new-child').attr('disabled', 'disabled');
                 var ref = $('#menu-tree').jstree(true);
                 ref.deselect_all(true);
-                
             }
             
             $('#block-form-info').html('<br /><br /><div class="text-center"><div class="btn btn-default disabled text-center text-muted">Selecione um item</div></div>');
