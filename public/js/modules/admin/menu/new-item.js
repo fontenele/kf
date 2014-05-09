@@ -3,86 +3,103 @@ $(document).ready(function() {
         "core": {
             //"animation": 0,
             "check_callback": true,
+            'expand_selected_onload': true,
             'themes': {
                 'responsive': false,
                 'variant': 'small'
+                        //'dots': true
             }
-            //"themes": {"stripes": true},
-            /*'data': {
-             'url': function(node) {
-             return node.id === '#' ?
-             'ajax_demo_roots.json' : 'ajax_demo_children.json';
-             },
-             'data': function(node) {
-             return {'id': node.id};
-             }
-             }*/
         },
         'types': {
             'default': {
-                //'icon': '../../css/bootstrap/jsTree/themes/default/small-tiles.png'
+                'icon': 'glyphicon glyphicon-th glyphicon-tree-use'
             }
-            /*'#': {
-             'valid_children': ['root']
-             },
-             'root': {
-             'icon': 'teste.png'
-             }*/
         },
         "plugins": [
-            "contextmenu", "dnd", "search",
-            "state", "types", "wholerow"
+            "search", "state", "types", "wholerow"
         ]
     });
 
-    $("#block-menu-tree").on('changed.jstree', function(e, data) {
-        console.log(e, data);
+    $("#block-menu-tree").bind('click.jstree', function(e, data) {
+
+        $('#btn-menu-new-sibling').removeClass('disabled');
+        $('#btn-menu-new-sibling').removeAttr('disabled');
+        $('#btn-menu-rename').removeClass('disabled');
+        $('#btn-menu-rename').removeAttr('disabled');
+        $('#btn-menu-delete').removeClass('disabled');
+        $('#btn-menu-delete').removeAttr('disabled');
+        $('#btn-menu-new-child').removeClass('disabled');
+        $('#btn-menu-new-child').removeAttr('disabled');
+        
+        if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('jstree') || $(e.target).attr('id') === 'root-item') {
+            
+            if ($(e.target).attr('id') === 'block-menu-tree-aux' || $(e.target).hasClass('jstree')) {
+                $('#btn-menu-new-child').addClass('disabled');
+                $('#btn-menu-new-child').attr('disabled', 'disabled');
+                var ref = $('#menu-tree').jstree(true);
+                ref.deselect_all(true);
+                
+            }
+            
+            $('#block-form-info').html('<br /><br /><div class="text-center"><div class="btn btn-default disabled text-center text-muted">Selecione um item</div></div>');
+            $('#btn-menu-new-sibling').addClass('disabled');
+            $('#btn-menu-new-sibling').attr('disabled', 'disabled');
+            $('#btn-menu-rename').addClass('disabled');
+            $('#btn-menu-rename').attr('disabled', 'disabled');
+            $('#btn-menu-delete').addClass('disabled');
+            $('#btn-menu-delete').attr('disabled', 'disabled');
+        } else if($(e.target).hasClass('jstree-anchor')) {
+            $('#block-form-info').html('ITEM SELECIONADO!');
+        }
     });
 
-    /*$("#block-menu-tree").jstree({
-     "plugins": ["themes", "html_data", "ui", "crrm", "hotkeys", "checkbox"],
-     "core": {
-     "animation": 100,
-     "initially_open": ["phtml_1"]
-     },
-     "themes": {
-     "theme": "classic",
-     "url": hostPath + "css/bootstrap/jsTree/themes/classic/style.css"
-     }
-     });*/
+    $('#btn-menu-new-child').on('click', function() {
+        var ref = $('#menu-tree').jstree(true);
+        var sel = ref.get_selected();
 
-    $('body').on('click', '.btn-add-item', function() {
-        var $item = $('.snippets > .list-group-item').clone();
+        if (!sel.length) {
+            return false;
+        }
 
-        $(this).parent().parent().after($item);
-
-        $item.find('.btn-edit-item').tooltip({'title': 'Editar Item'});
-        $item.find('.btn-add-item').tooltip({'title': 'Adicionar um filho'});
-
-        $item.data('layer', $(this).parents('.list-group-item').data('layer') + 1);
-        $item.find('label').css('paddingLeft', 20 * $(this).parents('.list-group-item').data('layer'));
-        $item.find('label').text('Filho de ' + $.trim($(this).parent().siblings('label').text()));
-
-        return false;
+        sel = sel[0];
+        sel = ref.create_node(sel, {"type": "file", 'text': 'Filho de ' + ref.get_text(sel), 'icon': 'glyphicon glyphicon-folder-open glyphicon-tree-use'});
+        if (sel) {
+            ref.edit(sel);
+        }
     });
 
-    $('body').on('click', '.btn-del-item', function() {
-        $('#md-del').modal('show');
-        return false;
+    $('#btn-menu-new-sibling').on('click', function() {
+        var ref = $('#menu-tree').jstree(true);
+        var sel = ref.get_selected(true);
+
+        if (!sel.length) {
+            return false;
+        }
+
+        sel = sel[0];
+        $('#menu-tree').jstree('create_node', ref.get_parent(sel.id), {'icon': 'glyphicon glyphicon-folder-open glyphicon-tree-use', 'text': 'Filho de ' + ref.get_text(ref.get_parent(sel.id))}, 'last');
     });
 
-    $('body').on('click', '.btn-edit-item', function() {
-        $('#md-edit :input[name=name]').val($.trim($(this).parent().siblings('label').text()));
-        $('#md-edit').data('target', $(this).parent().siblings('label'));
-        $('#md-edit').modal('show');
-        return false;
+    $('#btn-menu-rename').on('click', function() {
+        var ref = $('#menu-tree').jstree(true);
+        var sel = ref.get_selected();
+
+        if (!sel.length) {
+            return false;
+        }
+
+        sel = sel[0];
+        ref.edit(sel);
     });
 
-    $('body').on('click', '#md-edit .btn-primary', function() {
-        $('#md-edit').data('target').text($.trim($('#md-edit :input[name=name]').val()));
-        $('#md-edit').modal('hide');
-        return false;
+    $('#btn-menu-delete').on('click', function() {
+        var ref = $('#menu-tree').jstree(true);
+        var sel = ref.get_selected();
+
+        if (!sel.length) {
+            return false;
+        }
+
+        ref.delete_node(sel);
     });
-
-
 });

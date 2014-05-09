@@ -16,17 +16,17 @@
                     <div id="block-menu-tree" class="col-sm-6 col-xs-12 well well-sm">
                         <div id="menu-tree">
                             <ul>
-                                <li id="phtml_1">
-                                    <a href="#">Root node 1</a>
+                                <li id="root">
+                                    <a id="root-item" href="#">Raiz</a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div id="block-menu-tree-aux" class="row col-xs-12">
-                            <a href="#" class="btn btn-warning"><?php echo $this->glyphicon('italic') ?> Renomear</a>
-                            <a href="#" class="btn btn-danger"><?php echo $this->glyphicon('remove') ?> Excluir</a>
-                            <a href="#" class="btn btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Filho</a>
-                            <a href="#" class="btn btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Irmão</a>
+                        <div id="block-menu-tree-aux" class="btn-group pull-right">
+                            <a href="#" id="btn-menu-rename" class="btn btn-sm btn-warning"><?php echo $this->glyphicon('italic') ?> Renomear</a>
+                            <a href="#" id="btn-menu-delete" class="btn btn-sm btn-danger"><?php echo $this->glyphicon('remove') ?> Excluir</a>
+                            <a href="#" id="btn-menu-new-child" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Filho</a>
+                            <a href="#" id="btn-menu-new-sibling" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Irmão</a>
                         </div>
 
 
