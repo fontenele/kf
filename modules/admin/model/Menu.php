@@ -11,6 +11,7 @@ class Menu extends \KF\Lib\Module\Model {
         
         $this->addField('cod', self::TYPE_INTEGER);
         $this->addField('name', self::TYPE_VARCHAR, 100);
+        $this->addField('codename', self::TYPE_VARCHAR, 10);
     }
 
 }

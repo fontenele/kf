@@ -79,7 +79,7 @@ class Menu extends \KF\Lib\Module\Service {
             $menu = [];
             $options = [];
             foreach ($menuDb as $item) {
-                $menuItem = ['cod' => $item['cod'], 'name' => $item['name'], 'children' => []];
+                $menuItem = ['cod' => $item['cod'], 'name' => $item['name'], 'children' => [], 'data' => ['link' => $item['link']]];
                 $options['found'] = false;
                 $this->array_addChildToParent($menuItem, $item['parent'], $menu, $options);
             }

@@ -132,7 +132,7 @@ NewItem = {
         $('#fm-menu').on('submit', function() {
             var ref = $('#menu-tree').jstree(true);
 
-            $.post(hostPath + 'admin/menu/new-item', {'cod': $(':input[name=cod]').val(), 'name': $(':input[name=name]').val(), 'menu': ref.get_json('root')}, function(result, status) {
+            $.post(hostPath + 'admin/menu/new-item', {'cod': $(':input[name=cod]').val(), 'codename': $(':input[name=codename]').val(),'name': $(':input[name=name]').val(), 'menu': ref.get_json('root')}, function(result, status) {
                 if (result.success) {
                     Global.alert.showSuccess(result.message);
                     window.location = hostPath + result.redirect;

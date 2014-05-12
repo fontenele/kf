@@ -183,6 +183,8 @@ class Sql {
                     $offset = $rowsPerPage * ($numPage - 1);
                 }
                 $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset}";
+            } elseif(substr($this->query, 0 , 6) != 'DELETE') {
+                $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
             }
 
             return $this;

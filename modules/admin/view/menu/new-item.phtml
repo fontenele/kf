@@ -11,6 +11,12 @@
                         <?php echo $this->form->name->render() ?>
                     </div>
                 </div>
+                <div class="form-group">
+                    <?php echo $this->form->codename->label('col-xs-3 text-right') ?>
+                    <div class="col-xs-8">
+                        <?php echo $this->form->codename->render() ?>
+                    </div>
+                </div>
                 <div class="col-xs-12">
 
                     <div id="block-menu-tree" class="col-sm-6 col-xs-12 well well-sm">
@@ -27,8 +33,6 @@
                         </div>
 
                         <div id="block-menu-tree-aux" class="btn-group pull-right">
-                            <!--a href="#" id="btn-menu-rename" class="btn btn-sm btn-warning"><?php echo $this->glyphicon('italic') ?> Renomear</a>
-                            <a href="#" id="btn-menu-delete" class="btn btn-sm btn-danger"><?php echo $this->glyphicon('remove') ?> Excluir</a-->
                             <a href="#" id="btn-menu-new-child" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Filho</a>
                             <a href="#" id="btn-menu-new-sibling" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Irmão</a>
                         </div>

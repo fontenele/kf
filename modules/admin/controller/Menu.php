@@ -15,6 +15,7 @@ class Menu extends \KF\Lib\Module\Controller {
                 ]);
                 $form->addField('cod', \KF\Lib\View\Html\Form::TYPE_INPUT_HIDDEN, 'Cod');
                 $form->addField('name', \KF\Lib\View\Html\Form::TYPE_INPUT_TEXT, 'Nome', ['required' => true, 'placeholder' => 'Nome']);
+                $form->addField('codename', \KF\Lib\View\Html\Form::TYPE_INPUT_TEXT, 'Sigla', ['required' => true, 'placeholder' => 'Sigla']);
                 $form->addField('submit', \KF\Lib\View\Html\Form::TYPE_BUTTON, 'Salvar Menu', ['class' => 'btn-primary', 'required' => true]);
                 self::$form = $form;
             }
@@ -69,9 +70,11 @@ class Menu extends \KF\Lib\Module\Controller {
     public function listItems() {
         try {
             $dg = new \KF\Lib\View\Html\Datagrid('#fm-menu', $this->request->post->getArrayCopy());
-            $dg->addHeader('name', 'Nome', '95%');
+            $dg->addHeader('codename', 'Sigla', '10%', 'text-center');
+            $dg->addHeader('name', 'Nome', '85%');
             $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\Menu::dgEdit');
             $dg->addCriteria('name', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
+            $dg->addCriteria('codename', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
 
             $service = new \Admin\Service\Menu();
             $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active, null, $dg->criteriaConditions));
@@ -80,6 +83,7 @@ class Menu extends \KF\Lib\Module\Controller {
             $form->action = \KF\Kernel::$router->basePath . 'admin/menu/list-items';
             $form->submit->label = $form->submit->content = \KF\Lib\View\Html\Helper\Glyphicon::get('search') . ' Pesquisar';
             $form->name->offsetUnset('required');
+            $form->codename->offsetUnset('required');
             $form->submit->addClass('btn-search');
             $form->setValues($this->request->post->getArrayCopy());
 
