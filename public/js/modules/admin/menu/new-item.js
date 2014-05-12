@@ -33,17 +33,22 @@ NewItem = {
         NewItem._tpl.itemIelected.selected = '<fieldset>' +
                 Global.html.getTplFormItem('Nome', Global.html.getTplFormInput('name')) +
                 Global.html.getTplFormItem('Link', Global.html.getTplFormInput('link')) +
-                Global.html.getTplFormItem('', Global.html.getTplFormSubmit('btn-save-menu-item', 'Salvar', 'btn-primary')) +
-                Global.html.getTplFormItem('', Global.html.getTplFormSubmit('btn-menu-delete', 'Excluir', 'btn-danger')) +
+                Global.html.getTplFormItem('', Global.html.getTplFormSubmit('btn-save-menu-item', Global.html.getTplIcon('ok') + ' Salvar', 'btn-primary') + ' ' + Global.html.getTplFormSubmit('btn-menu-delete', Global.html.getTplIcon('remove') + ' Excluir', 'btn-danger')) +
                 '</fieldset>';
 
-        $("#block-menu-tree").bind('click.jstree', function(e, data) {
-            /*var ref = $('#menu-tree').jstree(true);
-             var sel = ref.get_selected();
-             var opened = ref.get_node(sel[0]).state.opened;
-             console.log(ref.get_node(sel[0]));
-             ref.set_icon(sel[0], opened ? 'glyphicon glyphicon-folder-open' : 'glyphicon glyphicon-folder-close');*/
+        $("#block-menu-tree").bind('dblclick.jstree', function(e) {
+            var ref = $('#menu-tree').jstree(true);
+            var sel = ref.get_selected();
 
+            if (!sel.length) {
+                return false;
+            }
+
+            sel = sel[0];
+            ref.edit(sel);
+        });
+        
+        $("#block-menu-tree").bind('click.jstree', function(e, data) {
             $('#btn-menu-new-sibling').removeClass('disabled');
             $('#btn-menu-new-sibling').removeAttr('disabled');
             $('#btn-menu-rename').removeClass('disabled');
@@ -105,19 +110,7 @@ NewItem = {
             $('#menu-tree').jstree('create_node', ref.get_parent(sel.id), {'icon': 'glyphicon glyphicon-folder-open glyphicon-tree-use', 'text': 'Filho de ' + ref.get_text(ref.get_parent(sel.id))}, 'last');
         });
 
-        $('#btn-menu-rename').on('click', function() {
-            var ref = $('#menu-tree').jstree(true);
-            var sel = ref.get_selected();
-
-            if (!sel.length) {
-                return false;
-            }
-
-            sel = sel[0];
-            ref.edit(sel);
-        });
-
-        $('#btn-menu-delete').on('click', function() {
+        $('body').on('click', '#btn-menu-delete', function() {
             var ref = $('#menu-tree').jstree(true);
             var sel = ref.get_selected();
 
@@ -126,6 +119,7 @@ NewItem = {
             }
 
             ref.delete_node(sel);
+            return false;
         });
     },
     'configForm': function() {

@@ -38,8 +38,9 @@ Global.html = {
             'item': '<div class="form-group"><label class="control-label col-xs-3">{$label}</label><div class="col-xs-8">{$input}</div></div>',
             'input': '<input type="text" name="{$name}" class="form-control" />',
             'select': '<select class="form-control" name="{$name}" >{$options}</select>',
-            'submit': '<button class="btn {$class}" id="{$id}">{$label}</button>'
-        }
+            'submit': '<button class="btn {$class}" id="{$id}">{$label}</button>',
+        },
+        'icon': '<span class="glyphicon glyphicon-{$name}"></span>'
     },
     'getTplFormItem': function(label, component) {
         return Global.html._tpl.form.item.replace('{$label}', label).replace('{$input}', component);
@@ -52,5 +53,8 @@ Global.html = {
     },
     'getTplFormSubmit': function(id, label, cssClass) {
         return Global.html._tpl.form.submit.replace('{$class}', cssClass).replace('{$id}', id).replace('{$label}', label);
+    },
+    'getTplIcon': function(name) {
+        return Global.html._tpl.icon.replace('{$name}', name);
     }
 };
