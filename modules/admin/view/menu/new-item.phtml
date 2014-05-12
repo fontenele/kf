@@ -16,45 +16,22 @@
                     <div id="block-menu-tree" class="col-sm-6 col-xs-12 well well-sm">
                         <div id="menu-tree">
                             <ul>
-                                <li id="root">
-                                    <a id="root-item" href="#">Raiz</a>
-                                </li>
+                                <?php if ($this->menuItems): ?>
+                                    <?php echo $this->tree($this->menuItems); ?>
+                                <?php else: ?>
+                                    <li id="root">
+                                        <a id="root-item" href="#">Raiz</a>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                         </div>
 
                         <div id="block-menu-tree-aux" class="btn-group pull-right">
-                            <a href="#" id="btn-menu-rename" class="btn btn-sm btn-warning"><?php echo $this->glyphicon('italic') ?> Renomear</a>
-                            <a href="#" id="btn-menu-delete" class="btn btn-sm btn-danger"><?php echo $this->glyphicon('remove') ?> Excluir</a>
+                            <!--a href="#" id="btn-menu-rename" class="btn btn-sm btn-warning"><?php echo $this->glyphicon('italic') ?> Renomear</a>
+                            <a href="#" id="btn-menu-delete" class="btn btn-sm btn-danger"><?php echo $this->glyphicon('remove') ?> Excluir</a-->
                             <a href="#" id="btn-menu-new-child" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Filho</a>
                             <a href="#" id="btn-menu-new-sibling" class="btn btn-sm btn-primary"><?php echo $this->glyphicon('plus') ?> Novo Irmão</a>
                         </div>
-
-
-                        <!--ul>
-                            <li id="phtml_1">
-                                <a href="#">Root node 1</a>
-                                <ul>
-                                    <li id="phtml_2">
-                                        <a href="#">Child node 1</a>
-                                    </li>
-                                    <li id="phtml_3">
-                                        <a href="#">Child node 2</a>
-                                    </li>
-                                    <li id="phtml_4">
-                                        <a href="#">Child node 3</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="phtml_5">
-                                <a href="#">Root node 2</a>
-                            </li>
-                            <li id="phtml_6">
-                                <a href="#">Root node 2</a>
-                            </li>
-                            <li id="phtml_7">
-                                <a href="#">Root node 2</a>
-                            </li>
-                        </ul-->
                     </div>
 
                     <div id="block-form-info" class="col-sm-6 col-xs-12 well well-sm">
@@ -63,15 +40,6 @@
                             <div class="btn btn-default disabled text-center text-muted">Selecione um item</div>
                         </div>
                     </div>
-
-                    <!--ul class="list-group well">
-                        <li data-layer="1" class="list-group-item">
-                            <label class="">Root</label>
-                            <div class="btn-group pull-right">
-                                <button title="Adicionar um filho" class="btn-add-item btn btn-success btn-xs"><?php echo $this->glyphicon('plus') ?></button>
-                            </div>
-                        </li>
-                    </ul-->
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 text-center">
@@ -82,17 +50,6 @@
             <?php echo $this->form->close() ?>
         </div>
     </div>
-</div>
-
-<div class="snippets hidden">
-    <li data-layer="1" class="list-group-item">
-        <label></label>
-        <div class="btn-group pull-right">
-            <button title="Propriedades" class="btn-edit-item btn btn-info btn-xs"><?php echo $this->glyphicon('info-sign') ?></button>
-            <button title="Remover" class="btn-del-item btn btn-warning btn-xs"><?php echo $this->glyphicon('trash') ?></button>
-            <button title="Adicionar um filho" class="btn-add-item btn btn-success btn-xs"><?php echo $this->glyphicon('plus') ?></button>
-        </div>
-    </li>
 </div>
 
 <div class="modal fade" id="md-del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

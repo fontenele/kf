@@ -14,6 +14,8 @@
 
 #block-menu-tree, #menu-tree, #block-form-info {
     height: 150px;
+    overflow: auto;
+    overflow-x: hidden;
 }
 
 #block-menu-tree-aux {

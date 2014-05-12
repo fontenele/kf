@@ -22,6 +22,7 @@ require_once('View/Html/Datagrid.php');
 require_once('View/Html/Form.php');
 require_once('View/Html/Helper/Helper.php');
 require_once('View/Html/Helper/Glyphicon.php');
+require_once('View/Html/Helper/Tree.php');
 require_once('Module/Controller.php');
 require_once('Module/Service.php');
 require_once('Module/Model.php');

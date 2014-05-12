@@ -28,6 +28,7 @@ class Menu extends \KF\Lib\Module\Controller {
         try {
             $service = new \Admin\Service\Menu();
             $form = $this->form();
+            $items = [];
             
             $this->addViewComponent('tree');
             $this->addExtraJsFile('bootstrap/jquery.jstree.js');
@@ -35,33 +36,64 @@ class Menu extends \KF\Lib\Module\Controller {
             if ($this->request->get->cod) {
                 $row = $service->findOneBy(['cod' => $this->request->get->cod]);
                 $form->setValues($row);
-                // carregar menu items
-            }
-
-            if ($this->request->isPost()) {
-                $row = $this->request->post->getArrayCopy();
-                xd($row);
-                $success = $service->save($row);
-                if ($success) {
-                    \KF\Lib\System\Messenger::success("Usuário {$row['name']} salvo com sucesso.");
-                } else {
-                    \KF\Lib\System\Messenger::error("Erro ao tentar salvar usuário {$row['name']}.");
-                    $this->redirect('admin/user/new-item');
-                }
-                $this->redirect('admin/user/list-items');
+                
+                $serviceMenuItem = new \Admin\Service\MenuItem();
+                $items = $service->arrayFromDb($serviceMenuItem->findBy(['menu' => $row['cod']]));
             }
             
             $this->view->form = $form;
+            $this->view->menuItems = $items;
+            
+            if ($this->request->isPost()) {
+                $row = $this->request->post->getArrayCopy();
+                $success = $service->saveFromJsTree($row);
+                $this->view = new \KF\Lib\View\Json();
+                $this->view->success = $success;
+                
+                if ($success) {
+                    $this->view->message = "Menu {$row['name']} salvo com sucesso.";
+                    $this->view->redirect = 'admin/menu/list-items';
+                    \KF\Lib\System\Messenger::success($this->view->message);
+                } else {
+                    $this->view->message = "Erro ao tentar salvar menu {$row['name']}.";
+                    $this->view->redirect = 'admin/menu/new-item';
+                }
+            }
+            
             return $this->view;
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
-
+    
     public function listItems() {
         try {
+            $dg = new \KF\Lib\View\Html\Datagrid('#fm-menu', $this->request->post->getArrayCopy());
+            $dg->addHeader('name', 'Nome', '95%');
+            $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\Menu::dgEdit');
+            $dg->addCriteria('name', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
 
+            $service = new \Admin\Service\Menu();
+            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active, null, $dg->criteriaConditions));
+
+            $form = $this->form();
+            $form->action = \KF\Kernel::$router->basePath . 'admin/menu/list-items';
+            $form->submit->label = $form->submit->content = \KF\Lib\View\Html\Helper\Glyphicon::get('search') . ' Pesquisar';
+            $form->name->offsetUnset('required');
+            $form->submit->addClass('btn-search');
+            $form->setValues($this->request->post->getArrayCopy());
+
+            $this->view->form = $form;
+            $this->view->dg = $dg;
             return $this->view;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    public static function dgEdit($value = null, $row) {
+        try {
+            return '<a href=' . \KF\Kernel::$router->basePath . "admin/menu/new-item/cod/{$row['cod']}>" . \KF\Lib\View\Html\Helper\Glyphicon::get('pencil') . '</a>';
         } catch (\Exception $ex) {
             throw $ex;
         }

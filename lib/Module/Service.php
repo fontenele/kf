@@ -42,4 +42,12 @@ abstract class Service {
         }
     }
 
+    public function delete($where = []) {
+        try {
+            return $this->model()->delete($where);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
 }

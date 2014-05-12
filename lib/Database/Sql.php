@@ -20,7 +20,6 @@ class Sql {
     public $model;
     public $aliases = [];
     public $aliasesFromFields = [];
-    
     public static $debug = false;
 
     /**
@@ -153,7 +152,7 @@ class Sql {
             foreach ($where as $field => $value) {
                 $_conditionOperator = \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL;
                 if (isset($whereConditions[$field]) && $whereConditions[$field]) {
-                        $_conditionOperator = $whereConditions[$field];
+                    $_conditionOperator = $whereConditions[$field];
                 }
 
                 if ($this->model->field($field)) {
@@ -196,7 +195,7 @@ class Sql {
         try {
             $_whereLike = "LIKE '%%%s%%'";
 
-            switch($criteriaCondition) {
+            switch ($criteriaCondition) {
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
                     return "{$field} = '{$value}' ";
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
@@ -242,6 +241,16 @@ class Sql {
             $this->query.= $where;
             $this->input[] = $pk;
         } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function delete($where) {
+        try {
+            $alias = isset($this->aliases[$this->model->_table]) ? $this->aliases[$this->model->_table] : '';
+            $this->query = "DELETE FROM {$this->model->_table} as {$alias} ";
+            $this->where($where);
+        } catch (\Exception $ex) {
             throw $ex;
         }
     }

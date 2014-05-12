@@ -120,7 +120,7 @@ abstract class Model {
      */
     protected function fetchAllBySql($dml, $input = []) {
         try {
-            if(self::$debug) {
+            if (self::$debug) {
                 x(__METHOD__, $dml, $input);
             }
             $stmt = \KF\Kernel::$db->prepare($dml);
@@ -139,7 +139,7 @@ abstract class Model {
      */
     protected function fetchBySql($dml, $input = []) {
         try {
-            if(self::$debug) {
+            if (self::$debug) {
                 x(__METHOD__, $dml, $input);
             }
             $stmt = \KF\Kernel::$db->prepare($dml);
@@ -162,7 +162,7 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions);
-            if(self::$debug) {
+            if (self::$debug) {
                 x(__METHOD__, $sql, $sql->query, $sql->input);
             }
             return $this->fetchAllBySql($sql->query, $sql->input);
@@ -181,7 +181,7 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames)->from($this->_table)->where($where);
-            if(self::$debug) {
+            if (self::$debug) {
                 x(__METHOD__, $sql, $sql->query, $sql->input);
             }
             return $this->fetchBySql($sql->query, $sql->input);
@@ -244,11 +244,11 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->insert($row);
-            
-            if(self::$debug) {
+
+            if (self::$debug) {
                 x(__METHOD__, $sql, $sql->query, $sql->input);
             }
-            
+
             $stmt = \KF\Kernel::$db->prepare($sql->query);
             $success = $stmt->execute($sql->input);
 
@@ -270,11 +270,26 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->update($row);
-            
-            if(self::$debug) {
+
+            if (self::$debug) {
                 x(__METHOD__, $sql, $sql->query, $sql->input);
             }
 
+            $stmt = \KF\Kernel::$db->prepare($sql->query);
+            return $stmt->execute($sql->input);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function delete($where = []) {
+        try {
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->delete($where);
+            
+            if (self::$debug) {
+                x(__METHOD__, $sql, $sql->query, $sql->input);
+            }
             $stmt = \KF\Kernel::$db->prepare($sql->query);
             return $stmt->execute($sql->input);
         } catch (\Exception $ex) {
