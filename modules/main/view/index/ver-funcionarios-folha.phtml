@@ -1,0 +1,42 @@
+<style>
+    .tr-success, .tr-success th, .tr-success td {
+        background-color: #dff0d8 !important;
+    }
+    .tr-danger {
+        background-color: #f2dede !important;
+    }
+</style>
+    
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Mês: <strong class="lb-mes"><?php echo $this->folha['mes'] ?></strong> / Ano: <strong class="lb-ano"><?php echo $this->folha['ano'] ?></strong>
+        <div class="pull-right">
+            <a href="<?php echo $this->basePath ?>main/index/ver-folha" id="btn-ver-mensal" type="button" title="Voltar para a folha de ponto" class="btn btn-xs btn-info"><?php echo $this->glyphicon('unshare', 'glyphicons') ?> Voltar para folha de ponto</a>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?php echo $this->form->open() ?>
+        <?php echo $this->dg->getInputHidden() ?>
+        <fieldset>
+            <div class="form-group">
+                <?php echo $this->form->name->label('col-xs-3 text-right') ?>
+                <div class="col-xs-8">
+                    <?php echo $this->form->name->render() ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $this->form->cargo->label('col-xs-3 text-right') ?>
+                <div class="col-xs-8">
+                    <?php echo $this->form->cargo->render() ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-8 col-xs-offset-3">
+                    <?php echo $this->form->submit->render() ?>
+                </div>
+            </div>
+        </fieldset>
+        <?php echo $this->form->close() ?>
+    </div>
+    <?php echo $this->dg->datagrid() ?>
+</div>
