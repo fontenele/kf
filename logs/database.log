@@ -1,0 +1,7 @@
+.[#42P01] ERROR:  relation "public.cargo" does not exist
+	SQL: CREATE TABLE public.funcionarios (cod integer NOT NULL, name character varying(200), cargo integer);
+CREATE SEQUENCE public.funcionarios_cod_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+ALTER SEQUENCE public.funcionarios_cod_seq OWNED BY public.funcionarios.cod;
+ALTER TABLE ONLY public.funcionarios ALTER COLUMN cod SET DEFAULT nextval('public.funcionarios_cod_seq'::regclass);
+ALTER TABLE ONLY public.funcionarios ADD CONSTRAINT funcionarios_pk PRIMARY KEY (cod);
+ALTER TABLE ONLY public.funcionarios ADD CONSTRAINT funcionarios_cargo_fk FOREIGN KEY (cargo) REFERENCES public.cargo(cod);
