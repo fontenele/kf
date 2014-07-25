@@ -1,0 +1,7 @@
+body {
+    padding-top: 60px;
+}
+
+.navbar-brand, .brand {
+    background: url(../img/logo-xs.png) no-repeat;
+}
