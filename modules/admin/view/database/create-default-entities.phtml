@@ -1,0 +1,41 @@
+<form method="POST">
+    <button class="btn btn-primary"><?php echo $this->glyphicon('database_plus', 'glyphicons') ?> &nbsp;&nbsp;Criar</button><br /><br />
+    <ul class="list-group">
+        <?php foreach ($this->db as $table => $data): ?>
+            <li class="list-group-item">
+                <h4 class='list-group-item-heading'>
+                    <input type="checkbox" name="tables[<?php echo $data['entitie'] ?>]" checked="checked" />&nbsp;
+                    <?php echo "{$data['entitie']} <strong class='text-info'>{$table}</strong>" ?>
+                </h4>
+                <p class='list-group-item-text'>
+                    <ul>
+                        <li>Primary Key: <strong class="text-info"><?php echo $data['pk'] ?></strong></li>
+                        <li>Sequence: <strong class="text-info"><?php echo $data['seq'] ?></strong></li>
+                        <li>
+                            Fields: 
+                            <ul>
+                                <?php foreach ($data['fields'] as $field => $fieldData): ?>
+                                    <li>
+                                        <strong class="text-info"><?php echo $field ?></strong>
+                                        <?php
+                                        switch ($fieldData['type']) {
+                                            case KF\Lib\Module\Model::TYPE_INTEGER:
+                                                echo 'Integer';
+                                                break;
+                                            case KF\Lib\Module\Model::TYPE_VARCHAR:
+                                                echo 'String';
+                                                break;
+                                        }
+                                        ?>
+                                        <?php echo $fieldData['length'] ? "({$fieldData['length']})" : '' ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    </ul>
+                </p>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <button class="btn btn-primary"><?php echo $this->glyphicon('database_plus', 'glyphicons') ?> &nbsp;&nbsp;Criar</button><br /><br />
+</form>

@@ -1,0 +1,29 @@
+<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+    <div class="panel panel-default">
+        <div class="panel-heading">Funcionários <a title="Ver Funcionários" href="<?php echo $this->basePath ?>main/funcionarios/list-items" class="btn btn-primary btn-xs pull-right"><?php echo $this->glyphicon('search') ?> Ver Funcionários</a></div>
+        <div class="panel-body">
+            <?php echo $this->form->open() ?>
+            <fieldset>
+                <?php echo $this->form->cod->render() ?>
+                <div class="form-group">
+                    <?php echo $this->form->name->label('col-xs-3 text-right') ?>
+                    <div class="col-xs-8">
+                        <?php echo $this->form->name->render() ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?php echo $this->form->cargo->label('col-xs-3 text-right') ?>
+                    <div class="col-xs-8">
+                        <?php echo $this->form->cargo->render() ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-8 col-xs-offset-3">
+                        <?php echo $this->form->submit->render() ?>
+                    </div>
+                </div>
+            </fieldset>
+            <?php echo $this->form->close() ?>
+        </div>
+    </div>
+</div>
