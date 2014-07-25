@@ -51,10 +51,15 @@ class Form extends \KF\Lib\System\ArrayObject {
     const TYPE_INPUT_FILE = 15;
     const TYPE_INPUT_RADIO = 16;
     const TYPE_INPUT_CHECK = 17;
-    const TYPE_TEXT_AREA = 18;
-    const TYPE_SELECT = 19;
-    const TYPE_SELECT_MULTIPLE = 20;
-    const TYPE_BUTTON = 21;
+    const TYPE_INPUT_MONEY = 18;
+    const TYPE_TEXT_AREA = 19;
+    const TYPE_SELECT = 20;
+    const TYPE_SELECT_MULTIPLE = 21;
+    const TYPE_BUTTON = 22;
+
+    /**
+     * HTTP Methods
+     */
     const METHOD_POST = 'POST';
     const METHOD_GET = 'GET';
 
@@ -117,6 +122,9 @@ class Form extends \KF\Lib\System\ArrayObject {
             switch ($type) {
                 case self::TYPE_INPUT_TEXT:
                     $obj = new InputText($name, $label, null, $options);
+                    break;
+                case self::TYPE_INPUT_MONEY:
+                    $obj = new InputTextMoney($name, $label, null, $options);
                     break;
                 case self::TYPE_INPUT_HIDDEN:
                     $obj = new Input($name, $label, 'hidden', $options);

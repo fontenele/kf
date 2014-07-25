@@ -61,9 +61,10 @@ class UserGroup extends \KF\Lib\Module\Controller {
             $dg->addHeader('name', 'Grupo', '85%');
             $dg->addHeader('status', 'Status', '10%', 'text-center', '\Admin\Controller\UserGroup::dgStatus');
             $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit');
+            $dg->addCriteria('name', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
 
             $service = new \Admin\Service\UserGroup();
-            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active));
+            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active, null, $dg->criteriaConditions));
 
             $form = $this->form();
             $form->action = \KF\Kernel::$router->basePath . 'admin/user-group/list-items';

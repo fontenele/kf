@@ -1,8 +1,8 @@
 <?php
 $session = new \KF\Lib\System\Session('errorInfo');
-//xd($session->info);
 ?>
 <style>
+    body { padding-top: 30px; }
     .error-template { padding: 40px 15px; text-align: center; }
     .error-actions { margin-top:15px;margin-bottom:15px; }
     .error-actions .btn { margin-right:10px; }
@@ -10,6 +10,7 @@ $session = new \KF\Lib\System\Session('errorInfo');
 <div class="row">
     <div class="col-md-12">
         <div class="error-template">
+            <img src="<?php echo $this->basePath ?>img/<?php echo $this->config['system']['view']['theme'] ?>/logo.png" />
             <h1>
                 Oops!</h1>
             <h2>
@@ -22,15 +23,17 @@ $session = new \KF\Lib\System\Session('errorInfo');
                 <a href="<?php echo $this->basePath ?>" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-envelope"></span> Contate o Suporte</a>
             </div>
         </div>
-        <div class="panel panel-danger">
-            <div class="panel-heading">
-                <h5><?php echo $session->info['message'] ?></h5>
+        <?php if (APPLICATION_ENV === 'dev'): ?>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h5><?php echo $session->info['message'] ?></h5>
+                </div>
+                <div class="panel-body">
+                    File: <strong><?php echo $session->info['file'] ?> | Line: <?php echo $session->info['line'] ?></strong>
+                    <br /><br />
+                    <pre><span class="label label-danger">Trace</span><br /><br /><?php print_r($session->info['trace']) ?><br /><span class="label label-danger">Previous</span><br /><br /><?php print_r($session->info['previous']) ?></pre>
+                </div>
             </div>
-            <div class="panel-body">
-                File: <strong><?php echo $session->info['file'] ?> | Line: <?php echo $session->info['line'] ?></strong>
-                <br /><br />
-                <pre><span class="label label-danger">Trace</span><br /><br /><?php print_r($session->info['trace']) ?><br /><span class="label label-danger">Previous</span><br /><br /><?php print_r($session->info['previous']) ?></pre>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>

@@ -14,6 +14,9 @@ class Input extends Tag {
             if (isset($options['placeholder'])) {
                 $this->placeholder = $options['placeholder'];
             }
+            if (isset($options['class'])) {
+                $this->class[] = $options['class'];
+            }
             $this->title = $label;
         } catch (\Exception $ex) {
             throw $ex;

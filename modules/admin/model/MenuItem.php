@@ -6,7 +6,7 @@ class MenuItem extends \KF\Lib\Module\Model {
 
     public function __construct() {
         $this->_table = 'public.menu_item';
-        $this->_sequence = 'menu_item_cod_seq';
+        $this->_sequence = 'public.menu_item_cod_seq';
         $this->_pk = 'cod';
 
         $this->addField('cod', self::TYPE_INTEGER);

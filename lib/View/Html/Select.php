@@ -12,9 +12,15 @@ class Select extends Tag {
     public function __construct($name, $label = null, $options = []) {
         try {
             parent::__construct('select', $name, $label);
+            if (isset($options['defaultItemLabel'])) {
+                $this->defaultItemLabel = $options['defaultItemLabel'];
+            }
             $this->setOptions(isset($options['options']) ? $options['options'] : []);
             if (isset($options['required'])) {
                 $this->required = $options['required'];
+            }
+            if (isset($options['class'])) {
+                $this->class[] = $options['class'];
             }
             $this->title = $label;
             $this->closeTagAfter = true;
@@ -26,9 +32,9 @@ class Select extends Tag {
     public function setSelected($value = null) {
         try {
             $this->content = '';
-            $selected = $value == $this->defaultItemValue ? "selected='selected'" : '';
 
             if ($this->defaultItemLabel) {
+                $selected = $value == $this->defaultItemValue ? "selected='selected'" : '';
                 $this->content.= "<option {$selected} value='{$this->defaultItemValue}'>{$this->defaultItemLabel}</option>";
             }
             $selected = '';

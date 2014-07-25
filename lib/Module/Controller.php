@@ -24,10 +24,10 @@ abstract class Controller {
             $arrClass = explode('\\', get_class($this));
             $this->action = $action;
 
-            $templace = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
+            $template = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
             $_module = \KF\Lib\System\String::camelToDash($arrClass[0]);
             $_controller = \KF\Lib\System\String::camelToDash($arrClass[2]);
-            $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$templace}.phtml", array('request' => $request));
+            $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $request));
 
             $this->request = $request;
 
@@ -94,6 +94,39 @@ abstract class Controller {
             $path = substr($path, 1);
         }
         \KF\Kernel::$router->redirect($path);
+    }
+
+    public function callAction($action) {
+        try {
+            $arrClass = explode('\\', get_class($this));
+            $this->action = $action;
+
+            $template = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
+            $_module = \KF\Lib\System\String::camelToDash($arrClass[0]);
+            $_controller = \KF\Lib\System\String::camelToDash($arrClass[2]);
+            $_action = \KF\Lib\System\String::camelToDash($action);
+            
+            $pathCssJs = "%s/modules/{$_module}/{$_controller}/{$_action}.%s";
+
+            $js = array();
+            $css = array();
+
+            if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'css', 'css'))) {
+                $css[] = sprintf(\KF\Kernel::$router->basePath . $pathCssJs, 'css', 'css');
+            }
+
+            if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'js', 'js'))) {
+                $js[] = sprintf(\KF\Kernel::$router->basePath . $pathCssJs, 'js', 'js');
+            }
+            
+            $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
+            \KF\Kernel::$layout->css = $css;
+            \KF\Kernel::$layout->js = $js;
+            
+            return $this->$action();
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
 }

@@ -13,6 +13,8 @@ class Html extends \KF\Lib\System\ArrayObject {
         try {
             parent::__construct($vars);
             $this->basePath = \KF\Kernel::$router->basePath;
+            $this->theme = \KF\Kernel::$config['system']['view']['theme'];
+            $this->themePath = \KF\Kernel::$router->basePath . 'themes/' . \KF\Kernel::$config['system']['view']['theme'] . '/';
             $this->template = $template;
         } catch (\Exception $ex) {
             throw $ex;
@@ -22,7 +24,7 @@ class Html extends \KF\Lib\System\ArrayObject {
     public function render() {
         try {
             if (!$this->template || !file_exists(APP_PATH . $this->template)) {
-                throw new \Exception("Template {$this->template} not found.");
+                throw new \Exception;
             }
 
             ob_start();
@@ -30,7 +32,16 @@ class Html extends \KF\Lib\System\ArrayObject {
             $html = ob_get_clean();
             return $html;
         } catch (\Exception $ex) {
-            throw new \Exception("Template {$this->template} not found.", 404);
+            throw new \Exception("Template {$this->template} not found.", 400);
+        }
+    }
+
+    public function renderWithHeader() {
+        try {
+            header('Content-type: text/html; charset=UTF-8');
+            return $this->render();
+        } catch (\Exception $ex) {
+            throw new \Exception("Template {$this->template} not found.", 400);
         }
     }
 

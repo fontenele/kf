@@ -2,10 +2,6 @@ a, a:hover, a:active, a:focus, object, embed, input::-moz-focus-inner {
     outline: 0 !important;
 }
 
-body {
-    padding-top: 60px;
-}
-
 .table tbody tr td {
     line-height: 100%;
     vertical-align: middle;
@@ -179,11 +175,21 @@ optgroup option {
 .navbar-brand {
     margin-top: 8px;
 }
+/* DEVERIA ESTAR NO THEME */
 .navbar-brand, .brand {
-    background: url(../../img/kf/logo-xs.png) no-repeat;
+    background-size: 45px;
     text-indent: -9999px;
     height: 32px;
-    width: 39px;
+    width: 48px;
+}
+
+.navbar-inverse {
+    background-color: #222222;
+    border-color: #080808;
+}
+
+.panel {
+    clear: both;
 }
 
 /* JS TREE */

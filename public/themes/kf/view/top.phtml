@@ -2,7 +2,7 @@
     <?php
     $session = new \KF\Lib\System\Session('system');
     ?>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -11,46 +11,60 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo $this->basePath ?>">KF</a>
+                <a class="navbar-brand" href="<?php echo $this->basePath ?>"></a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="<?php echo $this->topItemAtual == 'painel' ? 'active' : '' ?> dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administração <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/index/index"><?php echo $this->glyphicon('th') ?> &nbsp;Painel Administrativo</a></li>
+                            <li><a href="<?php echo $this->basePath ?>admin/index/index"><?php echo $this->glyphicon('cogwheels', 'glyphicons') ?> &nbsp;Painel Administrativo</a></li>
                             <li role="presentation" class="divider"></li>
                             <li class="dropdown-submenu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('group', 'glyphicons') ?> &nbsp;Grupos de Usuários</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('nameplate', 'glyphicons') ?> &nbsp;Funcionários</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/admin/user-group/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Grupos de Usuários</a></li>
-                                    <li><a href="/admin/user-group/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Grupo de Usuários</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>main/funcionarios/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Funcionário</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>main/funcionarios/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Funcionários</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('nameplate', 'glyphicons') ?> &nbsp;Cargos</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->basePath ?>main/cargos/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Cargo</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>main/cargos/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Cargos</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown-submenu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('user') ?> &nbsp;Usuários</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/admin/user/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Usuários</a></li>
-                                    <li><a href="/admin/user/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Usuário</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>admin/user/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Usuário</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>admin/user/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Usuários</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown-submenu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('list') ?> &nbsp;Menus</a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('group', 'glyphicons') ?> &nbsp;Grupos de Usuários</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/admin/menu/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Menus</a></li>
-                                    <li><a href="/admin/menu/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Menu</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>admin/user-group/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Grupo de Usuários</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>admin/user-group/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Grupos de Usuários</a></li>
                                 </ul>
                             </li>
+                            <!--li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->glyphicon('list') ?> &nbsp;Menus</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->basePath ?>admin/menu/list-items"><?php echo $this->glyphicon('list-alt') ?> &nbsp;Ver Menus</a></li>
+                                    <li><a href="<?php echo $this->basePath ?>admin/menu/new-item"><?php echo $this->glyphicon('plus-sign') ?> &nbsp;Novo Menu</a></li>
+                                </ul>
+                            </li-->
                         </ul>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $session->identity['name'] ?> <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo isset($session->identity['name']) ? $session->identity['name'] : 'Usuário' ?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/user/profile"><?php echo $this->glyphicon('nameplate', 'glyphicons') ?> &nbsp;Ver Perfil</a></li>
+                            <li><a href="<?php echo $this->basePath ?>admin/user/profile"><?php echo $this->glyphicon('nameplate', 'glyphicons') ?> &nbsp;Ver Perfil</a></li>
                             <li role="presentation" class="divider"></li>
-                            <li><a href="/admin/auth/logout"><?php echo $this->glyphicon('exit', 'glyphicons') ?> &nbsp;Sair</a></li>
+                            <li><a href="<?php echo $this->basePath ?>admin/auth/logout"><?php echo $this->glyphicon('exit', 'glyphicons') ?> &nbsp;Sair</a></li>
                         </ul>
                     </li>
                 </ul>

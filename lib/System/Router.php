@@ -27,6 +27,16 @@ class Router {
     /**
      * @var string
      */
+    public $appName;
+
+    /**
+     * @var string
+     */
+    public $requestUri;
+
+    /**
+     * @var string
+     */
     public $controller;
 
     /**
@@ -82,7 +92,15 @@ class Router {
                 $host = \str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
                 $this->basePath = "{$httpScheme}://{$_SERVER['HTTP_HOST']}{$host}/";
             }
-
+            
+            $appName = str_replace(array('/public','/index.php'), '', $_SERVER['SCRIPT_NAME']);
+            if(!$appName) {
+                $appName = $_SERVER['SERVER_NAME'];
+            }
+            $this->appName = $appName;
+            $this->requestUri = str_replace($appName, '', $_SERVER['REQUEST_URI']);
+            
+            //xd($this->basePath, $this->serverName, str_replace($appName, '', str_replace($this->serverName, '', $this->basePath)), $appName);
             $this->default = $config['default'];
             $this->defaultAuth = $config['defaultAuth'];
         } catch (\Exception $ex) {
@@ -95,8 +113,8 @@ class Router {
      */
     public function defineControllerAndAction() {
         try {
-            if ($_SERVER['REQUEST_URI'] && $_SERVER['REQUEST_URI'] != '/') {
-                $uri = $this->parseRoute($_SERVER['REQUEST_URI'], 1);
+            if ($this->requestUri && $this->requestUri != '/') {
+                $uri = $this->parseRoute($this->requestUri, 1);
                 $this->controller = $uri['controller'];
                 if ($uri['params']) {
                     \KF\Kernel::$request->setQuery(urldecode($uri['params']));
@@ -156,8 +174,9 @@ class Router {
      */
     public function parseRoute($route) {
         try {
-            $route = str_replace($this->basePath, '', $this->serverName . $route);
-
+            if(substr($route, 0, 1) === '/') {
+                $route = substr($route, 1);
+            }
             $arrRoute = \explode('/', $route);
             $_module = ucfirst(String::dashToCamel(array_shift($arrRoute)));
             $_controller = ucfirst(String::dashToCamel(array_shift($arrRoute)));

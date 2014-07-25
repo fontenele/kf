@@ -1,44 +1,90 @@
 <div class="row">
     <h2>Painel Administrativo</h2>
-    <hr />
-    <div class="col-sm-6">
-        <div class="blockquote-box blockquote-warning clearfix">
-            <div class="square pull-left">
-                <?php echo $this->glyphicon('group glyphicon-lg', 'glyphicons') ?>
+    <br />
+    <fieldset>
+        <legend>Sistema</legend>
+        <div class="col-sm-6">
+            
+            <div class="blockquote-box blockquote-success clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('nameplate glyphicon-lg', 'glyphicons') ?>
+                </div>
+                <h4>Funcionários</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>main/funcionarios/new-item">Novo Funcionário</a></li>
+                    <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>main/funcionarios/list-items">Ver Funcionários</a></li>
+                </ul>
+                </p>
             </div>
-            <h4>Grupo de Usuários</h4>
-            <p>
-            <ul class="list-unstyled list-inline">
-                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user-group/new-item">Novo Grupo de Usuário</a></li>
-                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user-group/list-items">Ver Grupos de Usuários</a></li>
-            </ul>
-            </p>
-        </div>
-        <div class="blockquote-box blockquote-danger clearfix">
-            <div class="square pull-left">
-                <?php echo $this->glyphicon('user glyphicon-lg') ?>
+            
+            <div class="blockquote-box blockquote-danger clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('user glyphicon-lg') ?>
+                </div>
+                <h4>Cargos</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>main/cargos/new-item">Novo Cargo</a></li>
+                    <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>main/cargos/list-items">Ver Cargos</a></li>
+                </ul>
+                </p>
             </div>
-            <h4>Usuários</h4>
-            <p>
-            <ul class="list-unstyled list-inline">
-                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user/new-item">Novo Usuário</a></li>
-                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user/list-items">Ver Usuários</a></li>
-            </ul>
-            </p>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="blockquote-box blockquote-info clearfix">
-            <div class="square pull-left">
-                <?php echo $this->glyphicon('list glyphicon-lg') ?>
+            <div class="blockquote-box blockquote-info clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('list glyphicon-lg') ?>
+                </div>
+                <h4>Menus</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/menu/new-item">Novo Menu</a></li>
+                    <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/menu/list-items">Ver Menus</a></li>
+                </ul>
+                </p>
             </div>
-            <h4>Menus</h4>
-            <p>
-            <ul class="list-unstyled list-inline">
-                <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/menu/new-item">Novo Menu</a></li>
-                <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/menu/list-items">Ver Menus</a></li>
-            </ul>
-            </p>
         </div>
-    </div>
+        <div class="col-sm-6">
+            <div class="blockquote-box blockquote-warning clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('group glyphicon-lg', 'glyphicons') ?>
+                </div>
+                <h4>Grupo de Usuários</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user-group/new-item">Novo Grupo de Usuário</a></li>
+                    <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user-group/list-items">Ver Grupos de Usuários</a></li>
+                </ul>
+                </p>
+            </div>
+            
+            <div class="blockquote-box blockquote-danger clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('user glyphicon-lg') ?>
+                </div>
+                <h4>Usuários</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('plus-sign') ?> <a href="<?php echo $this->basePath ?>admin/user/new-item">Novo Usuário</a></li>
+                    <li><?php echo $this->glyphicon('list-alt') ?> <a href="<?php echo $this->basePath ?>admin/user/list-items">Ver Usuários</a></li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Kernel</legend>
+        <div class="col-sm-6">
+            <div class="blockquote-box blockquote-info clearfix">
+                <div class="square pull-left">
+                    <?php echo $this->glyphicon('cogwheels glyphicon-lg', 'glyphicons') ?>
+                </div>
+                <h4>Gerador</h4>
+                <p>
+                <ul class="list-unstyled list-inline">
+                    <li><?php echo $this->glyphicon('cogwheel', 'glyphicons') ?> <a href="<?php echo $this->basePath ?>admin/database/create-default-entities">Criar tabelas do Sistema</a></li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </fieldset>
 </div>

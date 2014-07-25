@@ -49,6 +49,11 @@ abstract class Model {
      */
     const TYPE_INTEGER = 1;
     const TYPE_VARCHAR = 2;
+    const TYPE_DATE = 3;
+    const TYPE_TIME = 4;
+    const TYPE_DATETIME = 5;
+    const TYPE_MONEY = 6;
+    const TYPE_BOOLEAN = 7;
 
     /**
      * Joins types
@@ -105,6 +110,7 @@ abstract class Model {
     }
 
     /**
+     * Return the field on _fields attribute array
      * @param string $field
      * @return array
      */
@@ -125,6 +131,11 @@ abstract class Model {
             }
             $stmt = \KF\Kernel::$db->prepare($dml);
             $stmt->execute($input);
+
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+            }
+
             return $stmt->fetchAll();
         } catch (\Exception $ex) {
             throw $ex;
@@ -144,6 +155,11 @@ abstract class Model {
             }
             $stmt = \KF\Kernel::$db->prepare($dml);
             $stmt->execute($input);
+
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+            }
+
             return $stmt->fetch();
         } catch (\Exception $ex) {
             throw $ex;
@@ -155,16 +171,20 @@ abstract class Model {
      * @param integer $rowsPerPage
      * @param integer $numPage
      * @param array $selectNames
+     * @param array $whereConditions
+     * @param array $orderBy
      * @return array
      * @throws \KF\Lib\Module\Exception
      */
-    public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = []) {
+    public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
-            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions);
+            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions, $orderBy);
+
             if (self::$debug) {
-                x(__METHOD__, $sql, $sql->query, $sql->input);
+                x(__METHOD__, $sql->query, $sql->input, $sql);
             }
+
             return $this->fetchAllBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
             throw $ex;
@@ -182,7 +202,7 @@ abstract class Model {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->select($selectNames)->from($this->_table)->where($where);
             if (self::$debug) {
-                x(__METHOD__, $sql, $sql->query, $sql->input);
+                x(__METHOD__, $sql->query, $sql->input, $sql);
             }
             return $this->fetchBySql($sql->query, $sql->input);
         } catch (\Exception $ex) {
@@ -246,14 +266,22 @@ abstract class Model {
             $sql->insert($row);
 
             if (self::$debug) {
-                x(__METHOD__, $sql, $sql->query, $sql->input);
+                x(__METHOD__, $sql->query, $sql->input, $sql);
             }
 
             $stmt = \KF\Kernel::$db->prepare($sql->query);
             $success = $stmt->execute($sql->input);
 
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+            }
+
             if ($success) {
                 $row[$this->_pk] = \KF\Kernel::$db->lastInsertId($this->_sequence);
+            }
+
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             return $success;
@@ -266,18 +294,25 @@ abstract class Model {
      * @param array $row
      * @return boolean
      */
-    public function update(&$row) {
+    public function update(&$row, $where = []) {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
-            $sql->update($row);
+            $sql->update($row, $where);
 
             if (self::$debug) {
-                x(__METHOD__, $sql, $sql->query, $sql->input);
+                x(__METHOD__, $sql->query, $sql->input, $sql);
             }
 
             $stmt = \KF\Kernel::$db->prepare($sql->query);
-            return $stmt->execute($sql->input);
+            $success = $stmt->execute($sql->input);
+
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+            }
+
+            return $success;
         } catch (\Exception $ex) {
+            xd($ex);
             throw $ex;
         }
     }
@@ -286,12 +321,39 @@ abstract class Model {
         try {
             $sql = new \KF\Lib\Database\Sql($this);
             $sql->delete($where);
-            
+
             if (self::$debug) {
-                x(__METHOD__, $sql, $sql->query, $sql->input);
+                x(__METHOD__, $sql->query, $sql->input, $sql);
             }
             $stmt = \KF\Kernel::$db->prepare($sql->query);
-            return $stmt->execute($sql->input);
+            $success = $stmt->execute($sql->input);
+
+            if ($stmt->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+            }
+
+            return $success;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function createTable() {
+        try {
+            $sql = new \KF\Lib\Database\Sql($this);
+            $sql->createTable();
+
+            if (self::$debug) {
+                x(__METHOD__, $sql->query, $sql);
+            }
+
+            $success = \KF\Kernel::$db->exec($sql->query);
+
+            if (\KF\Kernel::$db->errorInfo()[2]) {
+                \KF\Lib\System\Logger::database($sql->getQuery(), \KF\Kernel::$db->errorInfo()[2], \KF\Kernel::$db->errorCode());
+            }
+
+            return $success;
         } catch (\Exception $ex) {
             throw $ex;
         }

@@ -6,7 +6,7 @@ class User extends \KF\Lib\Module\Model {
 
     public function __construct() {
         $this->_table = 'public.user';
-        $this->_sequence = 'user_cod_seq';
+        $this->_sequence = 'public.user_cod_seq';
         $this->_pk = 'cod';
 
         $this->addField('cod', self::TYPE_INTEGER);

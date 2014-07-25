@@ -3,6 +3,12 @@
 namespace KF\Lib\View\Html;
 
 class Datagrid {
+    
+    /**
+     * HTML ID
+     * @var string
+     */
+    public $id;
 
     /**
      * @var integer
@@ -84,6 +90,12 @@ class Datagrid {
      * @var array
      */
     public $headersRenderers = [];
+    
+    /**
+     * Nome do método
+     * @var string
+     */
+    public $trTemplate;
 
     const CRITERIA_CONDITION_LIKE = 'LIKE';
     const CRITERIA_CONDITION_EQUAL = 'EQUAL';
@@ -163,7 +175,8 @@ HTML;
         try {
             $html = '';
             if (count($this->headers)) {
-                $html.= '<table class="table table-bordered table-condensed table-hover table-responsive table-striped">';
+                $id = $this->id ? "id='{$this->id}'" : '';
+                $html.= "<table {$id} class='table table-bordered table-condensed table-hover table-responsive table-striped'>";
                 $html.= $this->headers();
                 $html.= $this->body();
                 $html.= $this->footer();
@@ -194,13 +207,20 @@ HTML;
         try {
             $html = '<tbody>';
             foreach ($this->rows as $row) {
-                $html.= '<tr>';
+                if ($this->trTemplate) {
+                    $html.= call_user_func_array($this->trTemplate, [$row]);
+                } else {
+                    $html.= '<tr>';
+                }
+                
                 foreach ($this->headers as $header => $data) {
                     $class = isset($data['class']) ? $data['class'] : null;
                     $value = isset($row[$header]) ? $row[$header] : null;
+                    
                     if (isset($this->headersRenderers[$header])) {
                         $value = call_user_func_array($this->headersRenderers[$header], [$value, $row]);
                     }
+                    
                     $html.= "<td class='{$class}'>{$value}</td>";
                 }
                 $html.= '</tr>';
@@ -260,9 +280,9 @@ HTML;
     public function setRows($rows = array()) {
         try {
             $this->rows = $rows;
-            if (count($this->rows) && isset($this->rows[array_keys($this->rows)[0]]) && isset($this->rows[array_keys($this->rows)[0]]['total'])) {
+            if (count($this->rows) && isset($this->rows[array_keys($this->rows)[0]]) && isset($this->rows[array_keys($this->rows)[0]]['kf_dg_total'])) {
                 $this->active = $this->active == 0 ? 1 : $this->active;
-                $this->totalItems = $this->rows[array_keys($rows)[0]]['total'];
+                $this->totalItems = $this->rows[array_keys($rows)[0]]['kf_dg_total'];
 
                 $maxItens = $this->numItems;
                 $this->totalPages = ceil($this->totalItems / $this->rowPerPage);

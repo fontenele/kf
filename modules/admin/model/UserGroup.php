@@ -6,7 +6,7 @@ class UserGroup extends \KF\Lib\Module\Model {
 
     public function __construct() {
         $this->_table = 'public.user_group';
-        $this->_sequence = 'user_group_cod_seq';
+        $this->_sequence = 'public.user_group_cod_seq';
         $this->_pk = 'cod';
 
         $this->addField('cod', self::TYPE_INTEGER);

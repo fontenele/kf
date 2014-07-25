@@ -18,8 +18,20 @@ class Sql {
      * @var \KF\Lib\Module\Model
      */
     public $model;
+
+    /**
+     * @var array
+     */
     public $aliases = [];
+
+    /**
+     * @var array
+     */
     public $aliasesFromFields = [];
+
+    /**
+     * @var boolean
+     */
     public static $debug = false;
 
     /**
@@ -52,7 +64,7 @@ class Sql {
         try {
             $this->query.= 'SELECT ';
             if ($paginator) {
-                $this->query.= "(SELECT count(1) FROM {$this->model->_table} %s) as total, ";
+                $this->query.= "(SELECT count(1) FROM {$this->model->_table} %s) as kf_dg_total, ";
             }
             if ($fields) {
                 foreach ($fields as $alias => $field) {
@@ -140,10 +152,11 @@ class Sql {
      * @param integer $rowsPerPage
      * @param integer $numPage
      * @param array $whereConditions
+     * @param array $orderBy
      * @return \KF\Lib\Database\Sql
      * @throws \KF\Lib\Database\Exception
      */
-    public function where($where = [], $rowsPerPage = null, $numPage = 1, $whereConditions = []) {
+    public function where($where = [], $rowsPerPage = null, $numPage = 1, $whereConditions = [], $orderBy = []) {
         try {
             $this->query.= "WHERE 1=1 ";
 
@@ -176,15 +189,31 @@ class Sql {
             $this->query = sprintf($this->query, $rowsPerPage ? ('WHERE 1=1 ' . sprintf($_where)) : '');
 
             if ($rowsPerPage) {
-                $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
+                // Order By
+                if ($orderBy) {
+                    foreach ($orderBy as $field => $orderType) {
+                        $field = explode('.', $field);
+                        $alias = $this->aliasesFromFields[$field[0]];
+                        $this->query.= "ORDER BY {$alias}.{$field[1]} {$orderType} ";
+                    }
+                } else {
+                    $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
+                }
+
                 $offset = 0;
                 $rowsPerPage = $rowsPerPage ? $rowsPerPage : \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
                 if ($numPage > 1) {
                     $offset = $rowsPerPage * ($numPage - 1);
                 }
                 $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset}";
-            } elseif(substr($this->query, 0 , 6) != 'DELETE') {
-                $this->query.= "ORDER BY {$this->aliases[$this->model->_table]}.{$this->model->_pk} ";
+            } elseif (substr($this->query, 0, 6) != 'DELETE') {
+                if ($orderBy) {
+                    foreach ($orderBy as $field => $orderType) {
+                        $field = explode('.', $field);
+                        $alias = $this->aliasesFromFields[$field[0]];
+                        $this->query.= "ORDER BY {$alias}.{$field[1]} {$orderType} ";
+                    }
+                }
             }
 
             return $this;
@@ -195,14 +224,26 @@ class Sql {
 
     protected function parseWhereFieldValue($field, $value, $criteriaCondition = \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL) {
         try {
-            $_whereLike = "LIKE '%%%s%%'";
-
             switch ($criteriaCondition) {
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
                     return "{$field} = '{$value}' ";
                 case \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
                     $value = strtoupper($value);
                     return "UPPER({$field}) LIKE '%%{$value}%%' ";
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    protected function parseFieldValue($field, &$value) {
+        try {
+            switch ($this->model->field($field)['type']) {
+                case \KF\Lib\Module\Model::TYPE_BOOLEAN:
+                    if(!$value) {
+                        $value = 0;
+                    }
+                    break;
             }
         } catch (\Exception $ex) {
             throw $ex;
@@ -219,6 +260,7 @@ class Sql {
             foreach ($row as $field => $value) {
                 $this->query.= "{$field}, ";
                 $values.= "?, ";
+                $this->parseFieldValue($field, $value);
                 $this->input[] = $value;
             }
             $values = substr($values, 0, -2);
@@ -228,20 +270,29 @@ class Sql {
         }
     }
 
-    public function update($row) {
+    public function update($row, $where = []) {
         try {
+            $_where = ' WHERE 1=1 ';
             $this->query = "UPDATE {$this->model->_table} SET ";
-            $pk = $row[$this->model->_pk];
-            $where = " WHERE {$this->model->_pk}=?";
-            $values = '';
-            unset($row[$this->model->_pk]);
+            $pk = isset($row[$this->model->_pk]) ? $row[$this->model->_pk] : null;
+            if($pk) {
+                $_where.= " AND {$this->model->_pk}=?";
+                unset($row[$this->model->_pk]);
+            }
             foreach ($row as $field => $value) {
                 $this->query.= "{$field}=?, ";
+                $this->parseFieldValue($field, $value);
                 $this->input[] = $value;
             }
-            $this->query = substr($this->query, 0, -2);
-            $this->query.= $where;
-            $this->input[] = $pk;
+            foreach($where as $param => $val) {
+                $_where.= " AND {$param}=?";
+                $this->input[] = $val;
+            }
+            if($pk) {
+                $this->query = substr($this->query, 0, -2);
+                $this->input[] = $pk;
+            }
+            $this->query.= $_where;
         } catch (Exception $ex) {
             throw $ex;
         }
@@ -252,6 +303,99 @@ class Sql {
             $alias = isset($this->aliases[$this->model->_table]) ? $this->aliases[$this->model->_table] : '';
             $this->query = "DELETE FROM {$this->model->_table} as {$alias} ";
             $this->where($where);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function createTable() {
+        try {
+            $schemeTable = explode('.', $this->model->_table);
+            $scheme = array_shift($schemeTable);
+            $table = array_shift($schemeTable);
+            $pk = $this->model->_pk;
+            $seq = $this->model->_sequence;
+            $joins = $this->model->_joins;
+
+            // Table
+            $this->query = "CREATE TABLE {$scheme}.{$table} (";
+
+            $i = 1;
+            foreach ($this->model->_fields as $field => $dataField) {
+                $this->query.= "{$field} ";
+                switch ($dataField['type']) {
+                    case \KF\Lib\Module\Model::TYPE_INTEGER:
+                        $this->query.= "integer";
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_VARCHAR:
+                        $this->query.= "character varying" . ($dataField['length'] ? "({$dataField['length']})" : '');
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_DATE:
+                        $this->query.= "date without time zone";
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_TIME:
+                        $this->query.= "time without time zone";
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_DATETIME:
+                        $this->query.= "datetime without time zone";
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_MONEY:
+                        $this->query.= "money";
+                        break;
+                    case \KF\Lib\Module\Model::TYPE_BOOLEAN:
+                        $this->query.= "boolean";
+                        break;
+                }
+
+                if ($field == $pk) {
+                    $this->query.= " NOT NULL";
+                }
+
+                if ($i != count($this->model->_fields)) {
+                    $this->query.= ", ";
+                }
+                $i++;
+            }
+
+            $this->query.= ");";
+
+            // Sequence
+            $this->query.= "\nCREATE SEQUENCE {$seq} START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;";
+
+            // Attach sequence to primary key
+            $this->query.= "\nALTER SEQUENCE {$seq} OWNED BY {$scheme}.{$table}.{$pk};";
+
+            $this->query.= "\nALTER TABLE ONLY {$scheme}.{$table} ALTER COLUMN {$pk} SET DEFAULT nextval('{$seq}'::regclass);";
+            $this->query.= "\nALTER TABLE ONLY {$scheme}.{$table} ADD CONSTRAINT {$table}_pk PRIMARY KEY ({$pk});";
+
+            if (count($joins)) {
+                foreach ($joins as $fieldJoin => $dataField) {
+                    $tableJoin = $dataField['model']->_table;
+                    $pkJoin = $dataField['model']->_pk;
+                    $this->query.= "\nALTER TABLE ONLY {$scheme}.{$table} ADD CONSTRAINT {$table}_{$fieldJoin}_fk FOREIGN KEY ({$fieldJoin}) REFERENCES {$tableJoin}({$pkJoin});";
+                }
+            }
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * Return the SQL query
+     * @return string
+     * @throws \KF\Lib\Database\Exception
+     */
+    public function getQuery() {
+        try {
+            $sql = $this->query;
+            foreach ($this->input as $input) {
+                $posInput = strpos($sql, '?');
+                if ($posInput) {
+                    $left = str_replace('?', $input, substr($sql, 0, $posInput + 1));
+                    $sql = substr_replace($sql, $left, 0, $posInput + 1);
+                }
+            }
+            return $sql;
         } catch (\Exception $ex) {
             throw $ex;
         }

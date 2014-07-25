@@ -5,11 +5,15 @@ namespace KF\Lib\View;
 class Layout extends Html {
 
     public function __construct($template = null, $vars = array()) {
-        parent::__construct($template, $vars);
-        $this->extraJs = [];
-        $this->extraCss = [];
-        $this->js = [];
-        $this->css = [];
+        try {
+            parent::__construct($template, $vars);
+            $this->extraJs = [];
+            $this->extraCss = [];
+            $this->js = [];
+            $this->css = [];
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
     public function addJsFile($file) {
