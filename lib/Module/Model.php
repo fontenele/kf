@@ -9,59 +9,70 @@ namespace KF\Lib\Module;
 abstract class Model {
 
     /**
+     * @var Entity
+     */
+    protected $entity;
+
+    /**
      * Table name
      * @var string
      */
-    public $_table;
+    //public $_table;
 
     /**
      * PK sequence
      * @var string
      */
-    public $_sequence;
+    //public $_sequence;
 
     /**
      * PK
      * @var string
      */
-    public $_pk;
+    //public $_pk;
 
     /**
      * Table Fields
      * @var array
      */
-    public $_fields = [];
+    //public $_fields = [];
 
     /**
      * Table joins
      * @var array
      */
-    public $_joins = [];
+    //public $_joins = [];
 
     /**
      * Debug toggle
      * @var boolean
      */
-    public static $debug = false;
+    //public static $debug = false;
 
     /**
      * Fields types
      */
-    const TYPE_INTEGER = 1;
-    const TYPE_VARCHAR = 2;
-    const TYPE_DATE = 3;
-    const TYPE_TIME = 4;
-    const TYPE_DATETIME = 5;
-    const TYPE_MONEY = 6;
-    const TYPE_BOOLEAN = 7;
+//    const TYPE_INTEGER = 1;
+//    const TYPE_VARCHAR = 2;
+//    const TYPE_DATE = 3;
+//    const TYPE_TIME = 4;
+//    const TYPE_DATETIME = 5;
+//    const TYPE_MONEY = 6;
+//    const TYPE_BOOLEAN = 7;
 
     /**
      * Joins types
      */
-    const JOIN_INNER = 1;
-    const JOIN_LEFT = 2;
-    const JOIN_RIGHT = 3;
-    const JOIN_FULL = 4;
+//    const JOIN_INNER = 1;
+//    const JOIN_LEFT = 2;
+//    const JOIN_RIGHT = 3;
+//    const JOIN_FULL = 4;
+
+    public function __construct() {
+        $this->configure();
+    }
+
+    abstract public function configure();
 
     /**
      * @param string $name
@@ -80,6 +91,21 @@ abstract class Model {
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    public function setEntity(Entity $entity) {
+        try {
+            $this->entity = $entity;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    /**
+     * @return Entity
+     */
+    public function getEntity() {
+        return $this->entity;
     }
 
     /**
@@ -126,15 +152,15 @@ abstract class Model {
      */
     protected function fetchAllBySql($dml, $input = []) {
         try {
-            if (self::$debug) {
-                x(__METHOD__, $dml, $input);
-            }
+//            if (self::$debug) {
+//                x(__METHOD__, $dml, $input);
+//            }
             $stmt = \KF\Kernel::$db->prepare($dml);
             $stmt->execute($input);
 
-            if ($stmt->errorInfo()[2]) {
-                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
-            }
+//            if ($stmt->errorInfo()[2]) {
+//                \KF\Lib\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+//            }
 
             return $stmt->fetchAll();
         } catch (\Exception $ex) {
@@ -178,14 +204,18 @@ abstract class Model {
      */
     public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
-            $sql = new \KF\Lib\Database\Sql($this);
-            $sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions, $orderBy);
+            $dml = $this->getEntity()->select()->from()->where()->orderBy();
+            //xd($dml);
 
-            if (self::$debug) {
-                x(__METHOD__, $sql->query, $sql->input, $sql);
-            }
 
-            return $this->fetchAllBySql($sql->query, $sql->input);
+            //$sql = new \KF\Lib\Database\Sql($this);
+            //$sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions, $orderBy);
+            //xd($sql);
+//            if (self::$debug) {
+//                x(__METHOD__, $sql->query, $sql->input, $sql);
+//            }
+
+            return $this->fetchAllBySql($dml->query, $dml->input);
         } catch (\Exception $ex) {
             throw $ex;
         }

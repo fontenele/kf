@@ -3,7 +3,7 @@
 return array(
     'db' => array(
         'type' => 'pgsql',
-        'dsn' => 'pgsql:dbname=kf;host=localhost',
+        'dsn' => 'pgsql:dbname=vd_prod;host=localhost',
         'username' => 'postgres',
         'password' => 'postgres',
     )

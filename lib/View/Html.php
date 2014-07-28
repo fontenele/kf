@@ -23,6 +23,9 @@ class Html extends \KF\Lib\System\ArrayObject {
 
     public function render() {
         try {
+            if ($this->template instanceof \KF\Lib\System\File) {
+                $this->template = str_replace(APP_PATH, '', $this->template->getName());
+            }
             if (!$this->template || !file_exists(APP_PATH . $this->template)) {
                 throw new \Exception;
             }

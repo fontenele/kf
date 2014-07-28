@@ -44,7 +44,8 @@ abstract class Service {
      */
     public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
-            return $this->parseAndFormatDbData2View($this->model()->fetchAll($where, $rowsPerPage, $numPage, $selectNames, $whereConditions, $orderBy));
+            //return $this->parseAndFormatDbData2View($this->model()->fetchAll($where, $rowsPerPage, $numPage, $selectNames, $whereConditions, $orderBy));
+            return $this->model()->fetchAll($where, $rowsPerPage, $numPage, $selectNames, $whereConditions, $orderBy);
         } catch (Exception $ex) {
             
         }

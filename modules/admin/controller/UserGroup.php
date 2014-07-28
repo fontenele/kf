@@ -57,24 +57,34 @@ class UserGroup extends \KF\Lib\Module\Controller {
 
     public function listItems() {
         try {
-            $dg = new \KF\Lib\View\Html\Datagrid('#fm-user-group', $this->request->post->getArrayCopy());
-            $dg->addHeader('name', 'Grupo', '85%');
-            $dg->addHeader('status', 'Status', '10%', 'text-center', '\Admin\Controller\UserGroup::dgStatus');
-            $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit');
-            $dg->addCriteria('name', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
-
-            $service = new \Admin\Service\UserGroup();
-            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active, null, $dg->criteriaConditions));
-
-            $form = $this->form();
-            $form->action = \KF\Kernel::$router->basePath . 'admin/user-group/list-items';
-            $form->submit->label = $form->submit->content = \KF\Lib\View\Html\Helper\Glyphicon::get('search') . ' Pesquisar';
-            $form->name->offsetUnset('required');
-            $form->status->offsetUnset('required');
-            $form->setValues($this->request->post->getArrayCopy());
-
-            $this->view->form = $form;
+            $dg = new \KF\Lib\View\Html\Datagrid\Datagrid(new \Admin\Entity\UserGroup);
+            $dg->addHeader(new \KF\Lib\View\Html\Datagrid\Header(3, '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit'));
             $this->view->dg = $dg;
+            //xd($dg);
+            
+            
+            
+            
+            
+            
+//            $dg = new \KF\Lib\View\Html\Datagrid('#fm-user-group', $this->request->post->getArrayCopy());
+//            $dg->addHeader('name', 'Grupo', '85%');
+//            $dg->addHeader('status', 'Status', '10%', 'text-center', '\Admin\Controller\UserGroup::dgStatus');
+//            $dg->addHeader('', '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit');
+//            $dg->addCriteria('name', \KF\Lib\View\Html\Datagrid::CRITERIA_CONDITION_LIKE);
+//
+//            $service = new \Admin\Service\UserGroup();
+//            $dg->setRows($service->fetchAll($dg->criteria, $dg->rowPerPage, $dg->active, null, $dg->criteriaConditions));
+//
+//            $form = $this->form();
+//            $form->action = \KF\Kernel::$router->basePath . 'admin/user-group/list-items';
+//            $form->submit->label = $form->submit->content = \KF\Lib\View\Html\Helper\Glyphicon::get('search') . ' Pesquisar';
+//            $form->name->offsetUnset('required');
+//            $form->status->offsetUnset('required');
+//            $form->setValues($this->request->post->getArrayCopy());
+//
+//            $this->view->form = $form;
+//            $this->view->dg = $dg;
             return $this->view;
         } catch (\Exception $ex) {
             throw $ex;

@@ -63,6 +63,12 @@ class User extends \KF\Lib\Module\Controller {
 
     public function listItems() {
         try {
+            $service = new \Admin\Service\User();
+            xd($service->fetchAll());
+            
+            
+            
+            
             $dg = new \KF\Lib\View\Html\Datagrid('#fm-user', $this->request->post->getArrayCopy());
             $dg->addHeader('name', 'Nome', '45%');
             $dg->addHeader('email', 'E-mail', '20%');

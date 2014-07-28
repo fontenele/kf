@@ -109,8 +109,32 @@ class Kernel {
     public static function loadConfigs() {
         try {
             $dir = new Lib\System\Dir(APP_PATH . 'config');
+            $envs = ['dev', 'hom', 'prod'];
+            $filesIgnore = [];
+
             foreach ($dir->getFiles() as $_item) {
-                $config = include_once("{$dir->dirName}/{$_item}");
+                $filename = "{$dir->dirName}/{$_item}";
+                if (in_array($filename, $filesIgnore)) {
+                    continue;
+                }
+
+                if (Lib\System\File::fileExists($filename, APPLICATION_ENV)) {
+                    $filesIgnore[] = $filename;
+                    $filename = Lib\System\File::getFileName($filename, APPLICATION_ENV);
+                    $filesIgnore[] = $filename;
+                } else {
+                    foreach ($envs as $env) {
+                        if ($env == APPLICATION_ENV) {
+                            continue;
+                        }
+                        if (Lib\System\File::fileExists($filename, $env)) {
+                            $filesIgnore[] = $filename;
+                            $filesIgnore[] = Lib\System\File::getFileName($filename, $env);
+                        }
+                    }
+                }
+
+                $config = Lib\System\File::loadFile($filename);
                 self::$config = array_merge_recursive(self::$config, $config);
             }
         } catch (\Exception $ex) {

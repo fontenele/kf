@@ -1,0 +1,12 @@
+<table>
+    <thead>
+        <tr>
+            <?php foreach ($this->headers as $header): ?>
+                <th class="<?php echo $header->getCssClass() ?>" width="<?php echo $header->getWidth() ?>"><?php echo $header->getLabel() ?></th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+</table>

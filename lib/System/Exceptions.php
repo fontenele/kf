@@ -21,3 +21,11 @@ class RouterException extends BaseException {
 class ACLException extends BaseException {
     
 }
+
+class FileNotFoundException extends BaseException {
+
+    public function __construct($filename, $code = null, $previous = null) {
+        parent::__construct("File {$filename} not found.", 304, $previous);
+    }
+
+}
