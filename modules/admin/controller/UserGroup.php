@@ -57,15 +57,14 @@ class UserGroup extends \KF\Lib\Module\Controller {
 
     public function listItems() {
         try {
-            $dg = new \KF\Lib\View\Html\Datagrid\Datagrid(new \Admin\Entity\UserGroup);
-            $dg->addHeader(new \KF\Lib\View\Html\Datagrid\Header(3, '', '5%', 'text-center', '\Admin\Controller\UserGroup::dgEdit'));
+            $userGroup = new \Admin\Service\UserGroup;
+            $dg = new \KF\Lib\View\Html\Datagrid\Datagrid('dg-user-group');
+            $dg->setEntity(new \Admin\Entity\UserGroup);
+            $dg->addHeader(
+                    new \KF\Lib\View\Html\Datagrid\Header(3, '', '5%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgEdit'))
+            );
+            $dg->setData($userGroup->fetchAll([], $dg->getPaginator()->getRowsPerPage(), $dg->getPaginator()->getActive()));
             $this->view->dg = $dg;
-            //xd($dg);
-            
-            
-            
-            
-            
             
 //            $dg = new \KF\Lib\View\Html\Datagrid('#fm-user-group', $this->request->post->getArrayCopy());
 //            $dg->addHeader('name', 'Grupo', '85%');
@@ -91,15 +90,15 @@ class UserGroup extends \KF\Lib\Module\Controller {
         }
     }
 
-    public static function dgStatus($value = null, $row) {
+    public static function dgStatus($row) {
         try {
-            return $value == 1 ? \KF\Lib\View\Html\Helper\Glyphicon::get('ok-circle text-success') : \KF\Lib\View\Html\Helper\Glyphicon::get('ban-circle text-danger');
+            return $row['status'] == 1 ? \KF\Lib\View\Html\Helper\Glyphicon::get('ok-circle text-success') : \KF\Lib\View\Html\Helper\Glyphicon::get('ban-circle text-danger');
         } catch (\Exception $ex) {
             throw $ex;
         }
     }
 
-    public static function dgEdit($value = null, $row) {
+    public static function dgEdit($row) {
         try {
             return '<a href=' . \KF\Kernel::$router->basePath . "admin/user-group/new-item/cod/{$row['cod']}>" . \KF\Lib\View\Html\Helper\Glyphicon::get('pencil') . '</a>';
         } catch (\Exception $ex) {

@@ -204,8 +204,13 @@ abstract class Model {
      */
     public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
-            $dml = $this->getEntity()->select()->from()->where()->orderBy();
-            //xd($dml);
+            $dml = $this->getEntity()
+                    ->select($selectNames, $rowsPerPage ? true : false)
+                    ->from()
+                    ->where($where, $rowsPerPage ? true : false)
+                    ->orderBy($orderBy)
+                    ->paginate($numPage, $rowsPerPage);
+            //xd($dml, $this->fetchAllBySql($dml->query, $dml->input));
 
 
             //$sql = new \KF\Lib\Database\Sql($this);

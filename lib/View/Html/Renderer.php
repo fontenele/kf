@@ -14,6 +14,10 @@ class Renderer {
      */
     protected $file;
 
+    /**
+     * @param string $method
+     * @param \KF\Lib\System\File $file
+     */
     public function __construct($method = null, \KF\Lib\System\File $file = null) {
         if ($method) {
             $this->setMethod($method);
@@ -56,6 +60,9 @@ class Renderer {
     }
 
     public function render($params = null) {
+        if($this->getMethod()) {
+            return call_user_func_array($this->getMethod(), [$params]);
+        }
         $view = new \KF\Lib\View\Html($this->getFile(), $params);
         return $view->render();
     }

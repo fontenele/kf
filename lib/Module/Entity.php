@@ -75,6 +75,10 @@ abstract class Entity extends \KF\Lib\Database\Dml {
         $this->fields[$field->getName()] = $field;
     }
 
+    /**
+     * @param string $field
+     * @return \KF\Lib\Database\Field
+     */
     public function getField($field) {
         return isset($this->fields[$field]) ? $this->fields[$field] : null;
     }

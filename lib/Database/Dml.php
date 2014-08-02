@@ -38,8 +38,11 @@ class Dml {
         return $dml;
     }
 
-    public function select($fields = []) {
+    public function select($fields = [], $paginator = false) {
         $this->query.= 'SELECT ';
+        if ($paginator) {
+            $this->query.= "(SELECT count(1) FROM {$this->getTable()} %s) as kf_dg_total, ";
+        }
         if ($fields) {
             foreach ($fields as $alias => $field) {
                 $alias = is_integer($alias) ? '' : " as {$alias}";
@@ -49,8 +52,8 @@ class Dml {
             foreach ($this->getFields() as $field => $fieldData) {
                 $alias = isset($this->aliases[$this->getTable()]) ? "{$this->aliases[$this->getTable()]}." : '';
                 $this->query.= "{$alias}{$fieldData->getDbName()}, ";
-                if($fieldData->getFkEntity()) {
-                    foreach($fieldData->getFkEntity()->getFields() as $fkField => $fkFieldData) {
+                if ($fieldData->getFkEntity()) {
+                    foreach ($fieldData->getFkEntity()->getFields() as $fkField => $fkFieldData) {
                         $fkTable = $fieldData->getFkEntity()->getTable();
                         $fkAlias = isset($this->aliases[$fkTable]) ? "{$this->aliases[$fkTable]}." : '';
                         $this->query.= "{$fkAlias}{$fkField} as {$fieldData->getDbName()}_{$fkField}, ";
@@ -61,7 +64,7 @@ class Dml {
             $alias = $this->getTable() && isset($this->aliases[$this->getTable()]) ? "{$this->aliases[$this->getTable()]}." : '';
             $this->query.= "{$alias}*, ";
         }
-        
+
         $this->query = substr($this->query, 0, -2) . ' ';
         return $this;
     }
@@ -109,13 +112,15 @@ class Dml {
         return $this;
     }
 
-    public function where($where = []) {
+    public function where($where = [], $paginator = false) {
+        $_where = 'WHERE 1=1 ';
         if ($where) {
-            $this->query.= "WHERE 1=1 ";
-            $_where = '';
             foreach ($where as $field => $value) {
                 // @todo
             }
+        }
+        if ($paginator) {
+            $this->query = sprintf($this->query, $_where);
         }
         return $this;
     }
@@ -125,9 +130,40 @@ class Dml {
             $this->query.= "ORDER BY ";
             $_orderBy = '';
             foreach ($fields as $field => $sortType) {
-                // @todo
+                if ($this->getField($field)) {
+                    $_orderBy.= "{$this->aliases[$this->getTable()]}.{$field} {$sortType}, ";
+                }
+            }
+            $this->query.= substr($_orderBy, 0, -2) . ' ';
+        } elseif ($this instanceof \KF\Lib\Module\Entity) {
+            $orderBy = [];
+            $_orderBy = '';
+            foreach ($this->getFields() as $field => $fieldData) {
+                if ($fieldData->getDbOrderBySequence()) {
+                    $orderBy[$fieldData->getDbOrderBySequence()] = [$field, $fieldData->getDbOrderBySortType()];
+                }
+            }
+            if (count($orderBy)) {
+                $this->query.= "ORDER BY ";
+                foreach ($orderBy as $fieldData) {
+                    $field = array_shift($fieldData);
+                    $sortType = array_shift($fieldData);
+                    if ($this->getField($field)) {
+                        $_orderBy.= "{$this->aliases[$this->getTable()]}.{$field} {$sortType}, ";
+                    }
+                }
+                $this->query.= substr($_orderBy, 0, -2) . ' ';
             }
         }
+        return $this;
+    }
+
+    public function paginate($numPage, $rowsPerPage) {
+        $offset = 0;
+        if ($numPage > 1) {
+            $offset = $rowsPerPage * ($numPage - 1);
+        }
+        $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset} ";
         return $this;
     }
 

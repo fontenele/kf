@@ -5,6 +5,11 @@ namespace KF\Lib\View\Html\Datagrid;
 class Datagrid {
 
     /**
+     * @var string
+     */
+    protected $id;
+
+    /**
      * @var \KF\Lib\Module\Entity
      */
     protected $entity;
@@ -20,7 +25,7 @@ class Datagrid {
     protected $paginator;
 
     /**
-     * @var array
+     * @var array|\KF\Lib\System\Collection
      */
     protected $data;
 
@@ -29,17 +34,22 @@ class Datagrid {
      */
     protected $renderer;
 
-    /**
-     * @param \KF\Lib\Module\Entity $entity
-     */
-    public function __construct(\KF\Lib\Module\Entity $entity = null) {
+    public function __construct($id = null) {
         $this->setRenderer(new \KF\Lib\View\Html\Renderer(null, new \KF\Lib\System\File(APP_PATH . 'lib/View/Html/Datagrid/datagrid.phtml')));
-        if ($entity) {
-            $this->setEntity($entity);
+        $this->setPaginator(new \KF\Lib\View\Html\Paginator);
+        if($id) {
+            $this->setId($id);
         }
     }
 
     /**
+     * @return string
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+        /**
      * @return \KF\Lib\Module\Entity
      */
     public function getEntity() {
@@ -73,6 +83,15 @@ class Datagrid {
     public function getRenderer() {
         return $this->renderer;
     }
+    
+    /**
+     * @param string $id
+     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     */
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @param \KF\Lib\Module\Entity $entity
@@ -103,7 +122,7 @@ class Datagrid {
     }
 
     /**
-     * @param array $data
+     * @param array|\KF\Lib\System\Collection $data
      * @return \KF\Lib\View\Html\Datagrid\Datagrid
      */
     public function setData($data) {

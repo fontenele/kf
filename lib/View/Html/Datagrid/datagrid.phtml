@@ -1,4 +1,4 @@
-<table>
+<table id='<?php echo $this->id ?>' class='table table-bordered table-condensed table-hover table-responsive table-striped'>
     <thead>
         <tr>
             <?php foreach ($this->headers as $header): ?>
@@ -7,6 +7,23 @@
         </tr>
     </thead>
     <tbody>
-        
+        <?php foreach ($this->data as $data): ?>
+            <tr>
+                <?php foreach ($this->headers as $header): ?>
+                    <td class="<?php echo $header->getCssClass() ?>" width="<?php echo $header->getWidth() ?>">
+                        <?php
+                        switch (true) {
+                            case $header->getRenderer():
+                                echo $header->getRenderer()->render($data);
+                                break;
+                            case isset($data[$header->getDataName()]):
+                                echo $data[$header->getDataName()];
+                                break;
+                        }
+                        ?>
+                    </td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
     </tbody>
 </table>

@@ -3,6 +3,8 @@
 require_once('fdebug.php');
 require_once('System/Exceptions.php');
 require_once('System/ArrayObject.php');
+require_once('System/Collection.php');
+require_once('System/EntityCollection.php');
 require_once('System/Session.php');
 require_once('System/Dir.php');
 require_once('System/Logger.php');

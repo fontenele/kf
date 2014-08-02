@@ -11,18 +11,25 @@ class UserGroup extends \KF\Lib\Module\Entity {
 
         $this->addField(self::createField('cod')
                         ->setDbName('cod')
-                        ->setDbType(\KF\Lib\Database\Field::DB_TYPE_INTEGER));
+                        ->setDbType(\KF\Lib\Database\Field::DB_TYPE_INTEGER)
+                        ->setViewComponent(new \KF\Lib\View\Html\Input('cod', '', 'hidden')));
 
         $this->addField(self::createField('name')
                         ->setDbName('name')
                         ->setDbType(\KF\Lib\Database\Field::DB_TYPE_VARCHAR)
                         ->setDbMaxLength(50)
-                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(1, 'Grupo', '85%')));
+                        ->setDbOrderBySequence(1)
+                        ->setDbOrderBySortType('ASC')
+                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(1, 'Grupo', '85%'))
+                        ->setViewComponent(new \KF\Lib\View\Html\InputText('name', 'Nome')));
 
         $this->addField(self::createField('status')
                         ->setDbName('status')
                         ->setDbType(\KF\Lib\Database\Field::DB_TYPE_INTEGER)
-                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(2, 'Status', '10%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgStatus'))));
+                        ->setDbOrderBySequence(2)
+                        ->setDbOrderBySortType('ASC')
+                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(2, 'Status', '10%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgStatus')))
+                        ->setViewComponent(new \KF\Lib\View\Html\Select('status', 'Status', ['options' => ['1' => 'Ativo', '2' => 'Inativo']])));
     }
 
 }
