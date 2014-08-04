@@ -37,7 +37,7 @@ class Datagrid {
     public function __construct($id = null) {
         $this->setRenderer(new \KF\Lib\View\Html\Renderer(null, new \KF\Lib\System\File(APP_PATH . 'lib/View/Html/Datagrid/datagrid.phtml')));
         $this->setPaginator(new \KF\Lib\View\Html\Paginator);
-        if($id) {
+        if ($id) {
             $this->setId($id);
         }
     }
@@ -49,7 +49,7 @@ class Datagrid {
         return $this->id;
     }
 
-        /**
+    /**
      * @return \KF\Lib\Module\Entity
      */
     public function getEntity() {
@@ -83,7 +83,18 @@ class Datagrid {
     public function getRenderer() {
         return $this->renderer;
     }
-    
+
+    public function getFormItems() {
+        try {
+            $html = <<<HTML
+                <input type="hidden" name="kf-dg-p" value="{$this->getPaginator()->getActive()}" />
+HTML;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+        return $html;
+    }
+
     /**
      * @param string $id
      * @return \KF\Lib\View\Html\Datagrid\Datagrid
@@ -130,8 +141,13 @@ class Datagrid {
         return $this;
     }
 
+    /**
+     * @param \KF\Lib\View\Html\Renderer $renderer
+     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     */
     public function setRenderer(\KF\Lib\View\Html\Renderer $renderer) {
         $this->renderer = $renderer;
+        return $this;
     }
 
     /**
@@ -158,6 +174,9 @@ class Datagrid {
         return $this->getRenderer()->render(get_object_vars($this));
     }
 
+    /**
+     * @return string
+     */
     public function __toString() {
         return $this->render();
     }

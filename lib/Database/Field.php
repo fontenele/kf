@@ -46,6 +46,11 @@ class Field {
     protected $datagridHeader;
 
     /**
+     * @var Criteria
+     */
+    protected $searchCriteria;
+
+    /**
      * Fields types
      */
     const DB_TYPE_INTEGER = 1;
@@ -164,6 +169,15 @@ class Field {
     }
 
     /**
+     * @param \KF\Lib\Database\Criteria $searchCriteria
+     * @return \KF\Lib\Database\Field
+     */
+    public function setSearchCriteria(Criteria $searchCriteria) {
+        $this->searchCriteria = $searchCriteria;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getName() {
@@ -236,6 +250,13 @@ class Field {
      */
     public function getDatagridHeader() {
         return $this->datagridHeader;
+    }
+
+    /**
+     * @return Criteria
+     */
+    public function getSearchCriteria() {
+        return $this->searchCriteria;
     }
 
 }

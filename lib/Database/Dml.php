@@ -116,12 +116,39 @@ class Dml {
         $_where = 'WHERE 1=1 ';
         if ($where) {
             foreach ($where as $field => $value) {
-                // @todo
+                if ($this->getField($field) && $value) {
+                    if ($this->getField($field)->getSearchCriteria()) {
+                        $upper = $this->getField($field)->getSearchCriteria()->getUpper();
+                        switch ($this->getField($field)->getSearchCriteria()->getType()) {
+                            case Criteria::CONDITION_EQUAL:
+                                $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
+                                $_value = $upper ? "UPPER({$this->parseFieldValue($field, $value)})" : $this->parseFieldValue($field, $value);
+                                $_where.= "AND {$_field} = {$_value} ";
+                                break;
+                            case Criteria::CONDITION_LIKE:
+                                $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
+                                $_value = $upper ? "UPPER('%{$value}%')" : "'%{$value}%'";
+                                $_where.= "AND {$_field} LIKE {$_value} ";
+                                break;
+                            case Criteria::CONDITION_BETWEEN:
+                                /**
+                                 * @todo
+                                 */
+                                xd('@TODO');
+                                $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} ";
+                                break;
+                        }
+                    } else {
+                        $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} = {$this->parseFieldValue($field, $value)} ";
+                    }
+                }
             }
         }
         if ($paginator) {
             $this->query = sprintf($this->query, $_where);
         }
+
+        $this->query.= $_where;
         return $this;
     }
 
@@ -165,6 +192,30 @@ class Dml {
         }
         $this->query.= "LIMIT {$rowsPerPage} OFFSET {$offset} ";
         return $this;
+    }
+
+    protected function parseFieldValue($field, &$value) {
+        try {
+            switch ($this->getField($field)->getDbType()) {
+                case Field::DB_TYPE_INTEGER:
+                    $value = (int) $value;
+                    break;
+                case Field::DB_TYPE_VARCHAR:
+                    if (!$value) {
+                        $value = '';
+                    }
+                    $value = "'{$value}'";
+                    break;
+                case Field::DB_TYPE_BOOLEAN:
+                    if (!$value) {
+                        $value = 0;
+                    }
+                    break;
+            }
+            return $value;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
 }

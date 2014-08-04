@@ -58,12 +58,11 @@ class UserGroup extends \KF\Lib\Module\Controller {
     public function listItems() {
         try {
             $userGroup = new \Admin\Service\UserGroup;
+            
             $dg = new \KF\Lib\View\Html\Datagrid\Datagrid('dg-user-group');
             $dg->setEntity(new \Admin\Entity\UserGroup);
-            $dg->addHeader(
-                    new \KF\Lib\View\Html\Datagrid\Header(3, '', '5%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgEdit'))
-            );
-            $dg->setData($userGroup->fetchAll([], $dg->getPaginator()->getRowsPerPage(), $dg->getPaginator()->getActive()));
+            $dg->addHeader(new \KF\Lib\View\Html\Datagrid\Header(3, '', '5%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgEdit')));
+            $dg->setData($userGroup->fetchAll($this->request->post->getArrayCopy(), $dg->getPaginator()->getRowsPerPage(), $dg->getPaginator()->getActive()));
             $this->view->dg = $dg;
             
 //            $dg = new \KF\Lib\View\Html\Datagrid('#fm-user-group', $this->request->post->getArrayCopy());

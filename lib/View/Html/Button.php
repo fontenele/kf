@@ -21,4 +21,18 @@ class Button extends Tag {
         }
     }
 
+    public function formGroup($class = null, $labelClass = null, $componentClass = null) {
+        try {
+            $return = "<div class='form-group {$class}'>";
+            $return.= $this->label($labelClass, true);
+            $return.= "<div class='{$componentClass}'>";
+            $return.= $this->render();
+            $return.= "</div>";
+            $return.= "</div>";
+            return $return;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
 }

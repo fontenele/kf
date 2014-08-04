@@ -20,6 +20,7 @@ class UserGroup extends \KF\Lib\Module\Entity {
                         ->setDbMaxLength(50)
                         ->setDbOrderBySequence(1)
                         ->setDbOrderBySortType('ASC')
+                        ->setSearchCriteria(\KF\Lib\Database\Criteria::create(\KF\Lib\Database\Criteria::CONDITION_LIKE))
                         ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(1, 'Grupo', '85%'))
                         ->setViewComponent(new \KF\Lib\View\Html\InputText('name', 'Nome')));
 
