@@ -25,8 +25,8 @@ class Form extends Helper {
         return '</form>';
     }
     
-    public function submit() {
-        return new \KF\Lib\View\Html\Button('btn-search', 'Pesquisar', ['class' => 'btn-primary']);
+    public function submit($label = 'Enviar', $id = 'btn-submit') {
+        return new \KF\Lib\View\Html\Button($id, $label, ['class' => 'btn-primary']);
     }
 
 }

@@ -39,7 +39,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             throw $ex;
         }
     }
-    
+
     public function __toString() {
         try {
             return ( $this->label ? $this->label() : '' ) . $this->render();
@@ -62,9 +62,10 @@ class Tag extends \KF\Lib\System\ArrayObject {
     public function addClass($classname) {
         try {
             $classname = explode(' ', $classname);
-            foreach($classname as $_classname) {
+            foreach ($classname as $_classname) {
                 $this->class[$_classname] = $_classname;
             }
+            return $this;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -75,6 +76,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             if ($this->hasClass($classname)) {
                 unset($this->class[$classname]);
             }
+            return $this;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -130,6 +132,15 @@ class Tag extends \KF\Lib\System\ArrayObject {
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    /**
+     * @param string $value
+     * @return \KF\Lib\View\Html\Tag
+     */
+    public function setValue($value) {
+        $this->value = $value;
+        return $this;
     }
 
 }

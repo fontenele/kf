@@ -5,20 +5,21 @@ namespace KF\Lib\View\Html;
 class Button extends Tag {
 
     /**
-     * @param string $name
+     * @param string $id
      * @param string $label
      * @param array $options
      * @throws \Exception
      */
-    public function __construct($name, $label = null, $options = []) {
+    public function __construct($id, $label = null, $options = []) {
         try {
-            parent::__construct('button', $name, $label);
+            parent::__construct('button', $id, $label);
             $this->content = $label;
-            $this->class[] = 'btn';
+            $this->addClass('btn');
             $this->removeClass('form-control');
+            $this->id = $this->name;
             $this->name = '';
             if (isset($options['class'])) {
-                $this->class[] = $options['class'];
+                $this->addClass($options['class']);
             }
             $this->title = $label;
             $this->closeTagAfter = true;
@@ -31,10 +32,10 @@ class Button extends Tag {
      * @param string $name
      * @param string $label
      * @param array $options
-     * @return Button
+     * @return \KF\Lib\View\Html\Button
      */
     public static function create($name, $label = null, $options = []) {
-        $obj = new self($name, $label, $options);
+        $obj = new Button($name, $label, $options);
         return $obj;
     }
 

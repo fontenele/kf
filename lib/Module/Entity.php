@@ -87,4 +87,10 @@ abstract class Entity extends \KF\Lib\Database\Dml {
         return $this->fields;
     }
 
+    public function setValues($row) {
+        foreach ($row as $field => $value) {
+            $this->getField($field)->setValue($value);
+        }
+    }
+
 }

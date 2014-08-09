@@ -46,11 +46,11 @@ abstract class Service {
         try {
             //return $this->parseAndFormatDbData2View($this->model()->fetchAll($where, $rowsPerPage, $numPage, $selectNames, $whereConditions, $orderBy));
             return $this->model()->fetchAll($where, $rowsPerPage, $numPage, $selectNames, $whereConditions, $orderBy);
-        } catch (Exception $ex) {
-            
+        } catch (\Exception $ex) {
+            throw $ex;
         }
     }
-    
+
     /**
      * @param array $where
      * @param array $selectNames
@@ -74,7 +74,8 @@ abstract class Service {
      */
     public function findOneBy($where, $selectNames = []) {
         try {
-            return $this->parseAndFormatDbData2View($this->model()->fetch($where, $selectNames));
+//            return $this->parseAndFormatDbData2View($this->model()->fetch($where, $selectNames));
+            return $this->model()->fetch($where, $selectNames);
         } catch (\Exception $ex) {
             throw $ex;
         }

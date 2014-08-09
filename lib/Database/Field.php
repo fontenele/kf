@@ -5,6 +5,7 @@ namespace KF\Lib\Database;
 class Field {
 
     protected $name;
+    protected $value;
     protected $dbName;
     protected $dbType;
 
@@ -176,6 +177,13 @@ class Field {
         $this->searchCriteria = $searchCriteria;
         return $this;
     }
+    
+    public function setValue($value) {
+        $this->value = $value;
+        if($this->getViewComponent()) {
+            $this->getViewComponent()->setValue($value);
+        }
+    }
 
     /**
      * @return string
@@ -241,6 +249,9 @@ class Field {
         return $this->required;
     }
 
+    /**
+     * @return \KF\Lib\View\Html\Tag
+     */
     public function getViewComponent() {
         return $this->viewComponent;
     }
@@ -257,6 +268,10 @@ class Field {
      */
     public function getSearchCriteria() {
         return $this->searchCriteria;
+    }
+    
+    public function getValue() {
+        return $this->value;
     }
 
 }

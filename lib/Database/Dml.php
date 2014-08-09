@@ -75,7 +75,7 @@ class Dml {
         $table = '';
         if ($table) {
             $alias = !$alias && isset($this->aliases[$table]) ? " as {$this->aliases[$table]} " : '';
-            $table = "{$table}{$alias}";
+            $table = $table;
         } elseif ($this->getTable()) {
             $alias = !$alias && $this->getTable() && isset($this->aliases[$this->getTable()]) ? " as {$this->aliases[$this->getTable()]} " : '';
             $table = $this->getTable();
@@ -135,7 +135,7 @@ class Dml {
                                  * @todo
                                  */
                                 xd('@TODO');
-                                $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} ";
+                                $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} AND {???otherValue???} ";
                                 break;
                         }
                     } else {
@@ -194,6 +194,67 @@ class Dml {
         return $this;
     }
 
+    public function insert($row) {
+        try {
+            $this->query = "INSERT INTO {$this->getTable()} (";
+            $values = '';
+            if (isset($row[$this->getPrimaryKey()])) {
+                unset($row[$this->getPrimaryKey()]);
+            }
+            foreach ($row as $field => $value) {
+                $this->query.= "{$field}, ";
+                $values.= "?, ";
+                $value = $this->parseFieldValue($field, $value);
+                $this->input[] = $value;
+            }
+            $values = substr($values, 0, -2);
+            $this->query = substr($this->query, 0, -2) . ") VALUES ({$values})";
+            return $this;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    public function update($row, $where = []) {
+        try {
+            $_where = ' WHERE 1=1 ';
+            $this->query = "UPDATE {$this->getTable()} SET ";
+            $pk = isset($row[$this->getPrimaryKey()]) ? $row[$this->getPrimaryKey()] : null;
+            if($pk) {
+                $_where.= " AND {$this->getPrimaryKey()}=?";
+                unset($row[$this->getPrimaryKey()]);
+            }
+            foreach ($row as $field => $value) {
+                $this->query.= "{$field}=?, ";
+                $value = $this->parseFieldValue($field, $value);
+                $this->input[] = $value;
+            }
+            foreach($where as $param => $val) {
+                $_where.= " AND {$param}=?";
+                $this->input[] = $val;
+            }
+            if($pk) {
+                $this->query = substr($this->query, 0, -2);
+                $this->input[] = $pk;
+            }
+            $this->query.= $_where;
+            return $this;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    public function delete($where) {
+        try {
+            $alias = isset($this->aliases[$this->getTable()]) ? $this->aliases[$this->getTable()] : '';
+            $this->query = "DELETE FROM {$this->getTable()} as {$alias} ";
+            $this->where($where);
+            return $this;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
     protected function parseFieldValue($field, &$value) {
         try {
             switch ($this->getField($field)->getDbType()) {
@@ -204,7 +265,7 @@ class Dml {
                     if (!$value) {
                         $value = '';
                     }
-                    $value = "'{$value}'";
+                    //$value = "'{$value}'";
                     break;
                 case Field::DB_TYPE_BOOLEAN:
                     if (!$value) {

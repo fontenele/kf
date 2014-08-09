@@ -126,6 +126,43 @@ optgroup option {
     clear: both;
 }
 
+.margin-left-xs {
+    margin-left: 1%;
+}
+.margin-left-sm {
+    margin-left: 3%;
+}
+.margin-left-lg {
+    margin-left: 5%;
+}
+.margin-right-xs {
+    margin-right: 1%;
+}
+.margin-right-sm {
+    margin-right: 3%;
+}
+.margin-right-lg {
+    margin-right: 5%;
+}
+.margin-bottom-xs {
+    margin-bottom: 1%;
+}
+.margin-bottom-sm {
+    margin-bottom: 3%;
+}
+.margin-bottom-lg {
+    margin-bottom: 5%;
+}
+.margin-top-xs {
+    margin-top: 1%;
+}
+.margin-top-sm {
+    margin-top: 3%;
+}
+.margin-top-lg {
+    margin-top: 5%;
+}
+
 /* JS TREE */
 /*.jstree-open > .jstree-icon:before {
     content: "\2212";

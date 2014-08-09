@@ -54,6 +54,7 @@ class Select extends Tag {
     public function setSelected($value = null) {
         try {
             $this->content = '';
+            $this->selected = $value;
 
             if ($this->defaultItemLabel) {
                 $selected = $value == $this->defaultItemValue ? "selected='selected'" : '';

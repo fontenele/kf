@@ -14,7 +14,7 @@ class Input extends Tag {
     public function __construct($name, $type, $label = null, $options = []) {
         try {
             parent::__construct('input', $name, $label);
-            $this->type = $type;
+            $this->setType($type);
             if (isset($options['required'])) {
                 $this->required = $options['required'];
             }
@@ -38,16 +38,73 @@ class Input extends Tag {
      * @return Input
      */
     public static function create($name, $type, $label = null, $options = []) {
-        $obj = new self($name, $type, $label, $options);
+        $obj = new Input($name, $type, $label, $options);
         return $obj;
     }
 
-    public function setValue($value = null) {
-        try {
-            $this->value = $value;
-        } catch (\Exception $ex) {
-            throw $ex;
-        }
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function getType() {
+        return $this->type;
+    }
+
+    public function getRequired() {
+        return $this->required;
+    }
+
+    public function getPlaceholder() {
+        return $this->placeholder;
+    }
+
+    public function getValue() {
+        return $this->value;
+    }
+
+    /**
+     * @param string $title
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setType($type) {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
+     * @param bool $required
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setRequired($required) {
+        $this->required = $required;
+        return $this;
+    }
+
+    /**
+     * @param string $placeholder
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setPlaceholder($placeholder) {
+        $this->placeholder = $placeholder;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setValue($value) {
+        $this->value = $value;
+        return $this;
     }
 
 }
