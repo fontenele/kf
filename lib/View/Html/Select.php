@@ -9,7 +9,14 @@ class Select extends Tag {
     public $defaultItemValue;
     public $defaultItemLabel = 'Selecione';
 
-    public function __construct($name, $label = null, $options = []) {
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $options
+     * @param string $selected
+     * @throws \Exception
+     */
+    public function __construct($name, $label = null, $options = [], $selected = null) {
         try {
             parent::__construct('select', $name, $label);
             if (isset($options['defaultItemLabel'])) {
@@ -22,11 +29,26 @@ class Select extends Tag {
             if (isset($options['class'])) {
                 $this->class[] = $options['class'];
             }
+            if ($selected) {
+                $this->setSelected($selected);
+            }
             $this->title = $label;
             $this->closeTagAfter = true;
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $options
+     * @param string $selected
+     * @return Select
+     */
+    public static function create($name, $label = null, $options = [], $selected = null) {
+        $obj = new self($name, $label, $options, $selected);
+        return $obj;
     }
 
     public function setSelected($value = null) {
@@ -75,7 +97,7 @@ class Select extends Tag {
     public static function rows2options($rows, $codName = 'cod', $valueName = 'name') {
         try {
             $options = [];
-            foreach($rows as $row) {
+            foreach ($rows as $row) {
                 $options[$row[$codName]] = $row[$valueName];
             }
             return $options;

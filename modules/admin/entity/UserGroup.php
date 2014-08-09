@@ -12,7 +12,7 @@ class UserGroup extends \KF\Lib\Module\Entity {
         $this->addField(self::createField('cod')
                         ->setDbName('cod')
                         ->setDbType(\KF\Lib\Database\Field::DB_TYPE_INTEGER)
-                        ->setViewComponent(new \KF\Lib\View\Html\Input('cod', '', 'hidden')));
+                        ->setViewComponent(\KF\Lib\View\Html\Input::create('cod', 'hidden')));
 
         $this->addField(self::createField('name')
                         ->setDbName('name')
@@ -21,16 +21,16 @@ class UserGroup extends \KF\Lib\Module\Entity {
                         ->setDbOrderBySequence(1)
                         ->setDbOrderBySortType('ASC')
                         ->setSearchCriteria(\KF\Lib\Database\Criteria::create(\KF\Lib\Database\Criteria::CONDITION_LIKE))
-                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(1, 'Grupo', '85%'))
-                        ->setViewComponent(new \KF\Lib\View\Html\InputText('name', 'Nome')));
+                        ->setDatagridHeader(\KF\Lib\View\Html\Datagrid\Header::create(1, 'Grupo', '85%'))
+                        ->setViewComponent(\KF\Lib\View\Html\InputText::create('name', 'Nome')));
 
         $this->addField(self::createField('status')
                         ->setDbName('status')
                         ->setDbType(\KF\Lib\Database\Field::DB_TYPE_INTEGER)
                         ->setDbOrderBySequence(2)
                         ->setDbOrderBySortType('ASC')
-                        ->setDatagridHeader(new \KF\Lib\View\Html\Datagrid\Header(2, 'Status', '10%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgStatus')))
-                        ->setViewComponent(new \KF\Lib\View\Html\Select('status', 'Status', ['options' => ['1' => 'Ativo', '2' => 'Inativo']])));
+                        ->setDatagridHeader(\KF\Lib\View\Html\Datagrid\Header::create(2, 'Status', '10%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgStatus')))
+                        ->setViewComponent(\KF\Lib\View\Html\Select::create('status', 'Status', ['options' => ['1' => 'Ativo', '2' => 'Inativo']])));
     }
 
 }

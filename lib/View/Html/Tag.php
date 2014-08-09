@@ -39,7 +39,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             throw $ex;
         }
     }
-
+    
     public function __toString() {
         try {
             return ( $this->label ? $this->label() : '' ) . $this->render();
@@ -61,7 +61,10 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     public function addClass($classname) {
         try {
-            $this->class[$classname] = $classname;
+            $classname = explode(' ', $classname);
+            foreach($classname as $_classname) {
+                $this->class[$_classname] = $_classname;
+            }
         } catch (\Exception $ex) {
             throw $ex;
         }

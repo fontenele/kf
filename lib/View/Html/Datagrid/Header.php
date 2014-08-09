@@ -34,6 +34,14 @@ class Header {
      */
     protected $renderer;
 
+    /**
+     * @param integer $order
+     * @param string $label
+     * @param string $width
+     * @param string $cssClass
+     * @param \KF\Lib\View\Html\Renderer $renderer
+     * @param string $dataName
+     */
     public function __construct($order = null, $label = null, $width = null, $cssClass = null, $renderer = null, $dataName = null) {
         if ($order) {
             $this->order = $order;
@@ -53,6 +61,20 @@ class Header {
         if ($dataName) {
             $this->dataName = $dataName;
         }
+    }
+
+    /**
+     * @param integer $order
+     * @param string $label
+     * @param string $width
+     * @param string $cssClass
+     * @param \KF\Lib\View\Html\Renderer $renderer
+     * @param string $dataName
+     * @return Header
+     */
+    public static function create($order = null, $label = null, $width = null, $cssClass = null, $renderer = null, $dataName = null) {
+        $obj = new self($order, $label, $width, $cssClass, $renderer, $dataName);
+        return $obj;
     }
 
     /**

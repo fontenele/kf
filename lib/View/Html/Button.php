@@ -4,6 +4,12 @@ namespace KF\Lib\View\Html;
 
 class Button extends Tag {
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $options
+     * @throws \Exception
+     */
     public function __construct($name, $label = null, $options = []) {
         try {
             parent::__construct('button', $name, $label);
@@ -19,6 +25,17 @@ class Button extends Tag {
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $options
+     * @return Button
+     */
+    public static function create($name, $label = null, $options = []) {
+        $obj = new self($name, $label, $options);
+        return $obj;
     }
 
     public function formGroup($class = null, $labelClass = null, $componentClass = null) {
