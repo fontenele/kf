@@ -7,7 +7,7 @@
             <?php echo $this->dg->getEntity()->getField('name')->getViewComponent()->setRequired(false)->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
             <?php echo $this->dg->getEntity()->getField('email')->getViewComponent()->setRequired(false)->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
             <?php echo $this->dg->getEntity()->getField('status')->getViewComponent()->setRequired(false)->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
-            <?php echo $this->form()->submit('Pesquisar', 'btn-search')->formGroup('col-xs-12', '', 'col-xs-offset-3 col-xs-8') ?>
+            <?php echo $this->form()->submitSearch()->formGroup('col-xs-12', '', 'col-xs-offset-3 col-xs-8') ?>
         </fieldset>
         <?php echo $this->form()->closeTag() ?>
     </div>

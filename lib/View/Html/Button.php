@@ -39,6 +39,15 @@ class Button extends Tag {
         return $obj;
     }
 
+    public function getContent() {
+        return $this->content;
+    }
+
+    public function setContent($content) {
+        $this->content = $content;
+        return $this;
+    }
+
     public function formGroup($class = null, $labelClass = null, $componentClass = null) {
         try {
             $return = "<div class='form-group {$class}'>";

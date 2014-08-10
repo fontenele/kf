@@ -10,23 +10,33 @@ class Form extends Helper {
 
     public function openTag($id = null, $attrs = []) {
         $return = "<form ";
-        if($id) {
+        if ($id) {
             $return.= "id='{$id}' ";
         }
-        if(count($attrs)) {
-            foreach($attrs as $attr => $value) {
+        if (count($attrs)) {
+            foreach ($attrs as $attr => $value) {
                 $return.= "{$attr}='{$value}' ";
             }
         }
         return "{$return}>";
     }
-    
+
     public function closeTag() {
         return '</form>';
     }
-    
+
     public function submit($label = 'Enviar', $id = 'btn-submit') {
         return new \KF\Lib\View\Html\Button($id, $label, ['class' => 'btn-primary']);
+    }
+
+    public function submitSave($label = 'Enviar', $id = 'btn-save') {
+        $content = Glyphicon::get('ok') . ' ' . $label;
+        return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
+    }
+
+    public function submitSearch($label = 'Pesquisar', $id = 'btn-search') {
+        $content = Glyphicon::get('search') . ' ' . $label;
+        return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
     }
 
 }
