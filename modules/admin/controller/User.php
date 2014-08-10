@@ -24,6 +24,8 @@ class User extends \KF\Lib\Module\Controller {
             }
             // Save
             $row = $this->request->post->getArrayCopy();
+            unset($row['re-password']);
+            $row['password'] = md5($row['password']);
             $success = $service->save($row);
             // Set alert message and redirect
             if ($success) {
