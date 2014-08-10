@@ -42,33 +42,8 @@ class Input extends Tag {
         return $obj;
     }
 
-    public function getTitle() {
-        return $this->title;
-    }
-
     public function getType() {
         return $this->type;
-    }
-
-    public function getRequired() {
-        return $this->required;
-    }
-
-    public function getPlaceholder() {
-        return $this->placeholder;
-    }
-
-    public function getValue() {
-        return $this->value;
-    }
-
-    /**
-     * @param string $title
-     * @return \KF\Lib\View\Html\Input
-     */
-    public function setTitle($title) {
-        $this->title = $title;
-        return $this;
     }
 
     /**
@@ -77,33 +52,6 @@ class Input extends Tag {
      */
     public function setType($type) {
         $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * @param bool $required
-     * @return \KF\Lib\View\Html\Input
-     */
-    public function setRequired($required) {
-        $this->required = $required;
-        return $this;
-    }
-
-    /**
-     * @param string $placeholder
-     * @return \KF\Lib\View\Html\Input
-     */
-    public function setPlaceholder($placeholder) {
-        $this->placeholder = $placeholder;
-        return $this;
-    }
-
-    /**
-     * @param string $value
-     * @return \KF\Lib\View\Html\Input
-     */
-    public function setValue($value) {
-        $this->value = $value;
         return $this;
     }
 

@@ -22,7 +22,7 @@ class UserGroup extends \KF\Lib\Module\Entity {
                         ->setDbOrderBySortType('ASC')
                         ->setSearchCriteria(\KF\Lib\Database\Criteria::create(\KF\Lib\Database\Criteria::CONDITION_LIKE))
                         ->setDatagridHeader(\KF\Lib\View\Html\Datagrid\Header::create(1, 'Grupo', '85%'))
-                        ->setViewComponent(\KF\Lib\View\Html\InputText::create('name', 'Nome')));
+                        ->setViewComponent(\KF\Lib\View\Html\InputText::create('name', 'Nome')->setRequired(true)->setPlaceholder('Nome do Grupo')));
 
         $this->addField(self::createField('status')
                         ->setDbName('status')
@@ -30,7 +30,7 @@ class UserGroup extends \KF\Lib\Module\Entity {
                         ->setDbOrderBySequence(2)
                         ->setDbOrderBySortType('ASC')
                         ->setDatagridHeader(\KF\Lib\View\Html\Datagrid\Header::create(2, 'Status', '10%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgStatus')))
-                        ->setViewComponent(\KF\Lib\View\Html\Select::create('status', 'Status', ['options' => ['1' => 'Ativo', '2' => 'Inativo']])));
+                        ->setViewComponent(\KF\Lib\View\Html\Select::create('status', 'Status', ['options' => ['1' => 'Ativo', '2' => 'Inativo']])->setRequired(true)));
     }
 
 }

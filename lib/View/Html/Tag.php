@@ -133,6 +133,49 @@ class Tag extends \KF\Lib\System\ArrayObject {
             throw $ex;
         }
     }
+    
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function getRequired() {
+        return $this->required;
+    }
+
+    public function getPlaceholder() {
+        return $this->placeholder;
+    }
+
+    public function getValue() {
+        return $this->value;
+    }
+
+    /**
+     * @param string $title
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @param bool $required
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setRequired($required) {
+        $this->required = $required;
+        return $this;
+    }
+
+    /**
+     * @param string $placeholder
+     * @return \KF\Lib\View\Html\Input
+     */
+    public function setPlaceholder($placeholder) {
+        $this->placeholder = $placeholder;
+        return $this;
+    }
 
     /**
      * @param string $value

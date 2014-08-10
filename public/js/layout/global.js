@@ -29,8 +29,18 @@
             $(this).maskMoney({thousands: '.', decimal: ','});
         });
     };
-    $('input.money').each(function(i, item) {
+    $.each($('input.money'), function(i, item) {
         $(item).moneyField();
+    });
+    /**
+     * Confirm popup
+     */
+    $('[data-confirmation]').confirmation({
+        'title': 'Tem certeza?',
+        'btnOkClass': 'btn btn-xs btn-danger',
+        'btnCancelClass': 'btn btn-xs btn-default',
+        'btnOkLabel': 'Sim',
+        'btnCancelLabel': 'Não'
     });
 })(jQuery);
 
