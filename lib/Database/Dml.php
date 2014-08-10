@@ -117,19 +117,19 @@ class Dml {
         if ($where) {
             foreach ($where as $field => $value) {
                 if ($this->getField($field) && $value) {
-                    
-                    if(is_array($value)) {
+                    $searchCondition = null;
+
+                    if (is_array($value)) {
                         $dataValue = $value;
                         $value = array_shift($dataValue);
-                        $searchCondition = null;
-                        
-                        if(count($dataValue)) {
+
+                        if (count($dataValue)) {
                             $searchCondition = array_shift($dataValue);
                         }
                     }
                     if ($this->getField($field)->getSearchCriteria() || $searchCondition) {
                         $upper = false;
-                        if($this->getField($field)->getSearchCriteria() && !$searchCondition) {
+                        if ($this->getField($field)->getSearchCriteria() && !$searchCondition) {
                             $upper = $this->getField($field)->getSearchCriteria()->getUpper();
                             $searchCondition = $this->getField($field)->getSearchCriteria()->getType();
                         }
