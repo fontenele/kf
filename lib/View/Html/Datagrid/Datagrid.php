@@ -64,6 +64,13 @@ class Datagrid {
     }
 
     /**
+     * @return Header
+     */
+    public function getHeader($index) {
+        return $this->headers[$index];
+    }
+
+    /**
      * @return \KF\Lib\View\Html\Paginator
      */
     public function getPaginator() {

@@ -26,6 +26,8 @@ require_once('View/Html/Tag.php');
 require_once('View/Html/Input.php');
 require_once('View/Html/InputText.php');
 require_once('View/Html/InputTextMoney.php');
+require_once('View/Html/InputPassword.php');
+require_once('View/Html/InputHidden.php');
 require_once('View/Html/Select.php');
 require_once('View/Html/Button.php');
 require_once('View/Html/Textarea.php');

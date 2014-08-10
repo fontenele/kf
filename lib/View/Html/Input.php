@@ -37,10 +37,10 @@ class Input extends Tag {
      * @param array $options
      * @return Input
      */
-    public static function create($name, $type, $label = null, $options = []) {
+    /*public static function create($name, $type, $label = null, $options = []) {
         $obj = new Input($name, $type, $label, $options);
         return $obj;
-    }
+    }*/
 
     public function getType() {
         return $this->type;

@@ -4,8 +4,8 @@
         <?php echo $this->form()->openTag('fm-user-group', ['method' => 'post', 'action' => $this->basePath . 'admin/user-group/list-items', 'class' => 'form-horizontal', 'role' => 'form']) ?>
         <fieldset>
             <?php echo $this->dg->getFormItems() ?>
-            <?php echo $this->dg->getEntity()->getField('name')->getViewComponent()->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
-            <?php echo $this->dg->getEntity()->getField('status')->getViewComponent()->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
+            <?php echo $this->dg->getEntity()->getField('name')->getViewComponent()->setRequired(false)->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
+            <?php echo $this->dg->getEntity()->getField('status')->getViewComponent()->setRequired(false)->formGroup('col-xs-12', 'col-xs-3 text-right', 'col-xs-8') ?>
             <?php echo $this->form()->submit('Pesquisar', 'btn-search')->formGroup('col-xs-12', '', 'col-xs-offset-3 col-xs-8') ?>
         </fieldset>
         <?php echo $this->form()->closeTag() ?>

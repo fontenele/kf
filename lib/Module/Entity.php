@@ -17,10 +17,16 @@ abstract class Entity extends \KF\Lib\Database\Dml {
     protected $sequence;
 
     /**
-     * PK
+     * Primary Key
      * @var string
      */
     protected $pk;
+
+    /**
+     * Service name
+     * @var string
+     */
+    protected $serviceName;
 
     /**
      * Table Fields
@@ -66,6 +72,14 @@ abstract class Entity extends \KF\Lib\Database\Dml {
         return $this->pk;
     }
 
+    public function getServiceName() {
+        return $this->serviceName;
+    }
+
+    public function getService() {
+        return new $this->serviceName;
+    }
+
     public static function createField($name) {
         $field = new \KF\Lib\Database\Field($name);
         return $field;
@@ -89,8 +103,14 @@ abstract class Entity extends \KF\Lib\Database\Dml {
 
     public function setValues($row) {
         foreach ($row as $field => $value) {
-            $this->getField($field)->setValue($value);
+            if ($this->getField($field)) {
+                $this->getField($field)->setValue($value);
+            }
         }
+    }
+
+    public function setServiceName($serviceName) {
+        $this->serviceName = $serviceName;
     }
 
 }

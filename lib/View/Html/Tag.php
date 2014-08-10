@@ -133,7 +133,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             throw $ex;
         }
     }
-    
+
     public function getTitle() {
         return $this->title;
     }
@@ -164,7 +164,11 @@ class Tag extends \KF\Lib\System\ArrayObject {
      * @return \KF\Lib\View\Html\Input
      */
     public function setRequired($required) {
-        $this->required = $required;
+        if (!$required) {
+            $this->offsetUnset('required');
+        } else {
+            $this->required = $required;
+        }
         return $this;
     }
 

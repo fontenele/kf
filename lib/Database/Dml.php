@@ -186,6 +186,9 @@ class Dml {
     }
 
     public function paginate($numPage, $rowsPerPage) {
+        if (!$rowsPerPage) {
+            return $this;
+        }
         $offset = 0;
         if ($numPage > 1) {
             $offset = $rowsPerPage * ($numPage - 1);
@@ -214,13 +217,13 @@ class Dml {
             throw $ex;
         }
     }
-    
+
     public function update($row, $where = []) {
         try {
             $_where = ' WHERE 1=1 ';
             $this->query = "UPDATE {$this->getTable()} SET ";
             $pk = isset($row[$this->getPrimaryKey()]) ? $row[$this->getPrimaryKey()] : null;
-            if($pk) {
+            if ($pk) {
                 $_where.= " AND {$this->getPrimaryKey()}=?";
                 unset($row[$this->getPrimaryKey()]);
             }
@@ -229,11 +232,11 @@ class Dml {
                 $value = $this->parseFieldValue($field, $value);
                 $this->input[] = $value;
             }
-            foreach($where as $param => $val) {
+            foreach ($where as $param => $val) {
                 $_where.= " AND {$param}=?";
                 $this->input[] = $val;
             }
-            if($pk) {
+            if ($pk) {
                 $this->query = substr($this->query, 0, -2);
                 $this->input[] = $pk;
             }
@@ -243,7 +246,7 @@ class Dml {
             throw $ex;
         }
     }
-    
+
     public function delete($where) {
         try {
             $alias = isset($this->aliases[$this->getTable()]) ? $this->aliases[$this->getTable()] : '';

@@ -156,6 +156,7 @@ class Field {
 
     public function setViewComponent($viewComponent) {
         $this->viewComponent = $viewComponent;
+        $this->populateWithFkData();
         return $this;
     }
 
@@ -177,10 +178,10 @@ class Field {
         $this->searchCriteria = $searchCriteria;
         return $this;
     }
-    
+
     public function setValue($value) {
         $this->value = $value;
-        if($this->getViewComponent()) {
+        if ($this->getViewComponent()) {
             $this->getViewComponent()->setValue($value);
         }
     }
@@ -256,6 +257,13 @@ class Field {
         return $this->viewComponent;
     }
 
+    public function populateWithFkData() {
+        if ($this->viewComponent instanceof \KF\Lib\View\Html\Select && $this->getFkEntityJoinType()) {
+            $data = \KF\Lib\View\Html\Select::rows2options($this->getFkEntity()->getService()->fetchAll());
+            $this->viewComponent->setOptions($data);
+        }
+    }
+
     /**
      * @return \KF\Lib\View\Html\Datagrid\Header
      */
@@ -269,7 +277,7 @@ class Field {
     public function getSearchCriteria() {
         return $this->searchCriteria;
     }
-    
+
     public function getValue() {
         return $this->value;
     }

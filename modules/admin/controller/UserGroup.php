@@ -40,20 +40,46 @@ class UserGroup extends \KF\Lib\Module\Controller {
 
     public function listItems() {
         try {
-            // Service
-            $userGroup = new \Admin\Service\UserGroup;
+            $service = new \Admin\Service\UserGroup; // Service
             // Datagrid
             $dg = new \KF\Lib\View\Html\Datagrid\Datagrid('dg-user-group');
             $dg->setEntity(new \Admin\Entity\UserGroup);
             $dg->addHeader(\KF\Lib\View\Html\Datagrid\Header::create(3, '', '2%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgEdit')));
             $dg->addHeader(\KF\Lib\View\Html\Datagrid\Header::create(4, '', '2%', 'text-center', new \KF\Lib\View\Html\Renderer('\Admin\Controller\UserGroup::dgDelete')));
-            $dg->setData($userGroup->fetchAll($this->request->post->getArrayCopy(), $dg->getPaginator()->getRowsPerPage(), $dg->getPaginator()->getActive()));
+            $dg->setData($service->fetchAll($this->request->post->getArrayCopy(), $dg->getPaginator()->getRowsPerPage(), $dg->getPaginator()->getActive()));
             $this->view->dg = $dg;
             // Render HTML
             return $this->view;
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    /**
+     * Render Status Column
+     * @param array $row
+     * @return string
+     */
+    public static function dgStatus($row) {
+        return $row['status'] == 1 ? '<span title="Ativo">' . \KF\Lib\View\Html\Helper\Glyphicon::get('ok-circle text-success') . '</span>' : '<span title="Inativo">' . \KF\Lib\View\Html\Helper\Glyphicon::get('ban-circle text-danger') . '</span>';
+    }
+
+    /**
+     * Render Edit Column
+     * @param array $row
+     * @return string
+     */
+    public static function dgEdit($row) {
+        return '<a title="Editar grupo" href=' . \KF\Kernel::$router->basePath . "admin/user-group/new-item/cod/{$row['cod']}>" . \KF\Lib\View\Html\Helper\Glyphicon::get('folder-open') . '</a>';
+    }
+
+    /**
+     * Render Delete Column
+     * @param array $row
+     * @return string
+     */
+    public static function dgDelete($row) {
+        return '<a class="text-danger" title="Excluir grupo" data-confirmation data-placement="left" href="' . \KF\Kernel::$router->basePath . "admin/user-group/delete-item/cod/{$row['cod']}\">" . \KF\Lib\View\Html\Helper\Glyphicon::get('remove-sign') . '</a>';
     }
 
     public function deleteItem() {
@@ -76,48 +102,6 @@ class UserGroup extends \KF\Lib\Module\Controller {
             }
             // Redirect
             $this->redirect('admin/user-group/list-items');
-        } catch (\Exception $ex) {
-            throw $ex;
-        }
-    }
-
-    /**
-     * Render Status Column
-     * @param array $row
-     * @return string
-     * @throws \Exception
-     */
-    public static function dgStatus($row) {
-        try {
-            return $row['status'] == 1 ? '<span title="Ativo">' . \KF\Lib\View\Html\Helper\Glyphicon::get('ok-circle text-success') . '</span>' : '<span title="Inativo">' . \KF\Lib\View\Html\Helper\Glyphicon::get('ban-circle text-danger') . '</span>';
-        } catch (\Exception $ex) {
-            throw $ex;
-        }
-    }
-
-    /**
-     * Render Edit Column
-     * @param array $row
-     * @return string
-     * @throws \Exception
-     */
-    public static function dgEdit($row) {
-        try {
-            return '<a title="Editar grupo" href=' . \KF\Kernel::$router->basePath . "admin/user-group/new-item/cod/{$row['cod']}>" . \KF\Lib\View\Html\Helper\Glyphicon::get('folder-open') . '</a>';
-        } catch (\Exception $ex) {
-            throw $ex;
-        }
-    }
-
-    /**
-     * Render Edit Column
-     * @param array $row
-     * @return string
-     * @throws \Exception
-     */
-    public static function dgDelete($row) {
-        try {
-            return '<a class="text-danger" title="Excluir grupo" data-confirmation data-placement="left" href="' . \KF\Kernel::$router->basePath . "admin/user-group/delete-item/cod/{$row['cod']}\">" . \KF\Lib\View\Html\Helper\Glyphicon::get('remove-sign') . '</a>';
         } catch (\Exception $ex) {
             throw $ex;
         }
