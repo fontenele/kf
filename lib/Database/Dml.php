@@ -108,7 +108,7 @@ class Dml {
         }
         $aliasFk = isset($this->aliases[$tableFk]) ? $this->aliases[$tableFk] : '';
         $aliasLocal = $this->getTable() && isset($this->aliases[$this->getTable()]) ? $this->aliases[$this->getTable()] : '';
-        $this->query.= "{$tableFk} {$aliasFk} ON ({$aliasFk}.{$fieldFk} = {$aliasLocal}.{$fieldLocal})";
+        $this->query.= "{$tableFk} {$aliasFk} ON ({$aliasFk}.{$fieldFk} = {$aliasLocal}.{$fieldLocal}) ";
         return $this;
     }
 
@@ -117,9 +117,23 @@ class Dml {
         if ($where) {
             foreach ($where as $field => $value) {
                 if ($this->getField($field) && $value) {
-                    if ($this->getField($field)->getSearchCriteria()) {
-                        $upper = $this->getField($field)->getSearchCriteria()->getUpper();
-                        switch ($this->getField($field)->getSearchCriteria()->getType()) {
+                    
+                    if(is_array($value)) {
+                        $dataValue = $value;
+                        $value = array_shift($dataValue);
+                        $searchCondition = null;
+                        
+                        if(count($dataValue)) {
+                            $searchCondition = array_shift($dataValue);
+                        }
+                    }
+                    if ($this->getField($field)->getSearchCriteria() || $searchCondition) {
+                        $upper = false;
+                        if($this->getField($field)->getSearchCriteria() && !$searchCondition) {
+                            $upper = $this->getField($field)->getSearchCriteria()->getUpper();
+                            $searchCondition = $this->getField($field)->getSearchCriteria()->getType();
+                        }
+                        switch ($searchCondition) {
                             case Criteria::CONDITION_EQUAL:
                                 $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
                                 $_value = $upper ? "UPPER({$this->parseFieldValue($field, $value)})" : $this->parseFieldValue($field, $value);
@@ -207,7 +221,7 @@ class Dml {
             foreach ($row as $field => $value) {
                 $this->query.= "{$field}, ";
                 $values.= "?, ";
-                $value = $this->parseFieldValue($field, $value);
+                //$value = $this->parseFieldValue($field, $value);
                 $this->input[] = $value;
             }
             $values = substr($values, 0, -2);
@@ -229,7 +243,7 @@ class Dml {
             }
             foreach ($row as $field => $value) {
                 $this->query.= "{$field}=?, ";
-                $value = $this->parseFieldValue($field, $value);
+                //$value = $this->parseFieldValue($field, $value);
                 $this->input[] = $value;
             }
             foreach ($where as $param => $val) {
@@ -268,7 +282,7 @@ class Dml {
                     if (!$value) {
                         $value = '';
                     }
-                    //$value = "'{$value}'";
+                    $value = "'{$value}'";
                     break;
                 case Field::DB_TYPE_BOOLEAN:
                     if (!$value) {

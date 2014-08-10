@@ -10,14 +10,11 @@ Class Auth extends \KF\Lib\Module\Controller {
 
     public function login() {
         try {
-            if ($this->request->isPost() && $this->request->post->offsetGet('email') && $this->request->post->offsetGet('senha')) {
-                $service = new \Admin\Service\User();
-                $logged = $service->findOneBy(['user_group.status' => '1', 'status' => '1', 'email' => $this->request->post->offsetGet('email'), 'password' => md5($this->request->post->offsetGet('senha'))], ['logged' => 'count(1)'])['logged'];
-                
-                if ($logged) {
+            if ($this->request->isPost() && $this->request->post->offsetGet('email') && $this->request->post->offsetGet('password')) {
+                $service = new \Admin\Service\User;
+                $user = $service->auth($this->request->post->offsetGet('email'), $this->request->post->offsetGet('password'));
+                if ($user) {
                     $session = new \KF\Lib\System\Session('system');
-                    $user = $service->findOneByEmail($this->request->post->offsetGet('email'));
-                    unset($user['password']);
                     $user['photo'] = null;
 
                     if (\KF\Kernel::$config['system']['auth']['gravatar']) {
@@ -26,7 +23,6 @@ Class Auth extends \KF\Lib\Module\Controller {
                         $user['photo'] = $gravatar;
                     }
                     $session->identity = $user;
-
                     \KF\Lib\System\Messenger::success('Bem vindo ' . $this->request->post->offsetGet('email'));
                     $this->redirect(\KF\Kernel::$router->default);
                 } else {

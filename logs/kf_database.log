@@ -1,4 +1,0 @@
-[#42703] ERROR:  column "sabado" of relation "ponto" does not exist
-LINE 1: UPDATE public.ponto SET feriado=$1, sabado=$2, domingoOuFeri...
-                                            ^
-	SQL: UPDATE public.ponto SET feriado=1, sabado=, domingoOuFeriado=1, folha=1, total=00:00, total_extra=04:00, horario1=08:00, horario3=00:00, horario5=00:00, horario2=12:00, horario4=00:00, horario6=00:00 WHERE 1=1  AND cod=19141

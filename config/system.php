@@ -3,7 +3,7 @@
 return [
     'system' => [
         'acl' => [
-            'enabled' => false
+            'enabled' => true
         ],
         'router' => [
             'error' => [
@@ -17,7 +17,7 @@ return [
             'defaultAuth' => '/admin/auth/login',
         ],
         'auth' => [
-            'gravatar' => false
+            'gravatar' => true
         ],
         'view' => [
             'theme' => 'kf',
