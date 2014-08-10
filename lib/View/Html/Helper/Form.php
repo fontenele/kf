@@ -30,12 +30,12 @@ class Form extends Helper {
     }
 
     public function submitSave($label = 'Enviar', $id = 'btn-save') {
-        $content = Glyphicon::get('ok') . ' ' . $label;
+        $content = Glyphicon::get('ok') . ' &nbsp;' . $label;
         return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
     }
 
     public function submitSearch($label = 'Pesquisar', $id = 'btn-search') {
-        $content = Glyphicon::get('search') . ' ' . $label;
+        $content = Glyphicon::get('search') . ' &nbsp;' . $label;
         return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
     }
 
