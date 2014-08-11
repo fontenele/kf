@@ -34,6 +34,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
             $this->tag = $tag;
             $this->name = $name;
             $this->label = $label;
+            $this->data = [];
             $this->addClass('form-control');
         } catch (\Exception $ex) {
             throw $ex;
@@ -110,7 +111,13 @@ class Tag extends \KF\Lib\System\ArrayObject {
             $html.= "' ";
 
             foreach ($this as $attr => $value) {
-                $html.= "{$attr}='{$value}' ";
+                if (is_array($value)) {
+                    foreach ($value as $subattr => $subvalue) {
+                        $html.= "{$attr}-{$subattr}='{$subvalue}' ";
+                    }
+                } else {
+                    $html.= "{$attr}='{$value}' ";
+                }
             }
 
             $html.= $this->closeTagAfter ? ">{$this->content}</{$this->tag}>" : " />";
@@ -147,6 +154,9 @@ class Tag extends \KF\Lib\System\ArrayObject {
     }
 
     public function getValue() {
+        if($this instanceof Select) {
+            return $this->getSelected();
+        }
         return $this->value;
     }
 
@@ -188,6 +198,17 @@ class Tag extends \KF\Lib\System\ArrayObject {
     public function setValue($value) {
         $this->value = $value;
         return $this;
+    }
+
+    public function addData($param, $value = null) {
+        $data = $this->data;
+        $data[$param] = $value;
+        $this->data = $data;
+        return $this;
+    }
+
+    public function getData($param) {
+        return isset($this->data[$param]) ? $this->data[$param] : null;
     }
 
 }

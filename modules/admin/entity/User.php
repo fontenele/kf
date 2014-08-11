@@ -55,8 +55,7 @@ class User extends \KF\Lib\Module\Entity {
                         ->setFkEntityJoinType(\KF\Lib\Database\Field::DB_JOIN_INNER)
                         ->setDatagridHeader(\KF\Lib\View\Html\Datagrid\Header::create(3, 'Grupo', '20%'))
                         ->setViewComponent(\KF\Lib\View\Html\Select::create('user_group', 'Grupo')
-                                ->setRequired(true))
-        );
+                                ->setRequired(true)));
         // Status
         $this->addField(self::createField('status')
                         ->setDbName('status')

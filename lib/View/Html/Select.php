@@ -71,6 +71,10 @@ class Select extends Tag {
         }
     }
 
+    public function getSelected() {
+        return $this->selected;
+    }
+
     public function setValue($value = null) {
         try {
             return $this->setSelected($value);

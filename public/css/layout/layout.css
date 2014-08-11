@@ -163,6 +163,14 @@ optgroup option {
     margin-top: 5%;
 }
 
+.has-changed .help-block, .has-changed .control-label {
+    color: #ff851b;
+}
+.has-changed .form-control, .has-changed .form-control:focus, .has-changed.form-control {
+    border: 1px solid #ff851b;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.075) inset;
+}
+
 /* JS TREE */
 /*.jstree-open > .jstree-icon:before {
     content: "\2212";
