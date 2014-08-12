@@ -1,6 +1,6 @@
 {
     "name": "kf/kf",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "KF PHP Framework",
     "keywords": ["kf", "php", "framework"],
     "homepage": "https://github.com/fontenele/kf",
@@ -12,8 +12,5 @@
             "homepage": "http://guilherme.fontenele.net",
             "role": "Developer"
         }
-    ],
-    "require": {
-        "php": ">=5.3.0"
-    }
+    ]
 }
