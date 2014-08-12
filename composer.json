@@ -1,5 +1,6 @@
 {
     "name": "kf/kf",
+    "version": "1.0.0",
     "description": "KF PHP Framework",
     "keywords": ["kf", "php", "framework"],
     "homepage": "https://github.com/fontenele/kf",
