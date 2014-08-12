@@ -49,11 +49,11 @@ class Kernel {
                 self::run();
             }
         } catch (Lib\System\Exception\ACLException $ex) {
-            
+
         } catch (Lib\System\Exception\DatabaseException $ex) {
-            
+
         } catch (Lib\System\Exception\RouterException $ex) {
-            
+
         } catch (\Exception $ex) {
             if (isset(self::$config['system']['router']['error'][$ex->getCode()])) {
                 $session = new Lib\System\Session('errorInfo');
@@ -112,8 +112,10 @@ class Kernel {
             $envs = ['dev', 'hom', 'prod'];
             $filesIgnore = [];
 
-            foreach ($dir->getFiles() as $_item) {
-                $filename = "{$dir->dirName}/{$_item}";
+            $files = $dir->getFiles()->getArrayCopy();
+            sort($files);
+            foreach ($files as $file) {
+                $filename = "{$dir->dirName}/{$file}";
                 if (in_array($filename, $filesIgnore)) {
                     continue;
                 }
