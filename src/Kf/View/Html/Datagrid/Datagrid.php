@@ -35,7 +35,7 @@ class Datagrid {
     protected $renderer;
 
     public function __construct($id = null) {
-        $this->setRenderer(new \Kf\View\Html\Renderer(null, new \Kf\System\File(APP_PATH . 'lib/View/Html/Datagrid/datagrid.phtml')));
+        $this->setRenderer(new \Kf\View\Html\Renderer(null, new \Kf\System\File(__DIR__ . '/datagrid.phtml')));
         $this->setPaginator(new \Kf\View\Html\Paginator);
         if ($id) {
             $this->setId($id);
