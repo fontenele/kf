@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\View;
+namespace Kf\View;
 
-class Json extends \KF\System\ArrayObject {
+class Json extends \Kf\System\ArrayObject {
 
     public function __construct($vars = array()) {
         parent::__construct($vars);

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Database;
+namespace Kf\Database;
 
 class Field {
 
@@ -21,7 +21,7 @@ class Field {
     protected $dbOrderBySortType;
 
     /**
-     * @var \KF\Module\Entity
+     * @var \Kf\Module\Entity
      */
     protected $fkEntity;
 
@@ -42,7 +42,7 @@ class Field {
     protected $viewComponent;
 
     /**
-     * @var \KF\View\Html\Datagrid\Header
+     * @var \Kf\View\Html\Datagrid\Header
      */
     protected $datagridHeader;
 
@@ -79,7 +79,7 @@ class Field {
 
     /**
      * @param string $dbName
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setDbName($dbName) {
         $this->dbName = $dbName;
@@ -88,7 +88,7 @@ class Field {
 
     /**
      * @param integer $dbType
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setDbType($dbType) {
         $this->dbType = $dbType;
@@ -97,7 +97,7 @@ class Field {
 
     /**
      * @param integer $dbMaxLength
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setDbMaxLength($dbMaxLength) {
         $this->dbMaxLength = $dbMaxLength;
@@ -106,7 +106,7 @@ class Field {
 
     /**
      * @param integer $dbMaxLength
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setDbOrderBySequence($dbOrderBySequence) {
         $this->dbOrderBySequence = $dbOrderBySequence;
@@ -119,17 +119,17 @@ class Field {
     }
 
     /**
-     * @param \KF\Module\Entity $fkEntity
-     * @return \KF\Database\Field
+     * @param \Kf\Module\Entity $fkEntity
+     * @return \Kf\Database\Field
      */
-    public function setFkEntity(\KF\Module\Entity $fkEntity) {
+    public function setFkEntity(\Kf\Module\Entity $fkEntity) {
         $this->fkEntity = $fkEntity;
         return $this;
     }
 
     /**
      * @param string $fkEntityField
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setFkEntityField($fkEntityField) {
         $this->fkEntityField = $fkEntityField;
@@ -138,7 +138,7 @@ class Field {
 
     /**
      * @param integer $fkEntityField
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setFkEntityJoinType($fkEntityJoinType) {
         $this->fkEntityJoinType = $fkEntityJoinType;
@@ -147,7 +147,7 @@ class Field {
 
     /**
      * @param bool $required
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function setRequired($required) {
         $this->required = $required;
@@ -161,18 +161,18 @@ class Field {
     }
 
     /**
-     * @param \KF\View\Html\Datagrid\Header $datagridHeader
-     * @return \KF\Database\Field
+     * @param \Kf\View\Html\Datagrid\Header $datagridHeader
+     * @return \Kf\Database\Field
      */
-    public function setDatagridHeader(\KF\View\Html\Datagrid\Header $datagridHeader) {
+    public function setDatagridHeader(\Kf\View\Html\Datagrid\Header $datagridHeader) {
         $datagridHeader->setDataName($this->getDbName());
         $this->datagridHeader = $datagridHeader;
         return $this;
     }
 
     /**
-     * @param \KF\Database\Criteria $searchCriteria
-     * @return \KF\Database\Field
+     * @param \Kf\Database\Criteria $searchCriteria
+     * @return \Kf\Database\Field
      */
     public function setSearchCriteria(Criteria $searchCriteria) {
         $this->searchCriteria = $searchCriteria;
@@ -226,7 +226,7 @@ class Field {
     }
 
     /**
-     * @return \KF\Module\Entity
+     * @return \Kf\Module\Entity
      */
     public function getFkEntity() {
         return $this->fkEntity;
@@ -251,21 +251,21 @@ class Field {
     }
 
     /**
-     * @return \KF\View\Html\Tag
+     * @return \Kf\View\Html\Tag
      */
     public function getViewComponent() {
         return $this->viewComponent;
     }
 
     public function populateWithFkData() {
-        if ($this->viewComponent instanceof \KF\View\Html\Select && $this->getFkEntityJoinType()) {
-            $data = \KF\View\Html\Select::rows2options($this->getFkEntity()->getService()->fetchAll());
+        if ($this->viewComponent instanceof \Kf\View\Html\Select && $this->getFkEntityJoinType()) {
+            $data = \Kf\View\Html\Select::rows2options($this->getFkEntity()->getService()->fetchAll());
             $this->viewComponent->setOptions($data);
         }
     }
 
     /**
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function getDatagridHeader() {
         return $this->datagridHeader;

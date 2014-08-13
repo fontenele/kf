@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\DataType;
+namespace Kf\DataType;
 
 class Time {
 
@@ -60,7 +60,7 @@ class Time {
      * @param integer $month
      * @param integer $year
      * @return bool
-     * @throws \KF\DataType\Exception
+     * @throws \Kf\DataType\Exception
      */
     public static function isWeekend($day, $month, $year) {
         try {

@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\Module;
+namespace Kf\Module;
 
-abstract class Entity extends \KF\Database\Dml {
+abstract class Entity extends \Kf\Database\Dml {
 
     /**
      * Table name
@@ -81,17 +81,17 @@ abstract class Entity extends \KF\Database\Dml {
     }
 
     public static function createField($name) {
-        $field = new \KF\Database\Field($name);
+        $field = new \Kf\Database\Field($name);
         return $field;
     }
 
-    public function addField(\KF\Database\Field $field) {
+    public function addField(\Kf\Database\Field $field) {
         $this->fields[$field->getName()] = $field;
     }
 
     /**
      * @param string $field
-     * @return \KF\Database\Field
+     * @return \Kf\Database\Field
      */
     public function getField($field) {
         return isset($this->fields[$field]) ? $this->fields[$field] : null;

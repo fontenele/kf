@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\System;
+namespace Kf\System;
 
-Class Dir extends ArrayObject {
+class Dir extends ArrayObject {
 
     public $dirName;
     public $resource;

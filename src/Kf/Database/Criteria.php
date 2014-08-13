@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Database;
+namespace Kf\Database;
 
 class Criteria {
 
@@ -25,7 +25,7 @@ class Criteria {
 
     /**
      * @param string $type
-     * @return \KF\Database\Criteria
+     * @return \Kf\Database\Criteria
      */
     public static function create($type) {
         $criteria = new Criteria($type);
@@ -41,7 +41,7 @@ class Criteria {
 
     /**
      * @param string $type
-     * @return \KF\Database\Criteria
+     * @return \Kf\Database\Criteria
      */
     public function setType($type) {
         $this->type = $type;
@@ -57,7 +57,7 @@ class Criteria {
 
     /**
      * @param bool $upper
-     * @return \KF\Database\Criteria
+     * @return \Kf\Database\Criteria
      */
     public function setUpper($upper) {
         $this->upper = $upper;

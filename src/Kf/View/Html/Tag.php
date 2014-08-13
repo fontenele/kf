@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\View\Html;
+namespace Kf\View\Html;
 
-class Tag extends \KF\System\ArrayObject {
+class Tag extends \Kf\System\ArrayObject {
 
     /**
      * @var string
@@ -93,8 +93,8 @@ class Tag extends \KF\System\ArrayObject {
 
     public function render($value = null, $static = false) {
         try {
-            if (\KF\Kernel::$request->post->offsetGet($this->name)) {
-                $this->setValue(\KF\Kernel::$request->post->offsetGet($this->name));
+            if (\Kf\Kernel::$request->post->offsetGet($this->name)) {
+                $this->setValue(\Kf\Kernel::$request->post->offsetGet($this->name));
             }
             if ($value) {
                 $this->setValue($value);
@@ -162,7 +162,7 @@ class Tag extends \KF\System\ArrayObject {
 
     /**
      * @param string $title
-     * @return \KF\View\Html\Input
+     * @return \Kf\View\Html\Input
      */
     public function setTitle($title) {
         $this->title = $title;
@@ -171,7 +171,7 @@ class Tag extends \KF\System\ArrayObject {
 
     /**
      * @param bool $required
-     * @return \KF\View\Html\Input
+     * @return \Kf\View\Html\Input
      */
     public function setRequired($required) {
         if (!$required) {
@@ -184,7 +184,7 @@ class Tag extends \KF\System\ArrayObject {
 
     /**
      * @param string $placeholder
-     * @return \KF\View\Html\Input
+     * @return \Kf\View\Html\Input
      */
     public function setPlaceholder($placeholder) {
         $this->placeholder = $placeholder;
@@ -193,7 +193,7 @@ class Tag extends \KF\System\ArrayObject {
 
     /**
      * @param string $value
-     * @return \KF\View\Html\Tag
+     * @return \Kf\View\Html\Tag
      */
     public function setValue($value) {
         $this->value = $value;

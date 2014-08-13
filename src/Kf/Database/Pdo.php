@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Database;
+namespace Kf\Database;
 
 abstract class Pdo extends \PDO {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View\Html;
+namespace Kf\View\Html;
 
 class Button extends Tag {
 
@@ -32,7 +32,7 @@ class Button extends Tag {
      * @param string $name
      * @param string $label
      * @param array $options
-     * @return \KF\View\Html\Button
+     * @return \Kf\View\Html\Button
      */
     public static function create($name, $label = null, $options = []) {
         $obj = new Button($name, $label, $options);

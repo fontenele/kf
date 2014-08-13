@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\System;
+namespace Kf\System;
 
 class Messenger {
 
@@ -19,15 +19,15 @@ class Messenger {
     }
 
     public static function successNow($message) {
-        $success = \KF\System::$layout->success;
+        $success = \Kf\System::$layout->success;
         $success[] = $message;
-        \KF\System::$layout->success = $success;
+        \Kf\System::$layout->success = $success;
     }
 
     public static function errorNow($message) {
-        $error = \KF\System::$layout->error;
+        $error = \Kf\System::$layout->error;
         $error[] = $message;
-        \KF\System::$layout->error = $error;
+        \Kf\System::$layout->error = $error;
     }
 
     public static function getSuccess() {

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View\Html\Helper;
+namespace Kf\View\Html\Helper;
 
 class Tree extends Helper {
 

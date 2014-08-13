@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\DataType;
+namespace Kf\DataType;
 
 class Date {
 
@@ -48,9 +48,9 @@ class Date {
 
     /**
      * Get days in a range of dates
-     * @param \KF\DataType\Date $dateTo
+     * @param \Kf\DataType\Date $dateTo
      * @return array
-     * @throws \KF\DataType\Exception
+     * @throws \Kf\DataType\Exception
      */
     public function getDatesTo(Date $dateTo) {
         try {
@@ -77,7 +77,7 @@ class Date {
      * @param integer $month
      * @param integer $year
      * @return bool
-     * @throws \KF\DataType\Exception
+     * @throws \Kf\DataType\Exception
      */
     public static function isWeekend($day, $month, $year) {
         try {

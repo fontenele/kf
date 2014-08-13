@@ -1,11 +1,11 @@
 <?php
 
-namespace KF\Module;
+namespace Kf\Module;
 
 abstract class Controller {
 
     /**
-     * @var \KF\View\Html
+     * @var \Kf\View\Html
      */
     public $view;
 
@@ -15,7 +15,7 @@ abstract class Controller {
     public $action;
 
     /**
-     * @var \KF\Http\Request
+     * @var \Kf\Http\Request
      */
     public $request;
 
@@ -24,10 +24,10 @@ abstract class Controller {
             $arrClass = explode('\\', get_class($this));
             $this->action = $action;
 
-            $template = \strpos($action, '-') === false ? \KF\System\String::camelToDash($action) : $action;
-            $_module = \KF\System\String::camelToDash($arrClass[0]);
-            $_controller = \KF\System\String::camelToDash($arrClass[2]);
-            $this->view = new \KF\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $request));
+            $template = \strpos($action, '-') === false ? \Kf\System\String::camelToDash($action) : $action;
+            $_module = \Kf\System\String::camelToDash($arrClass[0]);
+            $_controller = \Kf\System\String::camelToDash($arrClass[2]);
+            $this->view = new \Kf\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $request));
 
             $this->request = $request;
 
@@ -43,7 +43,7 @@ abstract class Controller {
 
     public function addJsFile($file) {
         try {
-            \KF\Kernel::$layout->addJsFile($file);
+            \Kf\Kernel::$layout->addJsFile($file);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -51,7 +51,7 @@ abstract class Controller {
 
     public function addCssFile($file) {
         try {
-            \KF\Kernel::$layout->addCssFile($file);
+            \Kf\Kernel::$layout->addCssFile($file);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -59,7 +59,7 @@ abstract class Controller {
 
     public function addExtraJsFile($file) {
         try {
-            \KF\Kernel::$layout->addExtraJsFile($file);
+            \Kf\Kernel::$layout->addExtraJsFile($file);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -67,7 +67,7 @@ abstract class Controller {
 
     public function addExtraCssFile($file) {
         try {
-            \KF\Kernel::$layout->addExtraCssFile($file);
+            \Kf\Kernel::$layout->addExtraCssFile($file);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -75,13 +75,13 @@ abstract class Controller {
 
     public function addViewComponent($name) {
         try {
-            if (!isset(\KF\Kernel::$config['view']['components'][$name])) {
+            if (!isset(\Kf\Kernel::$config['view']['components'][$name])) {
                 return;
             }
-            foreach (\KF\Kernel::$config['view']['components'][$name]['css'] as $file) {
+            foreach (\Kf\Kernel::$config['view']['components'][$name]['css'] as $file) {
                 $this->addExtraCssFile($file);
             }
-            foreach (\KF\Kernel::$config['view']['components'][$name]['js'] as $file) {
+            foreach (\Kf\Kernel::$config['view']['components'][$name]['js'] as $file) {
                 $this->addExtraJsFile($file);
             }
         } catch (\Exception $ex) {
@@ -93,7 +93,7 @@ abstract class Controller {
         if ($path && substr($path, 0, 1) == '/') {
             $path = substr($path, 1);
         }
-        \KF\Kernel::$router->redirect($path);
+        \Kf\Kernel::$router->redirect($path);
     }
 
     public function callAction($action) {
@@ -101,10 +101,10 @@ abstract class Controller {
             $arrClass = explode('\\', get_class($this));
             $this->action = $action;
 
-            $template = \strpos($action, '-') === false ? \KF\System\String::camelToDash($action) : $action;
-            $_module = \KF\System\String::camelToDash($arrClass[0]);
-            $_controller = \KF\System\String::camelToDash($arrClass[2]);
-            $_action = \KF\System\String::camelToDash($action);
+            $template = \strpos($action, '-') === false ? \Kf\System\String::camelToDash($action) : $action;
+            $_module = \Kf\System\String::camelToDash($arrClass[0]);
+            $_controller = \Kf\System\String::camelToDash($arrClass[2]);
+            $_action = \Kf\System\String::camelToDash($action);
             
             $pathCssJs = "%s/modules/{$_module}/{$_controller}/{$_action}.%s";
 
@@ -112,16 +112,16 @@ abstract class Controller {
             $css = array();
 
             if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'css', 'css'))) {
-                $css[] = sprintf(\KF\Kernel::$router->basePath . $pathCssJs, 'css', 'css');
+                $css[] = sprintf(\Kf\Kernel::$router->basePath . $pathCssJs, 'css', 'css');
             }
 
             if (file_exists(sprintf(APP_PATH . 'public/' . $pathCssJs, 'js', 'js'))) {
-                $js[] = sprintf(\KF\Kernel::$router->basePath . $pathCssJs, 'js', 'js');
+                $js[] = sprintf(\Kf\Kernel::$router->basePath . $pathCssJs, 'js', 'js');
             }
             
-            $this->view = new \KF\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
-            \KF\Kernel::$layout->css = $css;
-            \KF\Kernel::$layout->js = $js;
+            $this->view = new \Kf\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
+            \Kf\Kernel::$layout->css = $css;
+            \Kf\Kernel::$layout->js = $js;
             
             return $this->$action();
         } catch (\Exception $ex) {

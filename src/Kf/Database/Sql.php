@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Database;
+namespace Kf\Database;
 
 class Sql {
 
@@ -15,7 +15,7 @@ class Sql {
     public $input = [];
 
     /**
-     * @var \KF\Module\Model
+     * @var \Kf\Module\Model
      */
     public $model;
 
@@ -35,8 +35,8 @@ class Sql {
     public static $debug = false;
 
     /**
-     * @param \KF\Module\Model $model
-     * @throws \KF\Database\Exception
+     * @param \Kf\Module\Model $model
+     * @throws \Kf\Database\Exception
      */
     public function __construct($model = null) {
         try {
@@ -57,8 +57,8 @@ class Sql {
     /**
      * Create SELECT Statement
      * @param array $fields
-     * @return \KF\Database\Sql
-     * @throws \KF\Database\Exception
+     * @return \Kf\Database\Sql
+     * @throws \Kf\Database\Exception
      */
     public function select($fields = [], $paginator = false) {
         try {
@@ -100,8 +100,8 @@ class Sql {
     /**
      * Set FROM Statement
      * @param string $table
-     * @return \KF\Database\Sql
-     * @throws \KF\Database\Exception
+     * @return \Kf\Database\Sql
+     * @throws \Kf\Database\Exception
      */
     public function from($table = null, $alias = null) {
         try {
@@ -125,16 +125,16 @@ class Sql {
     public function join($field, $type, $tableFrom, $tableFk, $aliasFk, $fieldFk) {
         try {
             switch ($type) {
-                case \KF\Module\Model::JOIN_INNER:
+                case \Kf\Module\Model::JOIN_INNER:
                     $this->query.= 'INNER JOIN ';
                     break;
-                case \KF\Module\Model::JOIN_LEFT:
+                case \Kf\Module\Model::JOIN_LEFT:
                     $this->query.= 'LEFT JOIN ';
                     break;
-                case \KF\Module\Model::JOIN_RIGHT:
+                case \Kf\Module\Model::JOIN_RIGHT:
                     $this->query.= 'RIGHT JOIN ';
                     break;
-                case \KF\Module\Model::JOIN_FULL:
+                case \Kf\Module\Model::JOIN_FULL:
                     $this->query.= 'FULL JOIN ';
                     break;
             }
@@ -153,8 +153,8 @@ class Sql {
      * @param integer $numPage
      * @param array $whereConditions
      * @param array $orderBy
-     * @return \KF\Database\Sql
-     * @throws \KF\Database\Exception
+     * @return \Kf\Database\Sql
+     * @throws \Kf\Database\Exception
      */
     public function where($where = [], $rowsPerPage = null, $numPage = 1, $whereConditions = [], $orderBy = []) {
         try {
@@ -163,7 +163,7 @@ class Sql {
             $_where = '';
 
             foreach ($where as $field => $value) {
-                $_conditionOperator = \KF\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL;
+                $_conditionOperator = \Kf\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL;
                 if (isset($whereConditions[$field]) && $whereConditions[$field]) {
                     $_conditionOperator = $whereConditions[$field];
                 }
@@ -201,7 +201,7 @@ class Sql {
                 }
 
                 $offset = 0;
-                $rowsPerPage = $rowsPerPage ? $rowsPerPage : \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
+                $rowsPerPage = $rowsPerPage ? $rowsPerPage : \Kf\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
                 if ($numPage > 1) {
                     $offset = $rowsPerPage * ($numPage - 1);
                 }
@@ -222,12 +222,12 @@ class Sql {
         }
     }
 
-    protected function parseWhereFieldValue($field, $value, $criteriaCondition = \KF\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL) {
+    protected function parseWhereFieldValue($field, $value, $criteriaCondition = \Kf\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL) {
         try {
             switch ($criteriaCondition) {
-                case \KF\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
+                case \Kf\View\Html\Datagrid::CRITERIA_CONDITION_EQUAL:
                     return "{$field} = '{$value}' ";
-                case \KF\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
+                case \Kf\View\Html\Datagrid::CRITERIA_CONDITION_LIKE:
                     $value = strtoupper($value);
                     return "UPPER({$field}) LIKE '%%{$value}%%' ";
             }
@@ -239,7 +239,7 @@ class Sql {
     protected function parseFieldValue($field, &$value) {
         try {
             switch ($this->model->field($field)['type']) {
-                case \KF\Module\Model::TYPE_BOOLEAN:
+                case \Kf\Module\Model::TYPE_BOOLEAN:
                     if(!$value) {
                         $value = 0;
                     }
@@ -324,25 +324,25 @@ class Sql {
             foreach ($this->model->_fields as $field => $dataField) {
                 $this->query.= "{$field} ";
                 switch ($dataField['type']) {
-                    case \KF\Module\Model::TYPE_INTEGER:
+                    case \Kf\Module\Model::TYPE_INTEGER:
                         $this->query.= "integer";
                         break;
-                    case \KF\Module\Model::TYPE_VARCHAR:
+                    case \Kf\Module\Model::TYPE_VARCHAR:
                         $this->query.= "character varying" . ($dataField['length'] ? "({$dataField['length']})" : '');
                         break;
-                    case \KF\Module\Model::TYPE_DATE:
+                    case \Kf\Module\Model::TYPE_DATE:
                         $this->query.= "date without time zone";
                         break;
-                    case \KF\Module\Model::TYPE_TIME:
+                    case \Kf\Module\Model::TYPE_TIME:
                         $this->query.= "time without time zone";
                         break;
-                    case \KF\Module\Model::TYPE_DATETIME:
+                    case \Kf\Module\Model::TYPE_DATETIME:
                         $this->query.= "datetime without time zone";
                         break;
-                    case \KF\Module\Model::TYPE_MONEY:
+                    case \Kf\Module\Model::TYPE_MONEY:
                         $this->query.= "money";
                         break;
-                    case \KF\Module\Model::TYPE_BOOLEAN:
+                    case \Kf\Module\Model::TYPE_BOOLEAN:
                         $this->query.= "boolean";
                         break;
                 }
@@ -383,7 +383,7 @@ class Sql {
     /**
      * Return the SQL query
      * @return string
-     * @throws \KF\Database\Exception
+     * @throws \Kf\Database\Exception
      */
     public function getQuery() {
         try {

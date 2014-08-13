@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Module;
+namespace Kf\Module;
 
 /**
  * @package Module
@@ -78,7 +78,7 @@ abstract class Model {
      * @param string $name
      * @param array $arguments
      * @return mixed
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function __call($name, $arguments) {
         try {
@@ -115,7 +115,7 @@ abstract class Model {
      * @param integer $join
      * @param Model $joinModel
      * @param string $joinForeign
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function addField($name, $type, $length = null, $join = null, $joinModel = null, $joinForeign = null) {
         try {
@@ -148,18 +148,18 @@ abstract class Model {
      * @param string $dml
      * @param array $input
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     protected function fetchAllBySql($dml, $input = []) {
         try {
 //            if (self::$debug) {
 //                x(__METHOD__, $dml, $input);
 //            }
-            $stmt = \KF\Kernel::$db->prepare($dml);
+            $stmt = \Kf\Kernel::$db->prepare($dml);
             $stmt->execute($input);
 
 //            if ($stmt->errorInfo()[2]) {
-//                \KF\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
+//                \Kf\System\Logger::database($sql->getQuery(), $stmt->errorInfo()[2], $stmt->errorCode());
 //            }
 
             return $stmt->fetchAll();
@@ -172,18 +172,18 @@ abstract class Model {
      * @param string $dml
      * @param array $input
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     protected function fetchBySql($dml, $input = []) {
         try {
 //            if (self::$debug) {
 //                x(__METHOD__, $dml, $input);
 //            }
-            $stmt = \KF\Kernel::$db->prepare($dml);
+            $stmt = \Kf\Kernel::$db->prepare($dml);
             $stmt->execute($input);
 
             if ($stmt->errorInfo()[2]) {
-                \KF\System\Logger::database($dml, $stmt->errorInfo()[2], $stmt->errorCode());
+                \Kf\System\Logger::database($dml, $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             return $stmt->fetch();
@@ -200,7 +200,7 @@ abstract class Model {
      * @param array $whereConditions
      * @param array $orderBy
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
@@ -211,7 +211,7 @@ abstract class Model {
                     ->orderBy($orderBy)
                     ->paginate($numPage, $rowsPerPage);
             //xd($dml, $this->fetchAllBySql($dml->query, $dml->input));
-            //$sql = new \KF\Database\Sql($this);
+            //$sql = new \Kf\Database\Sql($this);
             //$sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions, $orderBy);
             //xd($sql);
 //            if (self::$debug) {
@@ -228,7 +228,7 @@ abstract class Model {
      * @param array $where
      * @param array $selectNames
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function fetch($where = [], $selectNames = []) {
         try {
@@ -238,7 +238,7 @@ abstract class Model {
                     ->where($where);
 
             //xd($where, $selectNames);
-//            $sql = new \KF\Database\Sql($this);
+//            $sql = new \Kf\Database\Sql($this);
 //            $sql->select($selectNames)->from($this->_table)->where($where);
 //            if (self::$debug) {
 //                x(__METHOD__, $sql->query, $sql->input, $sql);
@@ -253,7 +253,7 @@ abstract class Model {
      * @param array $where
      * @param array $selectNames
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function findBy($where, $selectNames = []) {
         try {
@@ -268,7 +268,7 @@ abstract class Model {
      * @param array $where
      * @param array $selectNames
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function findOneBy($where, $selectNames = []) {
         try {
@@ -281,7 +281,7 @@ abstract class Model {
     /**
      * @param array $row
      * @return boolean
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function save(&$row) {
         try {
@@ -305,25 +305,25 @@ abstract class Model {
             $dml = $this->getEntity()->insert($row);
 
 //            xd($row, $dml->query, $dml->input, $dml);
-//            $sql = new \KF\Database\Sql($this);
+//            $sql = new \Kf\Database\Sql($this);
 //            $sql->insert($row);
 //            if (self::$debug) {
 //                x(__METHOD__, $dml->query, $dml->input, $dml);
 //            }
 
-            $stmt = \KF\Kernel::$db->prepare($dml->query);
+            $stmt = \Kf\Kernel::$db->prepare($dml->query);
             $success = $stmt->execute($dml->input);
 
             if ($stmt->errorInfo()[2]) {
-                \KF\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
+                \Kf\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             if ($success) {
-                $row[$this->getEntity()->getPrimaryKey()] = \KF\Kernel::$db->lastInsertId($this->getEntity()->getSequence());
+                $row[$this->getEntity()->getPrimaryKey()] = \Kf\Kernel::$db->lastInsertId($this->getEntity()->getSequence());
             }
 
             if ($stmt->errorInfo()[2]) {
-                \KF\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
+                \Kf\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             return $success;
@@ -339,18 +339,18 @@ abstract class Model {
     public function update(&$row, $where = []) {
         try {
             $dml = $this->getEntity()->update($row, $where);
-//            $sql = new \KF\Database\Sql($this);
+//            $sql = new \Kf\Database\Sql($this);
 //            $sql->update($row, $where);
 //
 //            if (self::$debug) {
 //                x(__METHOD__, $sql->query, $sql->input, $sql);
 //            }
 
-            $stmt = \KF\Kernel::$db->prepare($dml->query);
+            $stmt = \Kf\Kernel::$db->prepare($dml->query);
             $success = $stmt->execute($dml->input);
 
             if ($stmt->errorInfo()[2]) {
-                \KF\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
+                \Kf\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             return $success;
@@ -362,17 +362,17 @@ abstract class Model {
     public function delete($where = []) {
         try {
             $dml = $this->getEntity()->delete($where);
-//            $sql = new \KF\Database\Sql($this);
+//            $sql = new \Kf\Database\Sql($this);
 //            $sql->delete($where);
 //
 //            if (self::$debug) {
 //                x(__METHOD__, $sql->query, $sql->input, $sql);
 //            }
-            $stmt = \KF\Kernel::$db->prepare($dml->query);
+            $stmt = \Kf\Kernel::$db->prepare($dml->query);
             $success = $stmt->execute($dml->input);
 
             if ($stmt->errorInfo()[2]) {
-                \KF\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
+                \Kf\System\Logger::database($dml->query, $stmt->errorInfo()[2], $stmt->errorCode());
             }
 
             return $success;
@@ -383,17 +383,17 @@ abstract class Model {
 
     public function createTable() {
         try {
-            $sql = new \KF\Database\Sql($this);
+            $sql = new \Kf\Database\Sql($this);
             $sql->createTable();
 
             if (self::$debug) {
                 x(__METHOD__, $sql->query, $sql);
             }
 
-            $success = \KF\Kernel::$db->exec($sql->query);
+            $success = \Kf\Kernel::$db->exec($sql->query);
 
-            if (\KF\Kernel::$db->errorInfo()[2]) {
-                \KF\System\Logger::database($sql->getQuery(), \KF\Kernel::$db->errorInfo()[2], \KF\Kernel::$db->errorCode());
+            if (\Kf\Kernel::$db->errorInfo()[2]) {
+                \Kf\System\Logger::database($sql->getQuery(), \Kf\Kernel::$db->errorInfo()[2], \Kf\Kernel::$db->errorCode());
             }
 
             return $success;

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View\Html;
+namespace Kf\View\Html;
 
 class InputPassword extends Input {
 

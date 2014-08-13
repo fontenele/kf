@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View\Html;
+namespace Kf\View\Html;
 
 class Datagrid {
     
@@ -106,7 +106,7 @@ class Datagrid {
             $this->paginatorLeft = Helper\Glyphicon::get('backward');
             $this->paginatorRight = Helper\Glyphicon::get('forward');
             $this->paginatorLast = Helper\Glyphicon::get('step-forward');
-            $this->rowsPerPage = \KF\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
+            $this->rowsPerPage = \Kf\Kernel::$config['system']['view']['datagrid']['rowsPerPage'];
             $this->formSelector = $formSelector;
 
             $this->setCriterias($criteria);

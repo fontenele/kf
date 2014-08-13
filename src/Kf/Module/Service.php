@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Module;
+namespace Kf\Module;
 
 /**
  * @package Module
@@ -40,7 +40,7 @@ abstract class Service {
      * @param array $whereConditions
      * @param array $orderBy
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function fetchAll($where = [], $rowsPerPage = null, $numPage = 0, $selectNames = [], $whereConditions = [], $orderBy = []) {
         try {
@@ -55,7 +55,7 @@ abstract class Service {
      * @param array $where
      * @param array $selectNames
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function findBy($where, $selectNames = []) {
         try {
@@ -70,7 +70,7 @@ abstract class Service {
      * @param array $where
      * @param array $selectNames
      * @return array
-     * @throws \KF\Module\Exception
+     * @throws \Kf\Module\Exception
      */
     public function findOneBy($where, $selectNames = []) {
         try {

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View;
+namespace Kf\View;
 
 class Layout extends Html {
 
@@ -21,7 +21,7 @@ class Layout extends Html {
             if (!file_exists(APP_PATH . 'public/js/' . $file)) {
                 throw new \Exception('Javascript File not found. ' . $file);
             }
-            $this->js = array_merge($this->js, [\KF\Kernel::$router->basePath . 'js/' . $file]);
+            $this->js = array_merge($this->js, [\Kf\Kernel::$router->basePath . 'js/' . $file]);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -32,7 +32,7 @@ class Layout extends Html {
             if (!file_exists(APP_PATH . 'public/css/' . $file)) {
                 throw new \Exception('Style File not found. ' . $file);
             }
-            $this->css = array_merge($this->css, [\KF\Kernel::$router->basePath . 'css/' . $file]);
+            $this->css = array_merge($this->css, [\Kf\Kernel::$router->basePath . 'css/' . $file]);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -43,7 +43,7 @@ class Layout extends Html {
             if (!file_exists(APP_PATH . 'public/js/' . $file)) {
                 throw new \Exception('Javascript File not found. ' . $file);
             }
-            $this->extraJs = array_merge($this->extraJs, [\KF\Kernel::$router->basePath . 'js/' . $file]);
+            $this->extraJs = array_merge($this->extraJs, [\Kf\Kernel::$router->basePath . 'js/' . $file]);
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -54,7 +54,7 @@ class Layout extends Html {
             if (!file_exists(APP_PATH . 'public/css/' . $file)) {
                 throw new \Exception('Style File not found. ' . $file);
             }
-            $this->extraCss = array_merge($this->extraCss, [\KF\Kernel::$router->basePath . 'css/' . $file]);
+            $this->extraCss = array_merge($this->extraCss, [\Kf\Kernel::$router->basePath . 'css/' . $file]);
         } catch (\Exception $ex) {
             throw $ex;
         }

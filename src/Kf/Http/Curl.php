@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Http;
+namespace Kf\Http;
 
 class Curl {
 

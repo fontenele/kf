@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\DataType;
+namespace Kf\DataType;
 
 class Salary extends Money {
 

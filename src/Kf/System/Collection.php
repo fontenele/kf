@@ -1,7 +1,7 @@
 <?php
 
-namespace KF\System;
+namespace Kf\System;
 
-class Collection extends \KF\System\ArrayObject {
+class Collection extends \Kf\System\ArrayObject {
     
 }

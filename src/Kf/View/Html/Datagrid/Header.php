@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\View\Html\Datagrid;
+namespace Kf\View\Html\Datagrid;
 
 class Header {
 
@@ -30,7 +30,7 @@ class Header {
     protected $cssClass;
 
     /**
-     * @var \KF\View\Html\Renderer
+     * @var \Kf\View\Html\Renderer
      */
     protected $renderer;
 
@@ -39,7 +39,7 @@ class Header {
      * @param string $label
      * @param string $width
      * @param string $cssClass
-     * @param \KF\View\Html\Renderer $renderer
+     * @param \Kf\View\Html\Renderer $renderer
      * @param string $dataName
      */
     public function __construct($order = null, $label = null, $width = null, $cssClass = null, $renderer = null, $dataName = null) {
@@ -68,7 +68,7 @@ class Header {
      * @param string $label
      * @param string $width
      * @param string $cssClass
-     * @param \KF\View\Html\Renderer $renderer
+     * @param \Kf\View\Html\Renderer $renderer
      * @param string $dataName
      * @return Header
      */
@@ -113,7 +113,7 @@ class Header {
     }
 
     /**
-     * @return \KF\View\Html\Renderer
+     * @return \Kf\View\Html\Renderer
      */
     public function getRenderer() {
         return $this->renderer;
@@ -121,7 +121,7 @@ class Header {
 
     /**
      * @param integer $order
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function setOrder($order) {
         $this->order = $order;
@@ -130,7 +130,7 @@ class Header {
 
     /**
      * @param string $dataName
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function setDataName($dataName) {
         $this->dataName = $dataName;
@@ -139,7 +139,7 @@ class Header {
 
     /**
      * @param string $label
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function setLabel($label) {
         $this->label = $label;
@@ -148,7 +148,7 @@ class Header {
 
     /**
      * @param string $width
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function setWidth($width) {
         $this->width = $width;
@@ -157,7 +157,7 @@ class Header {
 
     /**
      * @param string $cssClass
-     * @return \KF\View\Html\Datagrid\Header
+     * @return \Kf\View\Html\Datagrid\Header
      */
     public function setCssClass($cssClass) {
         $this->cssClass = $cssClass;
@@ -165,10 +165,10 @@ class Header {
     }
 
     /**
-     * @param \KF\View\Html\Renderer $renderer
-     * @return \KF\View\Html\Datagrid\Header
+     * @param \Kf\View\Html\Renderer $renderer
+     * @return \Kf\View\Html\Datagrid\Header
      */
-    public function setRenderer(\KF\View\Html\Renderer $renderer) {
+    public function setRenderer(\Kf\View\Html\Renderer $renderer) {
         $this->renderer = $renderer;
         return $this;
     }

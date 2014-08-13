@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\Http;
+namespace Kf\Http;
 
-use KF\System\ArrayObject;
+use Kf\System\ArrayObject;
 
 class Request {
 
