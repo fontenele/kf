@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\System;
+namespace KF\System;
 
 class EntityCollection extends Collection {
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html\Datagrid;
+namespace KF\View\Html\Datagrid;
 
 class Field {
 
@@ -10,7 +10,7 @@ class Field {
     protected $template;
 
     /**
-     * @var \KF\Lib\View\Html\Renderer
+     * @var \KF\View\Html\Renderer
      */
     protected $renderer;
 
@@ -22,7 +22,7 @@ class Field {
     }
 
     /**
-     * @return \KF\Lib\View\Html\Renderer
+     * @return \KF\View\Html\Renderer
      */
     public function getRenderer() {
         return $this->renderer;
@@ -30,7 +30,7 @@ class Field {
 
     /**
      * @param string $template
-     * @return \KF\Lib\View\Html\Datagrid\Field
+     * @return \KF\View\Html\Datagrid\Field
      */
     public function setTemplate($template) {
         $this->template = $template;
@@ -38,10 +38,10 @@ class Field {
     }
 
     /**
-     * @param \KF\Lib\View\Html\Renderer $renderer
-     * @return \KF\Lib\View\Html\Datagrid\Field
+     * @param \KF\View\Html\Renderer $renderer
+     * @return \KF\View\Html\Datagrid\Field
      */
-    public function setRenderer(\KF\Lib\View\Html\Renderer $renderer) {
+    public function setRenderer(\KF\View\Html\Renderer $renderer) {
         $this->renderer = $renderer;
         return $this;
     }

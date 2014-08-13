@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
 class Input extends Tag {
 
@@ -48,7 +48,7 @@ class Input extends Tag {
 
     /**
      * @param string $type
-     * @return \KF\Lib\View\Html\Input
+     * @return \KF\View\Html\Input
      */
     public function setType($type) {
         $this->type = $type;

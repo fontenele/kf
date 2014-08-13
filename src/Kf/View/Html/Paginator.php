@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
 class Paginator {
 
@@ -122,7 +122,7 @@ class Paginator {
 
     /**
      * @param string $templateFirst
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTemplateFirst($templateFirst) {
         $this->templateFirst = $templateFirst;
@@ -131,7 +131,7 @@ class Paginator {
 
     /**
      * @param string $templateLeft
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTemplateLeft($templateLeft) {
         $this->templateLeft = $templateLeft;
@@ -140,7 +140,7 @@ class Paginator {
 
     /**
      * @param string $templateRight
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTemplateRight($templateRight) {
         $this->templateRight = $templateRight;
@@ -149,7 +149,7 @@ class Paginator {
 
     /**
      * @param string $templateLast
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTemplateLast($templateLast) {
         $this->templateLast = $templateLast;
@@ -158,7 +158,7 @@ class Paginator {
 
     /**
      * @param integer $rowsPerPage
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setRowsPerPage($rowsPerPage) {
         $this->rowsPerPage = $rowsPerPage;
@@ -167,7 +167,7 @@ class Paginator {
 
     /**
      * @param integer $active
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setActive($active) {
         $this->active = $active;
@@ -176,7 +176,7 @@ class Paginator {
 
     /**
      * @param integer $totalItems
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTotalItems($totalItems) {
         $this->totalItems = $totalItems;
@@ -185,7 +185,7 @@ class Paginator {
 
     /**
      * @param integer $totalPages
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTotalPages($totalPages) {
         $this->totalPages = $totalPages;
@@ -194,7 +194,7 @@ class Paginator {
 
     /**
      * @param integer $totalPagesInPaginator
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function setTotalPagesInPaginator($totalPagesInPaginator) {
         $this->totalPagesInPaginator = $totalPagesInPaginator;

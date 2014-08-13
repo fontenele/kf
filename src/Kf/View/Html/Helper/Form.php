@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html\Helper;
+namespace KF\View\Html\Helper;
 
 class Form extends Helper {
 
@@ -26,17 +26,17 @@ class Form extends Helper {
     }
 
     public function submit($label = 'Enviar', $id = 'btn-submit') {
-        return new \KF\Lib\View\Html\Button($id, $label, ['class' => 'btn-primary']);
+        return new \KF\View\Html\Button($id, $label, ['class' => 'btn-primary']);
     }
 
     public function submitSave($label = 'Enviar', $id = 'btn-save') {
         $content = Glyphicon::get('ok') . ' &nbsp;' . $label;
-        return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
+        return \KF\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
     }
 
     public function submitSearch($label = 'Pesquisar', $id = 'btn-search') {
         $content = Glyphicon::get('search') . ' &nbsp;' . $label;
-        return \KF\Lib\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
+        return \KF\View\Html\Button::create($id, $label, ['class' => 'btn-primary'])->setContent($content);
     }
 
 }

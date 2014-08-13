@@ -1,11 +1,11 @@
 <?php
 
-namespace KF\Lib\Module;
+namespace KF\Module;
 
 abstract class Controller {
 
     /**
-     * @var \KF\Lib\View\Html
+     * @var \KF\View\Html
      */
     public $view;
 
@@ -15,7 +15,7 @@ abstract class Controller {
     public $action;
 
     /**
-     * @var \KF\Lib\Http\Request
+     * @var \KF\Http\Request
      */
     public $request;
 
@@ -24,10 +24,10 @@ abstract class Controller {
             $arrClass = explode('\\', get_class($this));
             $this->action = $action;
 
-            $template = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
-            $_module = \KF\Lib\System\String::camelToDash($arrClass[0]);
-            $_controller = \KF\Lib\System\String::camelToDash($arrClass[2]);
-            $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $request));
+            $template = \strpos($action, '-') === false ? \KF\System\String::camelToDash($action) : $action;
+            $_module = \KF\System\String::camelToDash($arrClass[0]);
+            $_controller = \KF\System\String::camelToDash($arrClass[2]);
+            $this->view = new \KF\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $request));
 
             $this->request = $request;
 
@@ -101,10 +101,10 @@ abstract class Controller {
             $arrClass = explode('\\', get_class($this));
             $this->action = $action;
 
-            $template = \strpos($action, '-') === false ? \KF\Lib\System\String::camelToDash($action) : $action;
-            $_module = \KF\Lib\System\String::camelToDash($arrClass[0]);
-            $_controller = \KF\Lib\System\String::camelToDash($arrClass[2]);
-            $_action = \KF\Lib\System\String::camelToDash($action);
+            $template = \strpos($action, '-') === false ? \KF\System\String::camelToDash($action) : $action;
+            $_module = \KF\System\String::camelToDash($arrClass[0]);
+            $_controller = \KF\System\String::camelToDash($arrClass[2]);
+            $_action = \KF\System\String::camelToDash($action);
             
             $pathCssJs = "%s/modules/{$_module}/{$_controller}/{$_action}.%s";
 
@@ -119,7 +119,7 @@ abstract class Controller {
                 $js[] = sprintf(\KF\Kernel::$router->basePath . $pathCssJs, 'js', 'js');
             }
             
-            $this->view = new \KF\Lib\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
+            $this->view = new \KF\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
             \KF\Kernel::$layout->css = $css;
             \KF\Kernel::$layout->js = $js;
             

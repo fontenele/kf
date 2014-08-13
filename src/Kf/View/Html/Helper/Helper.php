@@ -1,16 +1,16 @@
 <?php
 
-namespace KF\Lib\View\Html\Helper;
+namespace KF\View\Html\Helper;
 
 abstract class Helper {
 
     /**
-     * @var \KF\Lib\View\Html
+     * @var \KF\View\Html
      */
     public $view;
     
     public function __construct() {
-        $this->view = new \KF\Lib\View\Html();
+        $this->view = new \KF\View\Html();
     }
 
 }

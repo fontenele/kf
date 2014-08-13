@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\System\Exception;
+namespace KF\System\Exception;
 
 class BaseException extends \Exception {
     

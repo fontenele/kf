@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
 class InputHidden extends Input {
 

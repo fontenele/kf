@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
-class Tag extends \KF\Lib\System\ArrayObject {
+class Tag extends \KF\System\ArrayObject {
 
     /**
      * @var string
@@ -162,7 +162,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     /**
      * @param string $title
-     * @return \KF\Lib\View\Html\Input
+     * @return \KF\View\Html\Input
      */
     public function setTitle($title) {
         $this->title = $title;
@@ -171,7 +171,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     /**
      * @param bool $required
-     * @return \KF\Lib\View\Html\Input
+     * @return \KF\View\Html\Input
      */
     public function setRequired($required) {
         if (!$required) {
@@ -184,7 +184,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     /**
      * @param string $placeholder
-     * @return \KF\Lib\View\Html\Input
+     * @return \KF\View\Html\Input
      */
     public function setPlaceholder($placeholder) {
         $this->placeholder = $placeholder;
@@ -193,7 +193,7 @@ class Tag extends \KF\Lib\System\ArrayObject {
 
     /**
      * @param string $value
-     * @return \KF\Lib\View\Html\Tag
+     * @return \KF\View\Html\Tag
      */
     public function setValue($value) {
         $this->value = $value;

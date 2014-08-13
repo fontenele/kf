@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace KF\Lib\Database;
+namespace KF\Database;
 
 /**
  * Description of Postgres

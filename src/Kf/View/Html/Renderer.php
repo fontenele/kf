@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
 class Renderer {
 
@@ -10,15 +10,15 @@ class Renderer {
     protected $method;
 
     /**
-     * @var \KF\Lib\System\File
+     * @var \KF\System\File
      */
     protected $file;
 
     /**
      * @param string $method
-     * @param \KF\Lib\System\File $file
+     * @param \KF\System\File $file
      */
-    public function __construct($method = null, \KF\Lib\System\File $file = null) {
+    public function __construct($method = null, \KF\System\File $file = null) {
         if ($method) {
             $this->setMethod($method);
         }
@@ -35,7 +35,7 @@ class Renderer {
     }
 
     /**
-     * @return \KF\Lib\System\File
+     * @return \KF\System\File
      */
     public function getFile() {
         return $this->file;
@@ -43,7 +43,7 @@ class Renderer {
 
     /**
      * @param string $method
-     * @return \KF\Lib\View\Html\Renderer
+     * @return \KF\View\Html\Renderer
      */
     public function setMethod($method) {
         $this->method = $method;
@@ -51,10 +51,10 @@ class Renderer {
     }
 
     /**
-     * @param \KF\Lib\System\File $file
-     * @return \KF\Lib\View\Html\Renderer
+     * @param \KF\System\File $file
+     * @return \KF\View\Html\Renderer
      */
-    public function setFile(\KF\Lib\System\File $file) {
+    public function setFile(\KF\System\File $file) {
         $this->file = $file;
         return $this;
     }
@@ -63,7 +63,7 @@ class Renderer {
         if($this->getMethod()) {
             return call_user_func_array($this->getMethod(), [$params]);
         }
-        $view = new \KF\Lib\View\Html($this->getFile(), $params);
+        $view = new \KF\View\Html($this->getFile(), $params);
         return $view->render();
     }
 

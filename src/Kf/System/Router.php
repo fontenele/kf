@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\System;
+namespace KF\System;
 
 class Router {
 
@@ -56,7 +56,7 @@ class Router {
 
     /**
      * @param array $config
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function __construct($config) {
         try {
@@ -69,7 +69,7 @@ class Router {
 
     /**
      * @param array $config
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function config($config) {
         try {
@@ -109,7 +109,7 @@ class Router {
     }
 
     /**
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function defineControllerAndAction() {
         try {
@@ -127,7 +127,7 @@ class Router {
     }
 
     /**
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function getController() {
         try {
@@ -138,7 +138,7 @@ class Router {
     }
 
     /**
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function getAction() {
         try {
@@ -151,7 +151,7 @@ class Router {
     /**
      * @param string $className
      * @return string
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public static function getRealPath($className) {
         try {
@@ -170,7 +170,7 @@ class Router {
     /**
      * @param string $route
      * @return array
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function parseRoute($route) {
         try {
@@ -212,7 +212,7 @@ class Router {
 
     /**
      * @param string $path
-     * @throws \KF\Lib\System\Exception
+     * @throws \KF\System\Exception
      */
     public function redirect($path = null) {
         try {

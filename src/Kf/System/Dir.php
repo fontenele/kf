@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\System;
+namespace KF\System;
 
 Class Dir extends ArrayObject {
 

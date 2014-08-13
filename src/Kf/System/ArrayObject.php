@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\System;
+namespace KF\System;
 
 class ArrayObject extends \ArrayObject {
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\Database;
+namespace KF\Database;
 
 class Dml {
 
@@ -176,7 +176,7 @@ class Dml {
                 }
             }
             $this->query.= substr($_orderBy, 0, -2) . ' ';
-        } elseif ($this instanceof \KF\Lib\Module\Entity) {
+        } elseif ($this instanceof \KF\Module\Entity) {
             $orderBy = [];
             $_orderBy = '';
             foreach ($this->getFields() as $field => $fieldData) {

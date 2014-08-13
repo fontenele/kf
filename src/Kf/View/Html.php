@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\Lib\View;
+namespace KF\View;
 
-class Html extends \KF\Lib\System\ArrayObject {
+class Html extends \KF\System\ArrayObject {
 
     /**
      * @var string
@@ -23,7 +23,7 @@ class Html extends \KF\Lib\System\ArrayObject {
 
     public function render() {
         try {
-            if ($this->template instanceof \KF\Lib\System\File) {
+            if ($this->template instanceof \KF\System\File) {
                 $this->template = str_replace(APP_PATH, '', $this->template->getName());
             }
             if (!$this->template || !file_exists(APP_PATH . $this->template)) {
@@ -66,7 +66,7 @@ class Html extends \KF\Lib\System\ArrayObject {
 
     public function __call($name, $arguments) {
         try {
-            $name = 'KF\Lib\View\Html\Helper\\' . ucfirst($name);
+            $name = 'KF\View\Html\Helper\\' . ucfirst($name);
             if (class_exists($name)) {
                 $class = new $name();
                 return call_user_func_array(array($class, "__invoke"), $arguments);

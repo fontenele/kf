@@ -1,8 +1,8 @@
 <?php
 
-namespace KF\Lib\View\Html;
+namespace KF\View\Html;
 
-class Form extends \KF\Lib\System\ArrayObject {
+class Form extends \KF\System\ArrayObject {
 
     /**
      * @var array
@@ -10,7 +10,7 @@ class Form extends \KF\Lib\System\ArrayObject {
     public $attrs = [];
 
     /**
-     * @var \KF\Lib\Module\Model
+     * @var \KF\Module\Model
      */
     public $model;
 
@@ -65,7 +65,7 @@ class Form extends \KF\Lib\System\ArrayObject {
 
     /**
      * @param array $config
-     * @throws \KF\Lib\View\Helper\Exception
+     * @throws \KF\View\Helper\Exception
      */
     public function __construct($config = []) {
         try {

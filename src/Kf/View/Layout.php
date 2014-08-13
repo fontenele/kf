@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View;
+namespace KF\View;
 
 class Layout extends Html {
 

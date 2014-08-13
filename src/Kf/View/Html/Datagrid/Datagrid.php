@@ -1,6 +1,6 @@
 <?php
 
-namespace KF\Lib\View\Html\Datagrid;
+namespace KF\View\Html\Datagrid;
 
 class Datagrid {
 
@@ -10,7 +10,7 @@ class Datagrid {
     protected $id;
 
     /**
-     * @var \KF\Lib\Module\Entity
+     * @var \KF\Module\Entity
      */
     protected $entity;
 
@@ -20,23 +20,23 @@ class Datagrid {
     protected $headers;
 
     /**
-     * @var \KF\Lib\View\Html\Paginator
+     * @var \KF\View\Html\Paginator
      */
     protected $paginator;
 
     /**
-     * @var array|\KF\Lib\System\Collection
+     * @var array|\KF\System\Collection
      */
     protected $data;
 
     /**
-     * @var \KF\Lib\View\Html\Renderer
+     * @var \KF\View\Html\Renderer
      */
     protected $renderer;
 
     public function __construct($id = null) {
-        $this->setRenderer(new \KF\Lib\View\Html\Renderer(null, new \KF\Lib\System\File(APP_PATH . 'lib/View/Html/Datagrid/datagrid.phtml')));
-        $this->setPaginator(new \KF\Lib\View\Html\Paginator);
+        $this->setRenderer(new \KF\View\Html\Renderer(null, new \KF\System\File(APP_PATH . 'lib/View/Html/Datagrid/datagrid.phtml')));
+        $this->setPaginator(new \KF\View\Html\Paginator);
         if ($id) {
             $this->setId($id);
         }
@@ -50,7 +50,7 @@ class Datagrid {
     }
 
     /**
-     * @return \KF\Lib\Module\Entity
+     * @return \KF\Module\Entity
      */
     public function getEntity() {
         return $this->entity;
@@ -71,7 +71,7 @@ class Datagrid {
     }
 
     /**
-     * @return \KF\Lib\View\Html\Paginator
+     * @return \KF\View\Html\Paginator
      */
     public function getPaginator() {
         return $this->paginator;
@@ -85,7 +85,7 @@ class Datagrid {
     }
 
     /**
-     * @return \KF\Lib\View\Html\Renderer
+     * @return \KF\View\Html\Renderer
      */
     public function getRenderer() {
         return $this->renderer;
@@ -104,7 +104,7 @@ HTML;
 
     /**
      * @param string $id
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
     public function setId($id) {
         $this->id = $id;
@@ -112,10 +112,10 @@ HTML;
     }
 
     /**
-     * @param \KF\Lib\Module\Entity $entity
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @param \KF\Module\Entity $entity
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
-    public function setEntity(\KF\Lib\Module\Entity $entity) {
+    public function setEntity(\KF\Module\Entity $entity) {
         $this->entity = $entity;
         $this->parseEntity();
         return $this;
@@ -123,7 +123,7 @@ HTML;
 
     /**
      * @param array $headers
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
     public function setHeaders($headers) {
         $this->headers = $headers;
@@ -131,17 +131,17 @@ HTML;
     }
 
     /**
-     * @param \KF\Lib\View\Html\Paginator $paginator
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @param \KF\View\Html\Paginator $paginator
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
-    public function setPaginator(\KF\Lib\View\Html\Paginator $paginator) {
+    public function setPaginator(\KF\View\Html\Paginator $paginator) {
         $this->paginator = $paginator;
         return $this;
     }
 
     /**
-     * @param array|\KF\Lib\System\Collection $data
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @param array|\KF\System\Collection $data
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
     public function setData($data) {
         $this->data = $data;
@@ -149,17 +149,17 @@ HTML;
     }
 
     /**
-     * @param \KF\Lib\View\Html\Renderer $renderer
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @param \KF\View\Html\Renderer $renderer
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
-    public function setRenderer(\KF\Lib\View\Html\Renderer $renderer) {
+    public function setRenderer(\KF\View\Html\Renderer $renderer) {
         $this->renderer = $renderer;
         return $this;
     }
 
     /**
-     * @param \KF\Lib\View\Html\Datagrid\Header $header
-     * @return \KF\Lib\View\Html\Datagrid\Datagrid
+     * @param \KF\View\Html\Datagrid\Header $header
+     * @return \KF\View\Html\Datagrid\Datagrid
      */
     public function addHeader(Header $header) {
         $this->headers[] = $header;
