@@ -98,9 +98,7 @@ class Router {
                 $appName = $_SERVER['SERVER_NAME'];
             }
             $this->appName = $appName;
-            $this->requestUri = str_replace($appName, '', $_SERVER['REQUEST_URI']);
-            
-            //xd($this->basePath, $this->serverName, str_replace($appName, '', str_replace($this->serverName, '', $this->basePath)), $appName);
+            $this->requestUri = preg_replace('/\\'.$appName.'/', '', $_SERVER['REQUEST_URI'], 1);
             $this->default = $config['default'];
             $this->defaultAuth = $config['defaultAuth'];
         } catch (\Exception $ex) {
@@ -117,7 +115,7 @@ class Router {
                 $uri = $this->parseRoute($this->requestUri, 1);
                 $this->controller = $uri['controller'];
                 if ($uri['params']) {
-                    \Kf\Kernel::$request->setQuery(urldecode($uri['params']));
+                    \Kf\Kernel::$request->setQuery($uri['params']);
                 }
                 $this->action = $uri['action'];
             }

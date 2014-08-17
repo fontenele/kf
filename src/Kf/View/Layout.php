@@ -7,6 +7,7 @@ class Layout extends Html {
     public function __construct($template = null, $vars = array()) {
         try {
             parent::__construct($template, $vars);
+            $this->extraHtml = '';
             $this->extraJs = [];
             $this->extraCss = [];
             $this->js = [];
@@ -58,6 +59,10 @@ class Layout extends Html {
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    public function appendExtraHtml($html) {
+        $this->extraHtml.= $html;
     }
 
 }

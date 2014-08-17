@@ -15,11 +15,11 @@ class Dir extends ArrayObject {
         $this->resource = \dir($dirName);
     }
 
-    public function getFiles() {
+    public function getFiles($withFullPath = false) {
         $dir = clone $this;
         while (($item = $this->resource->read()) !== false) {
             if (!\in_array($item, $this->ignores)) {
-                $dir->append($item);
+                $dir->append($withFullPath ? "{$this->resource->path}/{$item}" : $item);
             }
         }
         return $dir;
