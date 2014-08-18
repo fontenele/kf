@@ -21,20 +21,9 @@ abstract class Controller {
 
     public function __construct($action, $request) {
         try {
-            $arrClass = explode('\\', get_class($this));
             $this->action = $action;
             $this->request = $request;
-
-            $template = \strpos($action, '-') === false ? \Kf\System\String::camelToDash($action) : $action;
-            $_module = \Kf\System\String::camelToDash($arrClass[0]);
-            $_controller = \Kf\System\String::camelToDash($arrClass[2]);
-
-            if (is_dir("modules/{$arrClass[0]}/view/{$_controller}")) {
-                $this->view = new \Kf\View\Html("modules/{$arrClass[0]}/view/{$_controller}/{$template}.phtml", array('request' => $request));
-            } elseif (is_dir("vendor/{$arrClass[0]}/$arrClass[0]/src/{$arrClass[0]}/view/{$_controller}")) {
-                $this->view = new \Kf\View\Html("vendor/{$arrClass[0]}/$arrClass[0]/src/{$arrClass[0]}/view/{$_controller}/{$template}.phtml", array('request' => $request));
-            }
-
+            $this->createView();
             $this->init();
         } catch (\Exception $ex) {
             throw $ex;
@@ -43,6 +32,55 @@ abstract class Controller {
 
     public function init() {
         
+    }
+
+    public function createView() {
+        // Template name
+        $template = \strpos($this->action, '-') === false ? \Kf\System\String::camelToDash($this->action) : $this->action;
+
+        $arrClass = explode('\\', get_class($this));
+        $_controller = \Kf\System\String::camelToDash($arrClass[2]);
+
+        if (!isset(\Kf\Kernel::$config['modulesPath'][$arrClass[0]])) {
+            throw new \Kf\System\Exception\FileNotFoundException("Path from module {$arrClass[0]} not found.");
+        }
+
+        $modulePath = \Kf\Kernel::$config['modulesPath'][$arrClass[0]];
+        if (is_dir("{$modulePath}/view/{$_controller}")) {
+            $appPath = str_replace('/', '\/', APP_PATH);
+            $moduleBasePath = preg_replace("/{$appPath}/", '', $modulePath, 1);
+            $this->view = new \Kf\View\Html("{$moduleBasePath}view/{$_controller}/{$template}.phtml", ['request' => $this->request]);
+        }
+    }
+
+    public function callAction($action = null) {
+        try {
+            $arrClass = explode('\\', get_class($this));
+            $this->action = $action ? $action : $this->action;
+
+            $template = \strpos($this->action, '-') === false ? \Kf\System\String::camelToDash($this->action) : $this->action;
+            $_module = \Kf\System\String::camelToDash($arrClass[0]);
+            $_controller = \Kf\System\String::camelToDash($arrClass[2]);
+            $_action = \Kf\System\String::camelToDash($this->action);
+            $cssAndJs = \Kf\Kernel::loadJsAndCssFiles(get_class($this), $this->action);
+
+            if (!isset(\Kf\Kernel::$config['modulesPath'][$arrClass[0]])) {
+                throw new \Kf\System\Exception\FileNotFoundException("Path from module {$arrClass[0]} not found.");
+            }
+
+            $modulePath = \Kf\Kernel::$config['modulesPath'][$arrClass[0]];
+            if (is_dir("{$modulePath}/view/{$_controller}")) {
+                $appPath = str_replace('/', '\/', APP_PATH);
+                $moduleBasePath = preg_replace("/{$appPath}/", '', $modulePath, 1);
+                $this->view = new \Kf\View\Html("{$moduleBasePath}view/{$_controller}/{$template}.phtml", ['request' => $this->request]);
+            }
+
+            \Kf\Kernel::$layout->css = $cssAndJs['css'];
+            \Kf\Kernel::$layout->js = $cssAndJs['js'];
+            return $this->{$this->action}();
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
     public function addJsFile($file) {
@@ -98,34 +136,6 @@ abstract class Controller {
             $path = substr($path, 1);
         }
         \Kf\Kernel::$router->redirect($path);
-    }
-
-    public function callAction($action = null) {
-        try {
-            $arrClass = explode('\\', get_class($this));
-            $this->action = $action ? $action : $this->action;
-
-            $template = \strpos($this->action, '-') === false ? \Kf\System\String::camelToDash($this->action) : $this->action;
-            $_module = \Kf\System\String::camelToDash($arrClass[0]);
-            $_controller = \Kf\System\String::camelToDash($arrClass[2]);
-            $_action = \Kf\System\String::camelToDash($this->action);
-            $cssAndJs = \Kf\Kernel::loadJsAndCssFiles(get_class($this), $this->action);
-
-            if (is_dir("modules/{$_module}/view/{$_controller}")) {
-                $this->view = new \Kf\View\Html("modules/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
-            } elseif (is_dir("vendor/{$_module}/$_module/src/{$_module}/view/{$_controller}")) {
-                $this->view = new \Kf\View\Html("vendor/{$_module}/$_module/src/{$_module}/view/{$_controller}/{$template}.phtml", array('request' => $this->request));
-            }
-            
-            $cssAndJs['css'] = array_merge(\Kf\Kernel::$layout->css, $cssAndJs['css']);
-            $cssAndJs['js'] = array_merge(\Kf\Kernel::$layout->js, $cssAndJs['js']);
-            \Kf\Kernel::$layout->css = $cssAndJs['css'];
-            \Kf\Kernel::$layout->js = $cssAndJs['js'];
-
-            return $this->{$this->action}();
-        } catch (\Exception $ex) {
-            throw $ex;
-        }
     }
 
 }
