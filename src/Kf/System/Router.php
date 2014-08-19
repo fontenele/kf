@@ -157,7 +157,7 @@ class Router {
             $_module = String::camelToDash($arrClassName[0]);
             $_class = $arrClassName[2];
 
-            $path = "modules/{$arClassName[0]}/" . strtolower($arrClassName[1]) . "/{$_class}.php";
+            $path = "modules/{$arrClassName[0]}/" . strtolower($arrClassName[1]) . "/{$_class}.php";
             $realPath = file_exists(APP_PATH . $path) ? APP_PATH . $path : null;
             return $realPath;
         } catch (\Exception $ex) {
