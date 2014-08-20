@@ -15,6 +15,15 @@ class Dir extends ArrayObject {
         $this->resource = \dir($dirName);
     }
 
+    /**
+     * @param string $dirName
+     * @return \Kf\System\Dir
+     */
+    public static function create($dirName) {
+        $obj = new Dir($dirName);
+        return $obj;
+    }
+
     public function getFiles($withFullPath = false) {
         $dir = clone $this;
         while (($item = $this->resource->read()) !== false) {
