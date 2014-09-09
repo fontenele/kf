@@ -3,10 +3,10 @@
 namespace Kf\System;
 
 class ArrayObject extends \ArrayObject {
-    
-    public function __construct($array) {
+
+    public function __construct($array = []) {
         parent::__construct($array);
-        $this->setFlags(\ArrayObject::STD_PROP_LIST|\ArrayObject::ARRAY_AS_PROPS);
+        $this->setFlags(\ArrayObject::STD_PROP_LIST | \ArrayObject::ARRAY_AS_PROPS);
     }
 
     public function offsetGet($index) {

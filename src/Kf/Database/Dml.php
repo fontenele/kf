@@ -72,19 +72,28 @@ class Dml {
     public function from($table = null, $alias = null) {
         $this->query.= 'FROM ';
         $alias = $alias ? " as {$alias}" : '';
-        $table = '';
+        $_table = $table;
+
         if ($table) {
-            $alias = !$alias && isset($this->aliases[$table]) ? " as {$this->aliases[$table]} " : '';
-            $table = $table;
-        } elseif ($this->getTable()) {
+            if (!$alias) {
+                $alias = isset($this->aliases[$table]) ? " as {$this->aliases[$table]} " : '';
+            }
+        } elseif ($this instanceof \Kf\Module\Entity && $this->getTable()) {
             $alias = !$alias && $this->getTable() && isset($this->aliases[$this->getTable()]) ? " as {$this->aliases[$this->getTable()]} " : '';
             $table = $this->getTable();
         }
+
         $this->query.= "{$table}{$alias}";
 
-        foreach ($this->getFields() as $field => $fieldData) {
-            if ($fieldData->getFkEntity()) {
-                $this->join($fieldData->getFkEntityJoinType(), $fieldData->getFkEntity()->getTable(), $fieldData->getFkEntityField(), $fieldData->getDbName());
+        if ($_table) {
+            return $this;
+        }
+
+        if ($this instanceof \Kf\Module\Entity) {
+            foreach ($this->getFields() as $field => $fieldData) {
+                if ($fieldData->getFkEntity()) {
+                    $this->join($fieldData->getFkEntityJoinType(), $fieldData->getFkEntity()->getTable(), $fieldData->getFkEntityField(), $fieldData->getDbName());
+                }
             }
         }
 
@@ -94,67 +103,98 @@ class Dml {
     public function join($type, $tableFk, $fieldFk, $fieldLocal) {
         switch ($type) {
             case Field::DB_JOIN_INNER:
-                $this->query.= 'INNER JOIN ';
+                $this->query.= ' INNER JOIN ';
                 break;
             case Field::DB_JOIN_LEFT:
-                $this->query.= 'LEFT JOIN ';
+                $this->query.= ' LEFT JOIN ';
                 break;
             case Field::DB_JOIN_RIGHT:
-                $this->query.= 'RIGHT JOIN ';
+                $this->query.= ' RIGHT JOIN ';
                 break;
             case Field::DB_JOIN_FULL:
-                $this->query.= 'FULL JOIN ';
+                $this->query.= ' FULL JOIN ';
                 break;
         }
-        $aliasFk = isset($this->aliases[$tableFk]) ? $this->aliases[$tableFk] : '';
-        $aliasLocal = $this->getTable() && isset($this->aliases[$this->getTable()]) ? $this->aliases[$this->getTable()] : '';
-        $this->query.= "{$tableFk} {$aliasFk} ON ({$aliasFk}.{$fieldFk} = {$aliasLocal}.{$fieldLocal}) ";
+
+        $aliasFkTable = isset($this->aliases[$tableFk]) ? $this->aliases[$tableFk] : '';
+        $aliasFk = $aliasFkTable ? $aliasFkTable . '.' : '';
+        $aliasLocal = '';
+
+        if ($this instanceof \Kf\Module\Entity) {
+            $aliasLocal = $this->getTable() && isset($this->aliases[$this->getTable()]) ? $this->aliases[$this->getTable()] . '.' : '';
+        }
+        $this->query.= "{$tableFk} {$aliasFkTable} ON ({$aliasFk}{$fieldFk} = {$aliasLocal}{$fieldLocal}) ";
         return $this;
     }
 
     public function where($where = [], $paginator = false) {
         $_where = 'WHERE 1=1 ';
-        if ($where) {
-            foreach ($where as $field => $value) {
-                if ($this->getField($field) && $value) {
-                    $searchCondition = null;
+        foreach ($where as $field => $value) {
+            $searchCondition = Criteria::CONDITION_EQUAL;
+            $upper = false;
+            if ($this instanceof \Kf\Module\Entity && $this->getField($field) && $value) {
+                if (is_array($value)) {
+                    $dataValue = $value;
+                    $value = array_shift($dataValue);
 
-                    if (is_array($value)) {
-                        $dataValue = $value;
-                        $value = array_shift($dataValue);
+                    if (count($dataValue)) {
+                        $searchCondition = array_shift($dataValue);
+                    }
+                }
+                if ($this->getField($field)->getSearchCriteria() && !$searchCondition) {
+                    $upper = $this->getField($field)->getSearchCriteria()->getUpper();
+                    $searchCondition = $this->getField($field)->getSearchCriteria()->getType();
+                }
+                switch ($searchCondition) {
+                    case Criteria::CONDITION_EQUAL:
+                        $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
+                        $_value = $upper ? "UPPER({$this->parseFieldValue($field, $value)})" : $this->parseFieldValue($field, $value);
+                        $_where.= "AND {$_field} = {$_value} ";
+                        break;
+                    case Criteria::CONDITION_LIKE:
+                        $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
+                        $_value = $upper ? "UPPER('%{$value}%')" : "'%{$value}%'";
+                        $_where.= "AND {$_field} LIKE {$_value} ";
+                        break;
+                    case Criteria::CONDITION_BETWEEN:
+                        /**
+                         * @todo
+                         */
+                        xd('@TODO');
+                        $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} AND {???otherValue???} ";
+                        break;
+                }
+            } else {
+                if (is_array($value)) {
+                    $dataValue = $value;
+                    $value = array_shift($dataValue);
 
-                        if (count($dataValue)) {
-                            $searchCondition = array_shift($dataValue);
-                        }
+                    if (count($dataValue)) {
+                        $searchCondition = array_shift($dataValue);
                     }
-                    if ($this->getField($field)->getSearchCriteria() || $searchCondition) {
-                        $upper = false;
-                        if ($this->getField($field)->getSearchCriteria() && !$searchCondition) {
-                            $upper = $this->getField($field)->getSearchCriteria()->getUpper();
-                            $searchCondition = $this->getField($field)->getSearchCriteria()->getType();
-                        }
-                        switch ($searchCondition) {
-                            case Criteria::CONDITION_EQUAL:
-                                $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
-                                $_value = $upper ? "UPPER({$this->parseFieldValue($field, $value)})" : $this->parseFieldValue($field, $value);
-                                $_where.= "AND {$_field} = {$_value} ";
-                                break;
-                            case Criteria::CONDITION_LIKE:
-                                $_field = $upper ? "UPPER({$this->aliases[$this->getTable()]}.{$field})" : "{$this->aliases[$this->getTable()]}.{$field}";
-                                $_value = $upper ? "UPPER('%{$value}%')" : "'%{$value}%'";
-                                $_where.= "AND {$_field} LIKE {$_value} ";
-                                break;
-                            case Criteria::CONDITION_BETWEEN:
-                                /**
-                                 * @todo
-                                 */
-                                xd('@TODO');
-                                $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} AND {???otherValue???} ";
-                                break;
-                        }
-                    } else {
-                        $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} = {$this->parseFieldValue($field, $value)} ";
+
+                    if (count($dataValue)) {
+                        $upper = array_shift($dataValue);
                     }
+                }
+                switch ($searchCondition) {
+                    case Criteria::CONDITION_EQUAL:
+                        $_field = $upper ? "UPPER({$field})" : "{$field}";
+                        $_value = $upper ? "UPPER({$value})" : $value;
+                        $_where.= "AND {$_field} = {$_value} ";
+                        break;
+                    case Criteria::CONDITION_LIKE:
+                        $_field = $upper ? "UPPER({$field})" : "{$field}";
+                        $_value = $upper ? "UPPER('%{$value}%')" : "'%{$value}%'";
+                        $_where.= "AND {$_field} LIKE {$_value} ";
+                        break;
+                    case Criteria::CONDITION_BETWEEN:
+                        /**
+                         * @todo
+                         */
+                        xd('@TODO');
+                        $_where.= "AND {$this->aliases[$this->getTable()]}.{$field} BETWEEN {$this->parseFieldValue($field, $value)} AND {???otherValue???} ";
+                        break;
                 }
             }
         }
@@ -171,8 +211,10 @@ class Dml {
             $this->query.= "ORDER BY ";
             $_orderBy = '';
             foreach ($fields as $field => $sortType) {
-                if ($this->getField($field)) {
+                if ($this instanceof \Kf\Module\Entity && $this->getField($field)) {
                     $_orderBy.= "{$this->aliases[$this->getTable()]}.{$field} {$sortType}, ";
+                } else {
+                    $_orderBy.= "{$field} {$sortType}, ";
                 }
             }
             $this->query.= substr($_orderBy, 0, -2) . ' ';

@@ -210,6 +210,11 @@ abstract class Model {
                     ->where($where, $rowsPerPage ? true : false)
                     ->orderBy($orderBy)
                     ->paginate($numPage, $rowsPerPage);
+
+            if (\Kf\Database\Dml::$debug) {
+                x($dml->query, $dml->input);
+            }
+
             //xd($dml, $this->fetchAllBySql($dml->query, $dml->input));
             //$sql = new \Kf\Database\Sql($this);
             //$sql->select($selectNames, $rowsPerPage ? true : false)->from($this->_table)->where($where, $rowsPerPage, $numPage, $whereConditions, $orderBy);
@@ -379,6 +384,17 @@ abstract class Model {
         } catch (\Exception $ex) {
             throw $ex;
         }
+    }
+
+    public function deleteBySql($sql, $input) {
+        $stmt = \Kf\Kernel::$db->prepare($sql);
+        $success = $stmt->execute($input);
+
+        if ($stmt->errorInfo()[2]) {
+            \Kf\System\Logger::database($sql, $stmt->errorInfo()[2], $stmt->errorCode());
+        }
+
+        return $success;
     }
 
     public function createTable() {

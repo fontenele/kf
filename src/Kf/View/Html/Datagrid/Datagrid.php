@@ -15,7 +15,7 @@ class Datagrid {
     protected $entity;
 
     /**
-     * @var array
+     * @var \Kf\System\Collection
      */
     protected $headers;
 
@@ -35,6 +35,7 @@ class Datagrid {
     protected $renderer;
 
     public function __construct($id = null) {
+        $this->headers = new \Kf\System\Collection;
         $this->setRenderer(new \Kf\View\Html\Renderer(null, new \Kf\System\File(__DIR__ . '/datagrid.phtml')));
         $this->setPaginator(new \Kf\View\Html\Paginator);
         if ($id) {
@@ -127,6 +128,7 @@ HTML;
      */
     public function setHeaders($headers) {
         $this->headers = $headers;
+        $this->getHeaders()->sortBy(null, 'getOrder');
         return $this;
     }
 
@@ -163,17 +165,18 @@ HTML;
      */
     public function addHeader(Header $header) {
         $this->headers[] = $header;
+        $this->getHeaders()->sortBy(null, 'getOrder');
         return $this;
     }
 
     public function parseEntity() {
-        $headers = [];
+        $headers = new \Kf\System\Collection;
         foreach ($this->getEntity()->getFields() as $field => $dataField) {
             if ($dataField->getDatagridHeader()) {
                 $headers[$dataField->getDatagridHeader()->getOrder()] = $dataField->getDatagridHeader();
             }
         }
-        ksort($headers);
+        //ksort($headers);
         $this->setHeaders($headers);
     }
 

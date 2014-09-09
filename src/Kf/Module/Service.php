@@ -17,6 +17,7 @@ abstract class Service {
 
     public function model() {
         try {
+            return new $this->_model;
             $this->model = new $this->_model;
             return $this->model;
         } catch (\Exception $ex) {

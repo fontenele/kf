@@ -154,7 +154,7 @@ class Tag extends \Kf\System\ArrayObject {
     }
 
     public function getValue() {
-        if($this instanceof Select) {
+        if ($this instanceof Select) {
             return $this->getSelected();
         }
         return $this->value;
@@ -209,6 +209,15 @@ class Tag extends \Kf\System\ArrayObject {
 
     public function getData($param) {
         return isset($this->data[$param]) ? $this->data[$param] : null;
+    }
+
+    public function attr($attr, $val) {
+        if ($val) {
+            $this->{$attr} = $val;
+            return $this;
+        } else {
+            return $this->{$attr};
+        }
     }
 
 }
